@@ -64,7 +64,7 @@ func NewNode(listenPort int, keyPath string, nodeName string) (*Node, error) {
     }
 
 	nodeID := h.ID().String()
-	log.Printf("🌟 Node created with ID: %s, name: %s", nodeID, nodeName)
+	log.Printf("🌟 Node created with  name: %s, ID: %s", nodeName, nodeID)
 	
 	// Log all listening addresses
 	for _, addr := range h.Addrs() {
