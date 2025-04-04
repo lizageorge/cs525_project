@@ -26,24 +26,28 @@ import (
 // Constants
 const ProtocolID = "/p2p-test/1.0.0"
 
-// Message represents a basic network message
 type Message struct {
 	Type    string      `json:"type"`
-	From    string      `json:"from"`
+	FromID    string      `json:"fromID"`
+	FromName    string      `json:"fromName"`
 	Payload interface{} `json:"payload"`
 }
 
-// Node represents a P2P network node
+type PeerInfo struct {
+    PeerAddr peer.AddrInfo
+    PeerName string
+}
+
 type Node struct {
 	Host      host.Host
-	Peers     map[string]peer.AddrInfo
+	Peers     map[string]PeerInfo
 	PeersLock sync.RWMutex
 	Running   bool
 	NodeID    string
+	NodeName  string
 }
 
-// NewNode creates a new P2P node
-func NewNode(listenPort int, keyPath string) (*Node, error) {
+func NewNode(listenPort int, keyPath string, nodeName string) (*Node, error) {
 	// Check or generate private key
     priv, err := loadOrCreatePrivateKey(keyPath)
     if err != nil {
@@ -69,9 +73,10 @@ func NewNode(listenPort int, keyPath string) (*Node, error) {
 
 	node := &Node{
 		Host:      h,
-		Peers:     make(map[string]peer.AddrInfo),
+		Peers:     make(map[string]PeerInfo),
 		Running:   false,
 		NodeID:    nodeID,
+		NodeName:  nodeName,
 	}
 
 	// Set up stream handler for incoming connections
@@ -152,24 +157,25 @@ func (n *Node) handleStream(stream network.Stream) {
 			return
 		}
 		
-		log.Printf("📩 Received message of type '%s' from %s", msg.Type, msg.From)
+		log.Printf("📩 Received message of type '%s' from %s", msg.Type, msg.FromName)
 		
 		// Handle message based on type
 		switch msg.Type {
 		case "hello":
-			log.Printf("👋 Hello message from peer %s", msg.From)
+			log.Printf("👋 Hello message from peer %s", msg.FromName)
 			// Add to peers list if not already there
-			n.AddPeer(remotePeer)
+			targetPeer := n.AddPeer(remotePeer, msg.FromName)
 			// Send back a hello message
-			n.SendMessage(remotePeerID, Message{
+			n.SendMessage(targetPeer, Message{
 				Type: "hello_ack",
-				From: n.NodeID,
+				FromID: n.NodeID,
+				FromName: n.NodeName,
 				Payload: map[string]interface{}{
 					"time": time.Now().Format(time.RFC3339),
 				},
 			})
 		case "hello_ack":
-			log.Printf("✅ Acknowledgment from peer %s", msg.From)
+			log.Printf("✅ Acknowledgment from peer %s", msg.FromName)
 		default:
 			log.Printf("ℹ️ Unhandled message type: %s", msg.Type)
 		}
@@ -177,8 +183,7 @@ func (n *Node) handleStream(stream network.Stream) {
 }
 
 // Connect establishes connection to a peer
-func (n *Node) Connect(addr string) error {
-	// Parse address
+func (n *Node) Connect(addr string, name string) error {
 	maddr, err := multiaddr.NewMultiaddr(addr)
 	if err != nil {
 		return fmt.Errorf("invalid address: %w", err)
@@ -199,23 +204,24 @@ func (n *Node) Connect(addr string) error {
 	}
 
 	// Add to peers list
-	n.AddPeer(info.ID)
+	newPeer := n.AddPeer(info.ID, name) // TODO change at other uses to add peer to use peer struct
 	
-	// Send hello message
-	n.SendMessage(info.ID.String(), Message{
+	// Send hello message TODO change this first para
+	n.SendMessage(newPeer, Message{ 
 		Type: "hello",
-		From: n.NodeID,
+		FromName: n.NodeName,
+		FromID: n.NodeID,
 		Payload: map[string]interface{}{
 			"time": time.Now().Format(time.RFC3339),
 		},
 	})
 
-	log.Printf("🔗 Connected to peer: %s", info.ID.String())
+	log.Printf("🔗 Connected to peer: %s", name)
 	return nil
 }
 
 // AddPeer adds a peer to the node's peer list
-func (n *Node) AddPeer(peerID peer.ID) {
+func (n *Node) AddPeer(peerID peer.ID, peerName string) PeerInfo {
 	n.PeersLock.Lock()
 	defer n.PeersLock.Unlock()
 	
@@ -223,24 +229,28 @@ func (n *Node) AddPeer(peerID peer.ID) {
 	
 	// Check if already in the list
 	if _, exists := n.Peers[peerIDStr]; exists {
-		return
-	}
-	
-	// Get peer info
-	addrInfo := peer.AddrInfo{
-		ID:    peerID,
-		Addrs: n.Host.Peerstore().Addrs(peerID),
+		return n.Peers[peerIDStr]
 	}
 	
 	// Add to peers list
-	n.Peers[peerIDStr] = addrInfo
-	log.Printf("➕ Added peer to list: %s", peerIDStr)
+	peerAddr := peer.AddrInfo{
+		ID:    peerID,
+		Addrs: n.Host.Peerstore().Addrs(peerID),
+	}
+	newPeer := PeerInfo{
+		PeerAddr: peerAddr,
+		PeerName: peerName,
+	}
+	n.Peers[peerIDStr] = newPeer
+	log.Printf("➕ Added peer to list: %s", peerName)
+
+	return newPeer
 }
 
 // SendMessage sends a message to a specific peer
-func (n *Node) SendMessage(peerID string, msg Message) error {
+func (n *Node) SendMessage(targetPeer PeerInfo, msg Message) error {
 	// Parse peer ID
-	pid, err := peer.Decode(peerID)
+	pid, err := peer.Decode(targetPeer.PeerAddr.ID.String())
 	if err != nil {
 		return fmt.Errorf("invalid peer ID: %w", err)
 	}
@@ -266,27 +276,30 @@ func (n *Node) SendMessage(peerID string, msg Message) error {
 		return fmt.Errorf("failed to write message: %w", err)
 	}
 
-	log.Printf("📤 Sent message of type '%s' to %s", msg.Type, peerID)
+	log.Printf("📤 Sent message of type '%s' to %s", msg.Type, targetPeer.PeerName)
 	return nil
 }
 
 // Broadcast sends a message to all connected peers
 func (n *Node) Broadcast(msg Message) {
 	n.PeersLock.RLock()
-	peers := make([]string, 0, len(n.Peers))
-	for id := range n.Peers {
-		peers = append(peers, id)
+	peersCopy := make(map[string]PeerInfo)
+	for id, peer := range n.Peers {
+		peersCopy[id] = peer
 	}
 	n.PeersLock.RUnlock()
 
-	log.Printf("📣 Broadcasting message of type '%s' to %d peers", msg.Type, len(peers))
+	log.Printf("📣 Broadcasting message of type '%s' to %d peers", msg.Type, len(peersCopy))
 	
-	for _, id := range peers {
-		go func(peerID string) {
-			if err := n.SendMessage(peerID, msg); err != nil {
-				log.Printf("❌ Failed to send to peer %s: %s", peerID, err)
-			}
-		}(id)
+	for _, peer := range peersCopy {
+		// go func(peerID string) {
+		// 	if err := n.SendMessage(peer, msg); err != nil {
+		// 		log.Printf("❌ Failed to send to peer %s: %s", peer.PeerName, err)
+		// 	}
+		// }(id)
+		if err := n.SendMessage(peer, msg); err != nil {
+			log.Printf("❌ Failed to send to peer %s: %s", peer.PeerName, err)
+		}
 	}
 }
 
@@ -296,8 +309,8 @@ func (n *Node) ListPeers() {
 	defer n.PeersLock.RUnlock()
 	
 	log.Printf("👥 Connected peers (%d):", len(n.Peers))
-	for id := range n.Peers {
-		log.Printf("  - %s", id)
+	for _, peer := range n.Peers {
+		log.Printf("  - %s", peer.PeerName)
 	}
 }
 
@@ -317,7 +330,8 @@ func (n *Node) Start() {
 				n.ListPeers()
 				n.Broadcast(Message{
 					Type: "heartbeat",
-					From: n.NodeID,
+					FromID: n.NodeID,
+					FromName: n.NodeName,
 					Payload: map[string]interface{}{
 						"time": time.Now().Format(time.RFC3339),
 					},
@@ -339,45 +353,48 @@ func main() {
 	// Parse command line arguments
 	port := flag.Int("port", 9000, "Port to listen on")
 	keyPath := flag.String("keyPath", "keyPath.pem", "Path to private key file")
-	peersFilePath := flag.String("peersFile", "peersFile.json", "Path to file containing peer addresses")
+	peersFilePath := flag.String("peersFile", "peersFile.json", "Path to file containing peer addresses and this node's name")
 	flag.Parse()
 
+
+	// Read peer data from file
+	peerDataJSON, err := os.ReadFile(*peersFilePath)
+	if err != nil {
+		log.Fatalf("❌ Failed to read peers file: %s", err)
+	}
+
+	// Parse JSON data
+	var peerData struct {
+		vmName	 string   `json:"vmName"`
+		vmPeers []struct {
+			Address  string `json:"vmAddress"`
+			Name string `json:"vmName"`
+		} `json:"vmPeers"`
+	}
+	if err := json.Unmarshal(peerDataJSON, &peerData); err != nil {
+		log.Fatalf("❌ Failed to parse peers file: %s", err)
+	}
+
 	// Create node
-	node, err := NewNode(*port, *keyPath)
+	node, err := NewNode(*port, *keyPath, peerData.vmName)
 	if err != nil {
 		log.Fatalf("❌ Failed to create node: %s", err)
 	}
 
-	// Connect to peers
-	if *peersFilePath != "" {
-		// Read peer addresses from file
-		peerData, err := os.ReadFile(*peersFilePath)
-		if err != nil {
-			log.Fatalf("❌ Failed to read peers file: %s", err)
+	// Connect to each peer
+	for _, peer := range peerData.vmPeers {
+		addr := strings.TrimSpace(peer.Address)
+		name := strings.TrimSpace(peer.Name)
+		if addr == "" {
+			continue
 		}
 
-		// Parse JSON data
-		var peerList struct {
-			VmAddresses []string `json:"vmAddresses"`
-		}
-		
-		if err := json.Unmarshal(peerData, &peerList); err != nil {
-			log.Fatalf("❌ Failed to parse peers file: %s", err)
-		}
-
-		// Connect to each peer
-		for _, addr := range peerList.VmAddresses {
-			addr = strings.TrimSpace(addr)
-			if addr == "" {
-				continue
-			}
-			
-			log.Printf("🔌 Connecting to peer: %s", addr)
-			if err := node.Connect(addr); err != nil {
-				log.Printf("❌ Failed to connect to peer %s: %s", addr, err)
-			}
+		log.Printf("🔌 Connecting to peer: %s", name)
+		if err := node.Connect(addr, name); err != nil {
+			log.Printf("❌ Failed to connect to peer %s: %s", addr, err)
 		}
 	}
+
 
 	// Start node
 	node.Start()
