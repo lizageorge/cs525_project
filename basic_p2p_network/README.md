@@ -1,7 +1,8 @@
 # installation/setup
 1. make sure go 1.24.2 is installed (see below)
 2. `go mod tidy` to install dependencies
-3. `go run basic_host.go -port 9000 -peers [comma seperated list of peers]`
+3. Make sure you set up a `peer2File.json` to look like the sample below
+4. `go run basic_host.go `
 
 # update go to desired version on RHL
 ```
@@ -22,3 +23,15 @@ source ~/.bashrc
 confirm installation with `go version` (expecting go version go1.24.2 linux/amd64)
 
 
+# sample peersFile.json
+```
+{
+    "vmName": "vm02",
+    "vmPeers": [
+        {
+            "addr": "/ip4/172.22.154.250/tcp/9000/p2p/12D3KooWJpgCgvPTaCtmCrixW7TAMggrEPzRvCRWqTzdWkhMMGG9",
+            "name": "vm01"
+        }
+    ]
+}
+```
