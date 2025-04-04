@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"github.com/libp2p/go-libp2p"
+	"github.com/libp2p/go-libp2p/core/crypto"
 	"github.com/libp2p/go-libp2p/core/host"
 	"github.com/libp2p/go-libp2p/core/network"
 	"github.com/libp2p/go-libp2p/core/peer"
@@ -42,28 +43,21 @@ type Node struct {
 }
 
 // NewNode creates a new P2P node
-func NewNode(listenPort int, staticIP string) (*Node, error) {
-	// Static IP usage setup
-	opts := []libp2p.Option{
-		libp2p.ListenAddrStrings(fmt.Sprintf("/ip4/0.0.0.0/tcp/%d", listenPort)),
-	}
-	announces := []multiaddr.Multiaddr{}
-	
-	addr, err := multiaddr.NewMultiaddr(fmt.Sprintf("/ip4/%s/tcp/%d", staticIP, listenPort))
-	if err != nil {
-		return nil, fmt.Errorf("invalid static IP address: %v", err)
-	}
-	announces = append(announces, addr)
-	
-	opts = append(opts, libp2p.AddrsFactory(func(addrs []multiaddr.Multiaddr) []multiaddr.Multiaddr {
-		return append(addrs, announces...)
-	}))
+func NewNode(listenPort int, keyPath string) (*Node, error) {
+	// Check or generate private key
+    priv, err := loadOrCreatePrivateKey(keyPath)
+    if err != nil {
+        return nil, fmt.Errorf("failed to get private key: %w", err)
+    }
 
-	// Create a new libp2p host with the options
-	h, err := libp2p.New(opts...)
-	if err != nil {
-		return nil, err
-	}
+    // Create a new libp2p host with the persistent private key
+    h, err := libp2p.New(
+        libp2p.ListenAddrStrings(fmt.Sprintf("/ip4/0.0.0.0/tcp/%d", listenPort)),
+        libp2p.Identity(priv),
+    )
+    if err != nil {
+        return nil, err
+    }
 
 	nodeID := h.ID().String()
 	log.Printf("🌟 Node created with ID: %s", nodeID)
@@ -84,6 +78,46 @@ func NewNode(listenPort int, staticIP string) (*Node, error) {
 	h.SetStreamHandler(protocol.ID(ProtocolID), node.handleStream)
 
 	return node, nil
+}
+
+// loadOrCreatePrivateKey loads an existing key from disk or creates a new one if it doesn't exist
+func loadOrCreatePrivateKey(keyPath string) (crypto.PrivKey, error) {
+    // Check if private key file exists
+    if _, err := os.Stat(keyPath); os.IsNotExist(err) {
+        // Key doesn't exist, generate a new one
+        priv, _, err := crypto.GenerateKeyPair(crypto.Ed25519, -1)
+        if err != nil {
+            return nil, err
+        }
+        
+        // Save the private key to file
+        keyBytes, err := crypto.MarshalPrivateKey(priv)
+        if err != nil {
+            return nil, err
+        }
+        
+        err = os.WriteFile(keyPath, keyBytes, 0600)
+        if err != nil {
+            return nil, err
+        }
+        
+        log.Printf("✅ Generated and saved new private key to %s", keyPath)
+        return priv, nil
+    }
+    
+    // Key exists, load it
+    keyBytes, err := os.ReadFile(keyPath)
+    if err != nil {
+        return nil, err
+    }
+    
+    priv, err := crypto.UnmarshalPrivateKey(keyBytes)
+    if err != nil {
+        return nil, err
+    }
+    
+    log.Printf("✅ Loaded existing private key from %s", keyPath)
+    return priv, nil
 }
 
 // handleStream processes incoming streams
@@ -304,12 +338,12 @@ func (n *Node) Stop() {
 func main() {
 	// Parse command line arguments
 	port := flag.Int("port", 9000, "Port to listen on")
-	staticIP := flag.String("ip", "127.0.0.1", "Static IP address to announce")
+	keyPath := flag.String("keyPath", "keyPath.pem", "Path to private key file")
 	peerAddrs := flag.String("peers", "", "Comma-separated list of peer addresses")
 	flag.Parse()
 
 	// Create node
-	node, err := NewNode(*port, *staticIP)
+	node, err := NewNode(*port, *keyPath)
 	if err != nil {
 		log.Fatalf("❌ Failed to create node: %s", err)
 	}
