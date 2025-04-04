@@ -64,7 +64,7 @@ func NewNode(listenPort int, keyPath string, nodeName string) (*Node, error) {
     }
 
 	nodeID := h.ID().String()
-	log.Printf("🌟 Node created with ID: %s", nodeID)
+	log.Printf("🌟 Node created with ID: %s, name: %s", nodeID, nodeName)
 	
 	// Log all listening addresses
 	for _, addr := range h.Addrs() {
@@ -365,10 +365,10 @@ func main() {
 
 	// Parse JSON data
 	var peerData struct {
-		vmName	 string   `json:"vmName"`
-		vmPeers []struct {
-			Address  string `json:"vmAddress"`
-			Name string `json:"vmName"`
+		VmName	 string   `json:"vmName"`
+		VmPeers []struct {
+			Address  string `json:"addr"`
+			Name string `json:"name"`
 		} `json:"vmPeers"`
 	}
 	if err := json.Unmarshal(peerDataJSON, &peerData); err != nil {
@@ -376,13 +376,13 @@ func main() {
 	}
 
 	// Create node
-	node, err := NewNode(*port, *keyPath, peerData.vmName)
+	node, err := NewNode(*port, *keyPath, peerData.VmName)
 	if err != nil {
 		log.Fatalf("❌ Failed to create node: %s", err)
 	}
 
 	// Connect to each peer
-	for _, peer := range peerData.vmPeers {
+	for _, peer := range peerData.VmPeers {
 		addr := strings.TrimSpace(peer.Address)
 		name := strings.TrimSpace(peer.Name)
 		if addr == "" {
