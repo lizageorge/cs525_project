@@ -42,11 +42,25 @@ type Node struct {
 }
 
 // NewNode creates a new P2P node
-func NewNode(listenPort int) (*Node, error) {
-	// Create a new libp2p host
-	h, err := libp2p.New(
+func NewNode(listenPort int, staticIP string) (*Node, error) {
+	// Static IP usage setup
+	opts := []libp2p.Option{
 		libp2p.ListenAddrStrings(fmt.Sprintf("/ip4/0.0.0.0/tcp/%d", listenPort)),
-	)
+	}
+	announces := []multiaddr.Multiaddr{}
+	
+	addr, err := multiaddr.NewMultiaddr(fmt.Sprintf("/ip4/%s/tcp/%d", staticIP, listenPort))
+	if err != nil {
+		return nil, fmt.Errorf("invalid static IP address: %v", err)
+	}
+	announces = append(announces, addr)
+	
+	opts = append(opts, libp2p.AddrsFactory(func(addrs []multiaddr.Multiaddr) []multiaddr.Multiaddr {
+		return append(addrs, announces...)
+	}))
+
+	// Create a new libp2p host with the options
+	h, err := libp2p.New(opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -290,11 +304,12 @@ func (n *Node) Stop() {
 func main() {
 	// Parse command line arguments
 	port := flag.Int("port", 9000, "Port to listen on")
+	staticIP := flag.String("ip", "127.0.0.1", "Static IP address to announce")
 	peerAddrs := flag.String("peers", "", "Comma-separated list of peer addresses")
 	flag.Parse()
 
 	// Create node
-	node, err := NewNode(*port)
+	node, err := NewNode(*port, *staticIP)
 	if err != nil {
 		log.Fatalf("❌ Failed to create node: %s", err)
 	}
