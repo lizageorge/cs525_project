@@ -186,7 +186,7 @@ func (n *Node) Connect(addr string) error {
 
 	// Extract peer info
 	info, err := peer.AddrInfoFromP2pAddr(maddr)
-	if err != nil {
+	if err != nil {f
 		return fmt.Errorf("invalid peer info: %w", err)
 	}
 
