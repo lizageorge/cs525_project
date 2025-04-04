@@ -186,7 +186,7 @@ func (n *Node) Connect(addr string) error {
 
 	// Extract peer info
 	info, err := peer.AddrInfoFromP2pAddr(maddr)
-	if err != nil {f
+	if err != nil {
 		return fmt.Errorf("invalid peer info: %w", err)
 	}
 
@@ -339,7 +339,7 @@ func main() {
 	// Parse command line arguments
 	port := flag.Int("port", 9000, "Port to listen on")
 	keyPath := flag.String("keyPath", "keyPath.pem", "Path to private key file")
-	peerAddrs := flag.String("peers", "", "Comma-separated list of peer addresses")
+	peersFilePath := flag.String("peersFile", "peersFile.json", "Path to file containing peer addresses")
 	flag.Parse()
 
 	// Create node
@@ -349,9 +349,24 @@ func main() {
 	}
 
 	// Connect to peers
-	if *peerAddrs != "" {
-		peers := strings.Split(*peerAddrs, ",")
-		for _, addr := range peers {
+	if *peersFilePath != "" {
+		// Read peer addresses from file
+		peerData, err := os.ReadFile(*peersFilePath)
+		if err != nil {
+			log.Fatalf("❌ Failed to read peers file: %s", err)
+		}
+
+		// Parse JSON data
+		var peerList struct {
+			VmAddresses []string `json:"vmAddresses"`
+		}
+		
+		if err := json.Unmarshal(peerData, &peerList); err != nil {
+			log.Fatalf("❌ Failed to parse peers file: %s", err)
+		}
+
+		// Connect to each peer
+		for _, addr := range peerList.VmAddresses {
 			addr = strings.TrimSpace(addr)
 			if addr == "" {
 				continue
