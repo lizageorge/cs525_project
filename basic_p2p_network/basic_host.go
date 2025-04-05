@@ -385,7 +385,11 @@ func main() {
 	for _, peer := range peerData.VmPeers {
 		addr := strings.TrimSpace(peer.Address)
 		name := strings.TrimSpace(peer.Name)
-		if addr == "" {
+		if addr == "" or name == "" {
+			continue
+		}
+
+		if name == node.NodeName {
 			continue
 		}
 

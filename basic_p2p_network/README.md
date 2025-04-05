@@ -6,7 +6,7 @@
 
 # update go to desired version on RHL
 ```
-sudo yum remove golang (y)
+sudo yum remove golang -y
 ```
 
 ```
@@ -18,6 +18,8 @@ sudo tar -C /usr/local -xzf go1.24.2.linux-amd64.tar.gz
 export PATH=$PATH:/usr/local/go/bin
 rm go1.24.2.linux-amd64.tar.gz
 source ~/.bashrc
+sudo dnf install 'dnf-command(versionlock)' -y
+sudo dnf versionlock add golang
 ```
 
 confirm installation with `go version` (expecting go version go1.24.2 linux/amd64)
