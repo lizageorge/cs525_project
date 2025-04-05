@@ -131,8 +131,6 @@ func (n *Node) handleStream(stream network.Stream) {
 	remotePeer := stream.Conn().RemotePeer()
 	remotePeerID := remotePeer.String()
 	
-	log.Printf("📥 Received stream from peer: %s", remotePeerID)
-	
 	defer stream.Close()
 
 	// Read the message
@@ -289,14 +287,9 @@ func (n *Node) Broadcast(msg Message) {
 	}
 	n.PeersLock.RUnlock()
 
-	log.Printf("📣 Broadcasting message of type '%s' to %d peers", msg.Type, len(peersCopy))
+	// log.Printf("📣 Broadcasting message of type '%s' to %d peers", msg.Type, len(peersCopy))
 	
 	for _, peer := range peersCopy {
-		// go func(peerID string) {
-		// 	if err := n.SendMessage(peer, msg); err != nil {
-		// 		log.Printf("❌ Failed to send to peer %s: %s", peer.PeerName, err)
-		// 	}
-		// }(id)
 		if err := n.SendMessage(peer, msg); err != nil {
 			log.Printf("❌ Failed to send to peer %s: %s", peer.PeerName, err)
 		}
@@ -398,7 +391,6 @@ func main() {
 			log.Printf("❌ Failed to connect to peer %s: %s", addr, err)
 		}
 	}
-
 
 	// Start node
 	node.Start()
