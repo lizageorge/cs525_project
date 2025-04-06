@@ -1,2 +1,2 @@
-internal/p2p-node/keyPath.pem
-internal/p2p-node/peersFile.json
+cmd/p2p-node/keyPath.pem
+cmd/p2p-node/peersFile.json
