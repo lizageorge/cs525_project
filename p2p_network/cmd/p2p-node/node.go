@@ -24,14 +24,13 @@ const ProtocolID = "/p2p-test/1.0.0"
 const GOSSIP_B = 3
 const MAX_SEEN_MESSAGES = 50
 
-
 type Node struct {
-	NodeID       string
-	NodeName     string
-	Host         host.Host
-	Running      bool
-	Peers        map[string]PeerInfo
-	PeersLock    sync.RWMutex
+	NodeID    string
+	NodeName  string
+	Host      host.Host
+	Running   bool
+	Peers     map[string]PeerInfo
+	PeersLock sync.RWMutex
 	// SeenMsgs     map[string]bool // Track seen gossip message IDs  // Moving forwarding logic to clients calling this node
 	// SeenMsgsLock sync.RWMutex
 	wsClients    map[*websocket.Conn]bool
@@ -63,11 +62,11 @@ func NewNode(listenPort int, keyPath string, nodeName string) (*Node, error) {
 	}
 
 	node := &Node{
-		Host:      h,
-		Running:   false,
-		NodeID:    nodeID,
-		NodeName:  nodeName,
-		Peers:     make(map[string]PeerInfo),
+		Host:     h,
+		Running:  false,
+		NodeID:   nodeID,
+		NodeName: nodeName,
+		Peers:    make(map[string]PeerInfo),
 		// SeenMsgs:  make(map[string]bool),
 		wsClients: make(map[*websocket.Conn]bool),
 	}
@@ -117,7 +116,6 @@ func loadOrCreatePrivateKey(keyPath string) (crypto.PrivKey, error) {
 	log.Printf("✅ Loaded existing private key from %s", keyPath)
 	return priv, nil
 }
-
 
 // handleStream processes incoming streams
 func (n *Node) handleStream(stream network.Stream) {
@@ -170,48 +168,55 @@ func (n *Node) handleStream(stream network.Stream) {
 			log.Printf("✅ Acknowledgment from peer %s", msg.FromName)
 		case "gossip":
 			if payload, ok := msg.Payload.(map[string]interface{}); ok {
-				if msgID, ok := payload["id"].(string); ok {
+				n.broadcastToClients("gossip_received", map[string]interface{}{
+					"id":     payload["id"],
+					"origin": payload["origin"],
+					"text":   payload["text"],
+					"time":   payload["time"],
+				})
 
-					// // Check if we've seen this message before
-					// n.SeenMsgsLock.RLock()
-					// seen := n.SeenMsgs[msgID]
-					// n.SeenMsgsLock.RUnlock()
-					// if seen {
-					// 	// log.Printf("👻 Ignoring already seen gossip message: %s", msgID)
-					// 	return
-					// }
+				// if msgID, ok := payload["id"].(string); ok {
 
-					msgText := "unknown"
-					if text, ok := payload["text"].(string); ok {
-						msgText = text
-					}
-					msgOrigin := "unknown"
-					if origin, ok := payload["origin"].(string); ok {
-						msgOrigin = origin
-					}
+				// 	// // Check if we've seen this message before
+				// 	// n.SeenMsgsLock.RLock()
+				// 	// seen := n.SeenMsgs[msgID]
+				// 	// n.SeenMsgsLock.RUnlock()
+				// 	// if seen {
+				// 	// 	// log.Printf("👻 Ignoring already seen gossip message: %s", msgID)
+				// 	// 	return
+				// 	// }
 
-					 // Moving forwarding logic to clients calling this node
-					// // Store this message as seen
-					// n.SeenMsgsLock.Lock()
-					// if len(n.SeenMsgs) >= MAX_SEEN_MESSAGES {
-					// 	n.pruneSeenMessages()
-					// }
-					// n.SeenMsgs[msgID] = true
-					// n.SeenMsgsLock.Unlock()
+				// 	msgText := "unknown"
+				// 	if text, ok := payload["text"].(string); ok {
+				// 		msgText = text
+				// 	}
+				// 	msgOrigin := "unknown"
+				// 	if origin, ok := payload["origin"].(string); ok {
+				// 		msgOrigin = origin
+				// 	}
 
-					log.Printf("💬 GOSSIP from %s (origin: %s): %s", msg.FromName, msgOrigin, msgText)
+				// 	// Moving forwarding logic to clients calling this node
+				// 	// // Store this message as seen
+				// 	// n.SeenMsgsLock.Lock()
+				// 	// if len(n.SeenMsgs) >= MAX_SEEN_MESSAGES {
+				// 	// 	n.pruneSeenMessages()
+				// 	// }
+				// 	// n.SeenMsgs[msgID] = true
+				// 	// n.SeenMsgsLock.Unlock()
 
-					// go n.forwardGossipMessage(msg, remotePeer.String())
+				// 	log.Printf("💬 GOSSIP from %s (origin: %s): %s", msg.FromName, msgOrigin, msgText)
 
-					// Notify WebSocket clients about the received gossip
-					n.broadcastToClients("gossip_received", map[string]interface{}{
-						"from":   msg.FromName,
-						"origin": msgOrigin,
-						"text":   msgText,
-						"time":   time.Now().Format(time.RFC3339),
-						// TODO pass entire payload on to clients
-					})
-				}
+				// 	// go n.forwardGossipMessage(msg, remotePeer.String())
+
+				// 	// Notify WebSocket clients about the received gossip
+				// 	n.broadcastToClients("gossip_received", map[string]interface{}{
+				// 		"from":   msg.FromName,
+				// 		"origin": msgOrigin,
+				// 		"text":   msgText,
+				// 		"time":   time.Now().Format(time.RFC3339),
+				// 		// TODO pass entire payload on to clients
+				// 	})
+				// }
 			}
 		default:
 			if msg.Type != "heartbeat" {
@@ -221,7 +226,7 @@ func (n *Node) handleStream(stream network.Stream) {
 	}
 }
 
- // Moving forwarding logic to clients calling this node
+// Moving forwarding logic to clients calling this node
 // // pruneSeenMessages removes half of old seen message IDs when the cache gets too full.
 // // Very rough implementation (assuming keys are roughly time-ordered by insertion)
 // func (n *Node) pruneSeenMessages() {
@@ -237,7 +242,6 @@ func (n *Node) handleStream(stream network.Stream) {
 
 // 	log.Printf("🧹 Pruned %d old message IDs from seen cache", deleteCount)
 // }
-
 
 func (n *Node) handleUserInput() {
 	reader := bufio.NewReader(os.Stdin)
