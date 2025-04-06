@@ -128,11 +128,28 @@ func main() {
 	go handleWebSocketMessages(conn, done)
 
 	// MAIN FUNCTIONALITY
-	// Send a single gossip message
-	message := flag.String("msg", "Hello from gossip client!", "Gossip message to send")
-	if err := sendGossipMessage(conn, *message); err != nil {
-		log.Fatalf("%v", err)
-	}
+	// ----- 
+
+	// call BB to get proposer ID
+
+
+	// if self = proposer
+		// generate block 
+
+
+		// send block to gossip network
+
+	// else 
+		// wait for block from gossip network
+
+		// attest
+
+	// add vote to block
+
+	// if enough votes, add to local chain
+
+
+	// ----- 
 
 	
 	WaitForInterrupt(done, c)
