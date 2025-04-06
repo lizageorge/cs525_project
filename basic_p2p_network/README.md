@@ -2,7 +2,7 @@
 1. make sure go 1.24.2 is installed (see below)
 2. `go mod tidy` to install dependencies
 3. Make sure you set up a `peer2File.json` to look like the sample below
-4. `go run basic_host.go `
+4. `go run node.go `
 
 # update go to desired version on RHL
 ```
