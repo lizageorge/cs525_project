@@ -30,8 +30,8 @@ type Transaction struct {
 
 // Block represents a block containing transactions
 type Block struct {
-	Transactions []Transaction
-	Hash         string
+	Transactions []Transaction `json:"transactions"`
+	Hash         string        `json:"hash"`
 }
 
 // generatePseudoRandom takes a number and returns a pseudorandom number
@@ -146,11 +146,43 @@ func parseTransactions(transactionsStr string) []Transaction {
 	return transactions
 }
 
+// verifyBlockHandler handles the verification of a block
+func verifyBlockHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Parse the form data
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, "Error parsing form", http.StatusBadRequest)
+		return
+	}
+
+	// Get the transactions from the form data
+	transactionsStr := r.FormValue("transactions")
+	transactions := parseTransactions(transactionsStr)
+
+	// Get the hash from the form data
+	blockHash := r.FormValue("hash")
+
+	// Verify the block
+	isValid := VerifyBlock(Block{Transactions: transactions, Hash: blockHash})
+	if isValid {
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("Block is valid"))
+	} else {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Block is invalid"))
+	}
+}
+
 func main() {
 	// Define the endpoint
 	http.HandleFunc("/random", randomHandler)
 	http.HandleFunc("/execute-transactions", executeTransactionHandler)
-	// http.HandleFunc("/verify-execution", randomHandler)
+	http.HandleFunc("/verify-block", verifyBlockHandler)
 	// http.HandleFunc("/verify-signature", randomHandler)
 	
 	// Set the port
