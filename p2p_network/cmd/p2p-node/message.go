@@ -23,9 +23,10 @@ type Message struct {
 
 type GossipPayload struct {
 	ID     string `json:"id"`
-	Text   string `json:"text"`
-	Time   string `json:"time"`
-	Origin string `json:"origin"`
+    Block  string `json:"block"`
+    Votes  []int  `json:"votes"`
+    Time   string `json:"time"`
+    Origin string `json:"origin"`
 }
 
 
@@ -108,7 +109,8 @@ func (n *Node) InitiateGossip(text string) {
 	msgID := fmt.Sprintf("%s-%d", n.NodeID[:8], time.Now().UnixNano())
 	payload := GossipPayload{
 		ID:     msgID,
-		Text:   text,
+		Block:   text,
+		Votes:  []int{},
 		Time:   time.Now().Format(time.RFC3339),
 		Origin: n.NodeName,
 	}
