@@ -1,10 +1,12 @@
 # installation/setup
 1. make sure go 1.24.2 is installed (see below)
 2. `go mod tidy` to install dependencies
-3. Make sure you set up a `peer2File.json` to look like the sample below
-4. `go run node.go `
+3. Make sure you set up a `inputs/peer2File.json` to look like the sample below
+4. In `cmd/p2p-node/`, `go run node.go `
+5. In `cmd/gossip-client`, `go run main.go`
 
 # update go to desired version on RHL (this also installs a versionlock tool and uses it, but sadly that didn't work as I tht it would)
+I think after running the below commands once, you just have to update the path and reload the shell anytime you open a new shell. Idk why tho. 
 ```
 sudo yum remove golang -y
 ```
