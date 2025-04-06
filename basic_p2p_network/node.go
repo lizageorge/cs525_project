@@ -25,6 +25,7 @@ import (
 
 // Constants
 const ProtocolID = "/p2p-test/1.0.0"
+const GOSSIP_B = 3
 
 type Message struct {
 	Type    string      `json:"type"`
