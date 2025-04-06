@@ -31,28 +31,28 @@ func DecodeBlock(data string) (Block, error) {
 	return block, nil
 }
 
-func main() {
-	// Create a sample Block
-	block := Block{
-		Hash:        "abc123",
-		Transactions: "tx1,tx2,tx3",
-		Votes:       5,
-	}
-	fmt.Println(block)
+// func main() {
+// 	// Create a sample Block
+// 	block := Block{
+// 		Hash:        "abc123",
+// 		Transactions: "tx1,tx2,tx3",
+// 		Votes:       5,
+// 	}
+// 	fmt.Println(block)
 
-	// Encode the Block
-	encodedBlock, err := EncodeBlock(block)
-	if err != nil {
-		fmt.Println("Error encoding block:", err)
-		return
-	}
-	fmt.Println("Encoded Block:", encodedBlock)
+// 	// Encode the Block
+// 	encodedBlock, err := EncodeBlock(block)
+// 	if err != nil {
+// 		fmt.Println("Error encoding block:", err)
+// 		return
+// 	}
+// 	fmt.Println("Encoded Block:", encodedBlock)
 
-	// Decode the Block
-	decodedBlock, err := DecodeBlock(encodedBlock)
-	if err != nil {
-		fmt.Println("Error decoding block:", err)
-		return
-	}
-	fmt.Println("Decoded Block:", decodedBlock)
-}
+// 	// Decode the Block
+// 	decodedBlock, err := DecodeBlock(encodedBlock)
+// 	if err != nil {
+// 		fmt.Println("Error decoding block:", err)
+// 		return
+// 	}
+// 	fmt.Println("Decoded Block:", decodedBlock)
+// }

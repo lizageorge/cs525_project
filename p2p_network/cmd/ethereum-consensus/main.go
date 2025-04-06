@@ -10,15 +10,17 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
+
+	"p2p_network/cmd/p2p-node/message"
 )
 
 // TODO this should def be refer to the same as in node code
-type GossipPayload struct {
-	ID     string `json:"id"`
-	Text   string `json:"text"`
-	Time   string `json:"time"`
-	Origin string `json:"origin"`
-}
+// type GossipPayload struct {
+// 	ID     string `json:"id"`
+// 	Text   string `json:"text"`
+// 	Time   string `json:"time"`
+// 	Origin string `json:"origin"`
+// }
 
 
 func setupWebSocket() (*websocket.Conn, error) {
