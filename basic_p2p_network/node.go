@@ -1,12 +1,14 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"os"
 	"os/signal"
 	"strings"
@@ -26,58 +28,69 @@ import (
 // Constants
 const ProtocolID = "/p2p-test/1.0.0"
 const GOSSIP_B = 3
+const MAX_SEEN_MESSAGES = 50
 
 type Message struct {
-	Type    string      `json:"type"`
-	FromID    string      `json:"fromID"`
-	FromName    string      `json:"fromName"`
-	Payload interface{} `json:"payload"`
+	Type     string      `json:"type"`
+	FromID   string      `json:"fromID"`
+	FromName string      `json:"fromName"`
+	Payload  interface{} `json:"payload"`
+}
+
+type GossipPayload struct {
+	ID     string `json:"id"`
+	Text   string `json:"text"`
+	Time   string `json:"time"`
+	Origin string `json:"origin"`
 }
 
 type PeerInfo struct {
-    PeerAddr peer.AddrInfo
-    PeerName string
+	PeerAddr peer.AddrInfo
+	PeerName string
 }
 
 type Node struct {
-	Host      host.Host
-	Peers     map[string]PeerInfo
-	PeersLock sync.RWMutex
-	Running   bool
-	NodeID    string
-	NodeName  string
+	NodeID       string
+	NodeName     string
+	Host         host.Host
+	Running      bool
+	Peers        map[string]PeerInfo
+	PeersLock    sync.RWMutex
+	SeenMsgs     map[string]bool // Track seen gossip message IDs
+	SeenMsgsLock sync.RWMutex
 }
 
 func NewNode(listenPort int, keyPath string, nodeName string) (*Node, error) {
 	// Check or generate private key
-    priv, err := loadOrCreatePrivateKey(keyPath)
-    if err != nil {
-        return nil, fmt.Errorf("failed to get private key: %w", err)
-    }
+	priv, err := loadOrCreatePrivateKey(keyPath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get private key: %w", err)
+	}
 
-    // Create a new libp2p host with the persistent private key
-    h, err := libp2p.New(
-        libp2p.ListenAddrStrings(fmt.Sprintf("/ip4/0.0.0.0/tcp/%d", listenPort)),
-        libp2p.Identity(priv),
-    )
-    if err != nil {
-        return nil, err
-    }
+	// Create a new libp2p host with the persistent private key
+	h, err := libp2p.New(
+		libp2p.ListenAddrStrings(fmt.Sprintf("/ip4/0.0.0.0/tcp/%d", listenPort)),
+		libp2p.Identity(priv),
+	)
+	if err != nil {
+		return nil, err
+	}
 
 	nodeID := h.ID().String()
 	log.Printf("🌟 Node created with  name: %s, ID: %s", nodeName, nodeID)
-	
+
 	// Log all listening addresses
 	for _, addr := range h.Addrs() {
 		log.Printf("📡 Listening on: %s/p2p/%s", addr, nodeID)
 	}
 
 	node := &Node{
-		Host:      h,
-		Peers:     make(map[string]PeerInfo),
-		Running:   false,
-		NodeID:    nodeID,
-		NodeName:  nodeName,
+		Host:     h,
+		Running:  false,
+		NodeID:   nodeID,
+		NodeName: nodeName,
+		Peers:    make(map[string]PeerInfo),
+		SeenMsgs: make(map[string]bool),
 	}
 
 	// Set up stream handler for incoming connections
@@ -88,49 +101,49 @@ func NewNode(listenPort int, keyPath string, nodeName string) (*Node, error) {
 
 // loadOrCreatePrivateKey loads an existing key from disk or creates a new one if it doesn't exist
 func loadOrCreatePrivateKey(keyPath string) (crypto.PrivKey, error) {
-    // Check if private key file exists
-    if _, err := os.Stat(keyPath); os.IsNotExist(err) {
-        // Key doesn't exist, generate a new one
-        priv, _, err := crypto.GenerateKeyPair(crypto.Ed25519, -1)
-        if err != nil {
-            return nil, err
-        }
-        
-        // Save the private key to file
-        keyBytes, err := crypto.MarshalPrivateKey(priv)
-        if err != nil {
-            return nil, err
-        }
-        
-        err = os.WriteFile(keyPath, keyBytes, 0600)
-        if err != nil {
-            return nil, err
-        }
-        
-        log.Printf("✅ Generated and saved new private key to %s", keyPath)
-        return priv, nil
-    }
-    
-    // Key exists, load it
-    keyBytes, err := os.ReadFile(keyPath)
-    if err != nil {
-        return nil, err
-    }
-    
-    priv, err := crypto.UnmarshalPrivateKey(keyBytes)
-    if err != nil {
-        return nil, err
-    }
-    
-    log.Printf("✅ Loaded existing private key from %s", keyPath)
-    return priv, nil
+	// Check if private key file exists
+	if _, err := os.Stat(keyPath); os.IsNotExist(err) {
+		// Key doesn't exist, generate a new one
+		priv, _, err := crypto.GenerateKeyPair(crypto.Ed25519, -1)
+		if err != nil {
+			return nil, err
+		}
+
+		// Save the private key to file
+		keyBytes, err := crypto.MarshalPrivateKey(priv)
+		if err != nil {
+			return nil, err
+		}
+
+		err = os.WriteFile(keyPath, keyBytes, 0600)
+		if err != nil {
+			return nil, err
+		}
+
+		log.Printf("✅ Generated and saved new private key to %s", keyPath)
+		return priv, nil
+	}
+
+	// Key exists, load it
+	keyBytes, err := os.ReadFile(keyPath)
+	if err != nil {
+		return nil, err
+	}
+
+	priv, err := crypto.UnmarshalPrivateKey(keyBytes)
+	if err != nil {
+		return nil, err
+	}
+
+	log.Printf("✅ Loaded existing private key from %s", keyPath)
+	return priv, nil
 }
 
 // handleStream processes incoming streams
 func (n *Node) handleStream(stream network.Stream) {
 	// Get peer ID
 	remotePeer := stream.Conn().RemotePeer()
-	
+
 	defer stream.Close()
 
 	// Read the message
@@ -154,11 +167,11 @@ func (n *Node) handleStream(stream network.Stream) {
 			log.Printf("❌ Error parsing message: %s", err)
 			return
 		}
-		
+
 		if msg.Type != "heartbeat" {
 			log.Printf("📩 Received message of type '%s' from %s", msg.Type, msg.FromName)
 		}
-		
+
 		// Handle message based on type
 		switch msg.Type {
 		case "hello":
@@ -167,8 +180,8 @@ func (n *Node) handleStream(stream network.Stream) {
 			targetPeer := n.AddPeer(remotePeer, msg.FromName)
 			// Send back a hello message
 			n.SendMessage(targetPeer, Message{
-				Type: "hello_ack",
-				FromID: n.NodeID,
+				Type:     "hello_ack",
+				FromID:   n.NodeID,
 				FromName: n.NodeName,
 				Payload: map[string]interface{}{
 					"time": time.Now().Format(time.RFC3339),
@@ -176,10 +189,98 @@ func (n *Node) handleStream(stream network.Stream) {
 			})
 		case "hello_ack":
 			log.Printf("✅ Acknowledgment from peer %s", msg.FromName)
+		case "gossip":
+			if payload, ok := msg.Payload.(map[string]interface{}); ok {
+				if msgID, ok := payload["id"].(string); ok {
+
+					// Check if we've seen this message before
+					n.SeenMsgsLock.RLock()
+					seen := n.SeenMsgs[msgID]
+					n.SeenMsgsLock.RUnlock()
+					if seen {
+						log.Printf("👻 Ignoring already seen gossip message: %s", msgID)
+						return
+					}
+
+					msgText := "unknown"
+					if text, ok := payload["text"].(string); ok {
+						msgText = text
+					}
+					msgOrigin := "unknown"
+					if origin, ok := payload["origin"].(string); ok {
+						msgOrigin = origin
+					}
+
+					// Store this message as seen
+					n.SeenMsgsLock.Lock()
+					if len(n.SeenMsgs) >= MAX_SEEN_MESSAGES {
+						n.pruneSeenMessages()
+					}
+					n.SeenMsgs[msgID] = true
+					n.SeenMsgsLock.Unlock()
+
+					log.Printf("💬 GOSSIP from %s (origin: %s): %s", msg.FromName, msgOrigin, msgText)
+
+					go n.forwardGossipMessage(msg, remotePeer.String())
+				}
+			}
 		default:
 			if msg.Type != "heartbeat" {
 				log.Printf("ℹ️ Unhandled message type: %s", msg.Type)
 			}
+		}
+	}
+}
+
+// pruneSeenMessages removes half of old seen message IDs when the cache gets too full.
+// Very rough implementation (assuming keys are roughly time-ordered by insertion)
+func (n *Node) pruneSeenMessages() {
+	toDelete := len(n.SeenMsgs) / 2
+	deleteCount := 0
+	for key := range n.SeenMsgs {
+		delete(n.SeenMsgs, key)
+		deleteCount++
+		if deleteCount >= toDelete {
+			break
+		}
+	}
+
+	log.Printf("🧹 Pruned %d old message IDs from seen cache", deleteCount)
+}
+
+// forwardGossipMessage forwards a gossip message to B random peers
+func (n *Node) forwardGossipMessage(msg Message, excludePeerID string) {
+	// Get a list of peers to potentially forward to (excluding the sender)
+	n.PeersLock.RLock()
+	eligiblePeers := make([]PeerInfo, 0, len(n.Peers))
+	for id, peer := range n.Peers {
+		if id != excludePeerID {
+			eligiblePeers = append(eligiblePeers, peer)
+		}
+	}
+	n.PeersLock.RUnlock()
+
+	// If we don't have enough peers, just forward to all
+	if len(eligiblePeers) <= GOSSIP_B {
+		for _, peer := range eligiblePeers {
+			if err := n.SendMessage(peer, msg); err != nil {
+				log.Printf("❌ Failed to forward gossip to %s: %s", peer.PeerName, err)
+			}
+		}
+		return
+	}
+
+	// Randomly select B peers and forward msg to them
+	selectedIndices := make(map[int]bool)
+	for len(selectedIndices) < GOSSIP_B {
+		idx := rand.Intn(len(eligiblePeers))
+		selectedIndices[idx] = true
+	}
+
+	for idx := range selectedIndices {
+		peer := eligiblePeers[idx]
+		if err := n.SendMessage(peer, msg); err != nil {
+			log.Printf("❌ Failed to forward gossip to %s: %s", peer.PeerName, err)
 		}
 	}
 }
@@ -200,19 +301,19 @@ func (n *Node) Connect(addr string, name string) error {
 	// Connect to peer
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	
+
 	if err := n.Host.Connect(ctx, *info); err != nil {
 		return fmt.Errorf("connection failed: %w", err)
 	}
 
 	// Add to peers list
-	newPeer := n.AddPeer(info.ID, name) // TODO change at other uses to add peer to use peer struct
-	
-	// Send hello message TODO change this first para
-	n.SendMessage(newPeer, Message{ 
-		Type: "hello",
+	newPeer := n.AddPeer(info.ID, name)
+
+	// Send hello message
+	n.SendMessage(newPeer, Message{
+		Type:     "hello",
 		FromName: n.NodeName,
-		FromID: n.NodeID,
+		FromID:   n.NodeID,
 		Payload: map[string]interface{}{
 			"time": time.Now().Format(time.RFC3339),
 		},
@@ -226,14 +327,14 @@ func (n *Node) Connect(addr string, name string) error {
 func (n *Node) AddPeer(peerID peer.ID, peerName string) PeerInfo {
 	n.PeersLock.Lock()
 	defer n.PeersLock.Unlock()
-	
+
 	peerIDStr := peerID.String()
-	
+
 	// Check if already in the list
 	if _, exists := n.Peers[peerIDStr]; exists {
 		return n.Peers[peerIDStr]
 	}
-	
+
 	// Add to peers list
 	peerAddr := peer.AddrInfo{
 		ID:    peerID,
@@ -260,7 +361,7 @@ func (n *Node) SendMessage(targetPeer PeerInfo, msg Message) error {
 	// Create stream
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	
+
 	stream, err := n.Host.NewStream(ctx, pid, protocol.ID(ProtocolID))
 	if err != nil {
 		return fmt.Errorf("failed to create stream: %w", err)
@@ -294,7 +395,7 @@ func (n *Node) Broadcast(msg Message) {
 	n.PeersLock.RUnlock()
 
 	log.Printf("📣 Broadcasting message of type '%s' to %d peers", msg.Type, len(peersCopy))
-	
+
 	for _, peer := range peersCopy {
 		if err := n.SendMessage(peer, msg); err != nil {
 			log.Printf("❌ Failed to send to peer %s: %s", peer.PeerName, err)
@@ -302,14 +403,68 @@ func (n *Node) Broadcast(msg Message) {
 	}
 }
 
+// InitiateGossip starts a new gossip message from this node
+func (n *Node) InitiateGossip(text string) {
+	// Create gossip payload with unique message ID
+	msgID := fmt.Sprintf("%s-%d", n.NodeID[:8], time.Now().UnixNano())
+	payload := GossipPayload{
+		ID:     msgID,
+		Text:   text,
+		Time:   time.Now().Format(time.RFC3339),
+		Origin: n.NodeName,
+	}
+
+	// Mark this message as seen by current node
+	n.SeenMsgsLock.Lock()
+	n.SeenMsgs[msgID] = true
+	n.SeenMsgsLock.Unlock()
+
+	msg := Message{
+		Type:     "gossip",
+		FromID:   n.NodeID,
+		FromName: n.NodeName,
+		Payload:  payload,
+	}
+
+	go n.forwardGossipMessage(msg, n.NodeID)
+
+	log.Printf("💬 GOSSIP initiated: %s", text)
+}
+
 // ListPeers prints out all connected peers
 func (n *Node) ListPeers() {
 	n.PeersLock.RLock()
 	defer n.PeersLock.RUnlock()
-	
+
 	log.Printf("👥 Connected peers (%d):", len(n.Peers))
 	for _, peer := range n.Peers {
 		log.Printf("  - %s", peer.PeerName)
+	}
+}
+
+func (n *Node) handleUserInput() {
+	reader := bufio.NewReader(os.Stdin)
+	for n.Running {
+		input, err := reader.ReadString('\n')
+		if err != nil {
+			log.Printf("❌ Error reading input: %s", err)
+			continue
+		}
+
+		input = strings.TrimSpace(input)
+		if input == "g" {
+			fmt.Print("Enter gossip message: ")
+			msgText, err := reader.ReadString('\n')
+			if err != nil {
+				log.Printf("❌ Error reading message: %s", err)
+				continue
+			}
+
+			msgText = strings.TrimSpace(msgText)
+			if msgText != "" {
+				n.InitiateGossip(msgText)
+			}
+		}
 	}
 }
 
@@ -317,27 +472,27 @@ func (n *Node) ListPeers() {
 func (n *Node) Start() {
 	n.Running = true
 	log.Println("🚀 Node started successfully")
-	
+
 	// Start a heartbeat to maintain connections
 	go func() {
 		ticker := time.NewTicker(30 * time.Second)
 		defer ticker.Stop()
-		
+
 		for n.Running {
-			select {
-			case <-ticker.C:
-				n.ListPeers()
-				n.Broadcast(Message{
-					Type: "heartbeat",
-					FromID: n.NodeID,
-					FromName: n.NodeName,
-					Payload: map[string]interface{}{
-						"time": time.Now().Format(time.RFC3339),
-					},
-				})
-			}
+			<-ticker.C // Simple channel receive instead of select
+			n.ListPeers()
+			n.Broadcast(Message{
+				Type:     "heartbeat",
+				FromID:   n.NodeID,
+				FromName: n.NodeName,
+				Payload: map[string]interface{}{
+					"time": time.Now().Format(time.RFC3339),
+				},
+			})
 		}
 	}()
+
+	go n.handleUserInput()
 }
 
 // Stop shuts down the node
@@ -355,7 +510,6 @@ func main() {
 	peersFilePath := flag.String("peersFile", "peersFile.json", "Path to file containing peer addresses and this node's name")
 	flag.Parse()
 
-
 	// Read peer data from file
 	peerDataJSON, err := os.ReadFile(*peersFilePath)
 	if err != nil {
@@ -364,10 +518,10 @@ func main() {
 
 	// Parse JSON data
 	var peerData struct {
-		VmName	 string   `json:"vmName"`
+		VmName  string `json:"vmName"`
 		VmPeers []struct {
-			Address  string `json:"addr"`
-			Name string `json:"name"`
+			Address string `json:"addr"`
+			Name    string `json:"name"`
 		} `json:"vmPeers"`
 	}
 	if err := json.Unmarshal(peerDataJSON, &peerData); err != nil {
@@ -394,22 +548,23 @@ func main() {
 
 		log.Printf("🔌 Connecting to peer: %s", name)
 		if err := node.Connect(addr, name); err != nil {
-			log.Printf("❌ Failed to connect to peer %s: %s", addr, err)
+			log.Printf("❌ Failed to connect to peer %s: %s", name, err)
 		}
 	}
 
 	// Start node
 	node.Start()
-	
+
 	// Print commands help
 	fmt.Println("\n=== Available Commands ===")
+	fmt.Println("Press 'g' then ENTER to send a gossip message")
 	fmt.Println("Press Ctrl+C to exit")
-	fmt.Println("========================\n")
-	
+	fmt.Println("========================")
+
 	// Wait for interrupt signal
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 	<-sigChan
-	
+
 	node.Stop()
 }

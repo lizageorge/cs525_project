@@ -4,7 +4,7 @@
 3. Make sure you set up a `peer2File.json` to look like the sample below
 4. `go run node.go `
 
-# update go to desired version on RHL
+# update go to desired version on RHL (this also installs a versionlock tool and uses it, but sadly that didn't work as I tht it would)
 ```
 sudo yum remove golang -y
 ```
