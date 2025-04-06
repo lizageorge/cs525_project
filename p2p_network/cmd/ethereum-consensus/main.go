@@ -12,13 +12,21 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-// setupWebSocket establishes a connection to the WebSocket server
+// TODO this should def be refer to the same as in node code
+type GossipPayload struct {
+	ID     string `json:"id"`
+	Text   string `json:"text"`
+	Time   string `json:"time"`
+	Origin string `json:"origin"`
+}
+
+
 func setupWebSocket() (*websocket.Conn, error) {
 	wsURL := flag.String("ws", "ws://localhost:8080/ws", "WebSocket server URL")
 	flag.Parse()
 
-	log.Printf("Connecting to WebSocket server at %s...", wsURL)
-	conn, _, err := websocket.DefaultDialer.Dial(wsURL, nil)
+	log.Printf("Connecting to WebSocket server at %s...", *wsURL)
+	conn, _, err := websocket.DefaultDialer.Dial(*wsURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to WebSocket server: %v", err)
 	}
@@ -26,7 +34,6 @@ func setupWebSocket() (*websocket.Conn, error) {
 	return conn, nil
 }
 
-// handleWebSocketMessages processes incoming messages from the WebSocket
 func handleWebSocketMessages(conn *websocket.Conn, done chan struct{}) {
 	defer close(done)
 	for {
@@ -45,13 +52,16 @@ func handleWebSocketMessages(conn *websocket.Conn, done chan struct{}) {
 		msgType, _ := msg["type"].(string)
 		if msgType == "gossip_received" {
 			data, _ := msg["data"].(map[string]interface{})
-			from, _ := data["from"].(string)
-			text, _ := data["text"].(string)
-			origin, _ := data["origin"].(string)
-			time, _ := data["time"].(string)
+			// parse data into GossipPayload 
+			gossip_payload := GossipPayload{
+				ID:     data["id"].(string),
+				Text:   data["text"].(string),
+				Time:   data["time"].(string),
+				Origin: data["origin"].(string),
+			}
 
-			fmt.Printf("\n📨 Received gossip from %s (origin: %s) at %s:\n   %s\n\n", 
-				from, origin, time, text)
+			fmt.Printf("\n📨 Received gossip from %s :\n   %s\n\n", 
+				gossip_payload.Origin, gossip_payload.Text)
 		} else if status, ok := msg["status"].(string); ok && status == "ok" {
 			serverMsg, _ := msg["message"].(string)
 			log.Printf("Server response: %s", serverMsg)
@@ -59,7 +69,6 @@ func handleWebSocketMessages(conn *websocket.Conn, done chan struct{}) {
 	}
 }
 
-// WaitForInterrupt blocks until an interrupt signal is received
 func WaitForInterrupt(done chan struct{}, conn *websocket.Conn) {
     // Set up channel to receive interrupt signals
     interrupt := make(chan os.Signal, 1)
@@ -75,7 +84,7 @@ func WaitForInterrupt(done chan struct{}, conn *websocket.Conn) {
         // Cleanly close the connection
         err := conn.WriteMessage(
             websocket.CloseMessage, 
-            websocket.FormatCloseMessage(websocket.CloseNormalClosure, "")
+            websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""),
         )
         if err != nil {
             log.Printf("Error during close: %v", err)
@@ -90,11 +99,11 @@ func WaitForInterrupt(done chan struct{}, conn *websocket.Conn) {
 }
 
 // sendGossipMessage sends a message to the WebSocket server
-func sendGossipMessage(conn *websocket.Conn, message string) error {
-	log.Printf("Sending gossip message: %s", message)
+func sendGossipMessage(conn *websocket.Conn, block string, votes []int) error {
+	log.Printf("Sending gossip message: %s", block)
 	cmd := map[string]string{
 		"action": "gossip",
-		"text":   message,
+		"text":   block + fmt.Sprintf("%v", votes),
 	}
 
 	jsonCmd, err := json.Marshal(cmd)
@@ -106,7 +115,7 @@ func sendGossipMessage(conn *websocket.Conn, message string) error {
 		return fmt.Errorf("failed to send message: %v", err)
 	}
 
-	// Wait for the message to be processed
+	// Wait for the message to be processed TODO check if this is needed
 	time.Sleep(500 * time.Millisecond)
 
 	return nil
@@ -128,29 +137,48 @@ func main() {
 	go handleWebSocketMessages(conn, done)
 
 	// MAIN FUNCTIONALITY
+	// Send a single block as gossip message
+	block := "abcdef"
+	votes := []int{}
+	if err := sendGossipMessage(conn, block, votes); err != nil {
+		log.Fatalf("%v", err)
+	}
+
 	// ----- 
+
+	// maintain list of seen messages
 
 	// call BB to get proposer ID
 
-
 	// if self = proposer
-		// generate block 
+		// generate block (BB)
 
+		// add vote to block
+
+		// attest (BB)
 
 		// send block to gossip network
+		// mark as seen
+		
+	
 
-	// else 
-		// wait for block from gossip network
+	// constantly listening for blocks
+		// if block msg id is seen
+			// ignore
+		
+		// if i haven't voted yet
+			// attest (BB)
+			// add vote to block
+			// change block id
+		// if enough votes, 
+			// add to local chain
 
-		// attest
-
-	// add vote to block
-
-	// if enough votes, add to local chain
+		// mark this block id as seen
+		// forward it
 
 
 	// ----- 
 
 	
-	WaitForInterrupt(done, c)
+	WaitForInterrupt(done, conn)
 }
