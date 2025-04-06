@@ -168,14 +168,14 @@ func (n *Node) handleStream(stream network.Stream) {
 			return
 		}
 
-		if msg.Type != "heartbeat" {
+		if msg.Type != "heartbeat" && msg.Type != "hello_ack" {
 			log.Printf("📩 Received message of type '%s' from %s", msg.Type, msg.FromName)
 		}
 
 		// Handle message based on type
 		switch msg.Type {
 		case "hello":
-			log.Printf("👋 Hello message from peer %s", msg.FromName)
+			// log.Printf("👋 Hello message from peer %s", msg.FromName)
 			// Add to peers list if not already there
 			targetPeer := n.AddPeer(remotePeer, msg.FromName)
 			// Send back a hello message
@@ -198,7 +198,7 @@ func (n *Node) handleStream(stream network.Stream) {
 					seen := n.SeenMsgs[msgID]
 					n.SeenMsgsLock.RUnlock()
 					if seen {
-						log.Printf("👻 Ignoring already seen gossip message: %s", msgID)
+						// log.Printf("👻 Ignoring already seen gossip message: %s", msgID)
 						return
 					}
 
@@ -379,7 +379,7 @@ func (n *Node) SendMessage(targetPeer PeerInfo, msg Message) error {
 		return fmt.Errorf("failed to write message: %w", err)
 	}
 
-	if msg.Type != "heartbeat" {
+	if msg.Type != "heartbeat"  && msg.Type != "hello_ack" {
 		log.Printf("📤 Sent message of type '%s' to %s", msg.Type, targetPeer.PeerName)
 	}
 	return nil
