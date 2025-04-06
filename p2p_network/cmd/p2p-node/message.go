@@ -113,10 +113,10 @@ func (n *Node) InitiateGossip(text string) {
 		Origin: n.NodeName,
 	}
 
-	// Mark this message as seen by current node
-	n.SeenMsgsLock.Lock()
-	n.SeenMsgs[msgID] = true
-	n.SeenMsgsLock.Unlock()
+	// // Mark this message as seen by current node
+	// n.SeenMsgsLock.Lock()
+	// n.SeenMsgs[msgID] = true
+	// n.SeenMsgsLock.Unlock()
 
 	msg := Message{
 		Type:     "gossip",
