@@ -129,7 +129,6 @@ func loadOrCreatePrivateKey(keyPath string) (crypto.PrivKey, error) {
 func (n *Node) handleStream(stream network.Stream) {
 	// Get peer ID
 	remotePeer := stream.Conn().RemotePeer()
-	remotePeerID := remotePeer.String()
 	
 	defer stream.Close()
 
