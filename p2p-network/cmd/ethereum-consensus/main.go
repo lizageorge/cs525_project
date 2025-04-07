@@ -14,6 +14,8 @@ import (
 	// "p2p-network/pkg/messaging"
 )
 
+const INPUT_FILE_PATH = "../inputs/peersFile.json"
+
 // TODO this should def be refer to the same as in node code
 type GossipPayload struct {
 	ID     string `json:"id"`
@@ -25,12 +27,31 @@ type GossipPayload struct {
 // Keeps track of seen message IDs
 type Client struct {
 	VMID		string // TODO have to read from file
-	seenMessages map[string]bool
+	seenMessages map[string]bool // TODO this should have a pruning function
 	mutex        sync.RWMutex
 }
 
 func NewClient() *Client {
+	// Read VMID from file
+	peerDataJSON, err := os.ReadFile(INPUT_FILE_PATH)
+	if err != nil {
+		log.Fatalf("❌ Failed to read peers file: %s", err)
+	}
+	// Parse JSON data
+	var peerData struct {
+		VmName  string `json:"vmName"`
+		VmPeers []struct {
+			Address string `json:"addr"`
+			Name    string `json:"name"`
+		} `json:"vmPeers"`
+	}
+	if err := json.Unmarshal(peerDataJSON, &peerData); err != nil {
+		log.Fatalf("❌ Failed to parse peers file: %s", err)
+	}
+
+	
 	return &Client{
+		VMID: peerData.VmName,
 		seenMessages: make(map[string]bool),
 	}
 }
@@ -133,8 +154,8 @@ func WaitForInterrupt(done chan struct{}, conn *websocket.Conn) {
 	}
 }
 
-// sendGossipMessage sends a message to the WebSocket server
-func (c *Client) sendGossipMessage(conn *websocket.Conn, msgId string, block string, transactions string, votes int) error {
+// sendGossipBlock sends a message to the WebSocket server
+func (c *Client) sendGossipBlock(conn *websocket.Conn, msgId string, block string, transactions string, votes int) error {
 	// Encode block intro string first
 	encodedBlock, err := EncodeBlock(Block{
 		Hash:         block,
@@ -185,23 +206,21 @@ func main() {
 
 	// Initialize the client
 	c := NewClient()
-	c.VMID = "vmid1234567890" // TODO read from file
 
 	// MAIN FUNCTIONALITY
-	// Send a single block as gossip message
-	block := "abcdef"
-	transactions := "tx1,tx2,tx3"
-	votes := 3
-	msgId := c.generateMsgID()
-	if err := c.sendGossipMessage(conn, msgId, block, transactions, votes); err != nil {
-		log.Fatalf("%v", err)
-	}
-	// mark this message as seen
-	c.MarkAsSeen(msgId)
+	// (test) Send a single block as gossip message
+	// block := "abcdef"
+	// transactions := "tx1,tx2,tx3"
+	// votes := 3
+	// msgId := c.generateMsgID()
+	// if err := c.sendGossipMessage(conn, msgId, block, transactions, votes); err != nil {
+	// 	log.Fatalf("%v", err)
+	// }
+	// // mark this message as seen
+	// c.MarkAsSeen(msgId)
 
 	// -----
 
-	// maintain list of seen messages
 
 	// call BB to get proposer ID
 
