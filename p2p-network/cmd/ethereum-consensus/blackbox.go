@@ -45,6 +45,7 @@ func BBgeneratePseudoRandom(num int64) int64 {
 func BBExecuteTransactions(transactions string) Block {
 	block := Block{Transactions: transactions}
 	block.Hash = CalculateHash(transactions)
+	block.Votes = 0
 	return block
 }
 
