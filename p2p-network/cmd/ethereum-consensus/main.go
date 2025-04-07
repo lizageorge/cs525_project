@@ -15,6 +15,7 @@ import (
 )
 
 const INPUT_FILE_PATH = "../inputs/peersFile.json"
+const LOCAL_CHAIN_FILE_PATH = "../inputs/localChain.txt"
 
 // TODO this should def be refer to the same as in node code
 type GossipPayload struct {
@@ -26,12 +27,12 @@ type GossipPayload struct {
 
 // Keeps track of seen message IDs
 type Client struct {
-	VMID           string          // TODO have to read from file
-	seenMessages   map[string]bool // TODO this should have a pruning function
-	seenMessagesMutex          sync.RWMutex
-	conn *websocket.Conn
-	votedThisEpoch bool
-	numPeers       int
+	VMID              string          // TODO have to read from file
+	seenMessages      map[string]bool // TODO this should have a pruning function
+	seenMessagesMutex sync.RWMutex
+	conn              *websocket.Conn
+	votedThisEpoch    bool
+	numPeers          int
 }
 
 func NewClient(conn *websocket.Conn) *Client {
@@ -55,7 +56,7 @@ func NewClient(conn *websocket.Conn) *Client {
 	return &Client{
 		VMID:           peerData.VmName,
 		seenMessages:   make(map[string]bool),
-		conn: 		conn,
+		conn:           conn,
 		votedThisEpoch: false,                 // TODO this should be reset with every epoch, once that's implementec
 		numPeers:       len(peerData.VmPeers), // TODO this should be actively managed, get this info from network node
 	}
@@ -74,6 +75,20 @@ func (mt *Client) MarkAsSeen(id string) {
 
 func (c *Client) generateMsgID() string {
 	return fmt.Sprintf("%s-%d", c.VMID[:8], time.Now().UnixNano())
+}
+
+func addToLocalChain(transactions string) error {
+	f, err := os.OpenFile(LOCAL_CHAIN_FILE_PATH, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+	if err != nil {
+		return err
+	}
+
+	defer f.Close()
+
+	if _, err = f.WriteString(transactions); err != nil {
+		return err
+	}
+	return nil
 }
 
 func setupWebSocket() (*websocket.Conn, error) {
@@ -211,14 +226,18 @@ func (c *Client) handleGossipBlock(gossip_payload GossipPayload) {
 		}
 	}
 
-	if block.Votes > c.numPeers/2 { // TODO check if that's what "enough votes" means
-		// TODO add to local chain
+	if block.Votes >= int(float64(c.numPeers)*(0.66)) { 
+		err = addToLocalChain(block.Transactions)
+		if err != nil {
+			log.Printf("Failed to add block to local chain: %v", err)
+			return
+		}
+
 		log.Printf("✅ Block %s has enough votes, adding to local chain", block.Hash)
 	}
 
-	// mark this block id as seen
+	// Mark this block id as seen and forward it to rest of network
 	c.MarkAsSeen(gossip_payload.ID)
-	// forward it to rest of network
 	if err := c.sendGossipBlock(gossip_payload.ID, block); err != nil {
 		log.Printf("Failed to send gossip message: %v", err)
 		return
@@ -239,7 +258,6 @@ func main() {
 	signal.Notify(interrupt, os.Interrupt)
 
 	done := make(chan struct{})
-
 
 	// Initialize the client
 	c := NewClient(conn)
