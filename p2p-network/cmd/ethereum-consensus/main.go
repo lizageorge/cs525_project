@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
 	"os/signal"
 	"sync"
@@ -226,7 +227,7 @@ func (c *Client) handleGossipBlock(gossip_payload GossipPayload) {
 		}
 	}
 
-	if block.Votes >= int(float64(c.numPeers)*(0.66)) { 
+	if block.Votes >= int(float64(c.numPeers)*(0.66)) {
 		err = addToLocalChain(block.Transactions)
 		if err != nil {
 			log.Printf("Failed to add block to local chain: %v", err)
@@ -243,7 +244,18 @@ func (c *Client) handleGossipBlock(gossip_payload GossipPayload) {
 		return
 	}
 	log.Printf("✅ Sent gossiped block to network: %s", gossip_payload.ID)
+}
 
+func transactionMempool() []Transaction {
+	var transactions []Transaction
+	// Split the string by commas and create Transaction objects
+	rand.Seed(time.Now().UnixNano())
+	for i := 0; i < 10; i++ {
+		// Generate a random float between 20 and 70
+		amount := 20 + rand.Float64()*(70-20)
+		transactions = append(transactions, Transaction{ID: fmt.Sprintf("%d", i), Amount: amount})
+	}
+	return transactions
 }
 
 func main() {
@@ -278,14 +290,22 @@ func main() {
 
 	// -----
 
+	// mempool of transactions:
+	transactions := transactionMempool()
+
+	epoch := 1
+	posposer := BBgeneratePseudoRandom(epoch)
 	// call BB to get proposer ID
 
 	// if self = proposer
-	// generate block (BB)
-
-	// add vote to block
-
-	// attest (BB)
+	vmIDNumber := int(c.VMID[2] - '0')
+	if vmIDNumber == proposer {
+		// generate block (BB)
+		block := BBExecuteTransactions(transactions)
+	} else {
+		// add vote to block
+		// attest (BB)
+	}
 
 	// send block to gossip network
 	// mark as seen
