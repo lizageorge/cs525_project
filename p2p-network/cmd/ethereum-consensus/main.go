@@ -280,7 +280,7 @@ func main() {
 	// mempool of transactions:
 	transactions := "tx1:30.45,tx2:20.00,tx3:15.75,tx4:50.00,tx5:10.00"
 
-	epoch := 1 // TODO implement multiple epochs
+	// epoch := 1 // TODO implement multiple epochs
 	// c.proposerThisEpoch = int(BBgeneratePseudoRandom(int64(epoch)))
 	c.proposerThisEpoch = 3 // TODO remove this hardcoded value
 
