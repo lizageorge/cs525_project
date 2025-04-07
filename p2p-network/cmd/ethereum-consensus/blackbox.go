@@ -2,38 +2,38 @@ package main
 
 import (
 	"crypto/sha256"
-	"encoding/json"
+	// "encoding/json"
 	"fmt"
-	"log"
-	"net/http"
-	"strconv"
-	"strings" 
-    "io/ioutil"
+	// "log"
+	// "net/http"
+	// "strconv"
+	// "strings"
+	// "io/ioutil"
 )
 
 // ResponseData defines the structure of our JSON response
 type ResponseData struct {
-	InputNumber     int64 `json:"inputNumber"`
-	PseudoRandom    int64 `json:"pseudoRandomNumber"`
+	InputNumber  int64 `json:"inputNumber"`
+	PseudoRandom int64 `json:"pseudoRandomNumber"`
 }
 
 // Constants for the pseudorandom number generation
 const (
 	MULTIPLIER = 75327 // A large prime number
-	MODULUS    = 10 // The number of nodes int he network
+	MODULUS    = 10    // The number of nodes int he network
 )
 
 // Transaction represents a simple transaction structure
 type Transaction struct {
-	ID      string
-	Amount  float64
+	ID     string
+	Amount float64
 }
 
 // Block represents a block containing transactions
-type Block struct {
-	Transactions []Transaction `json:"transactions"`
-	Hash         string        `json:"hash"`
-}
+// type Block struct {
+// 	Transactions []Transaction `json:"transactions"`
+// 	Hash         string        `json:"hash"`
+// }
 
 // generatePseudoRandom takes a number and returns a pseudorandom number
 // by multiplying it by a large constant and taking the modulo
@@ -42,19 +42,17 @@ func BBgeneratePseudoRandom(num int64) int64 {
 }
 
 // ExecuteTransactions simulates executing transactions and building a block
-func BBExecuteTransactions(transactions []Transaction) Block {
+func BBExecuteTransactions(transactions string) Block {
 	block := Block{Transactions: transactions}
 	block.Hash = CalculateHash(transactions)
 	return block
 }
 
 // CalculateHash generates a hash for the transactions
-func CalculateHash(transactions []Transaction) string {
+func CalculateHash(transactions string) string {
 	hasher := sha256.New()
-	for _, tx := range transactions {
-		hasher.Write([]byte(tx.ID))
-		hasher.Write([]byte(fmt.Sprintf("%f", tx.Amount)))
-	}
+	hasher.Write([]byte(transactions))
+
 	return fmt.Sprintf("%x", hasher.Sum(nil))
 }
 
@@ -67,10 +65,10 @@ func BBVerifyBlock(block Block) bool {
 // func randomHandler(w http.ResponseWriter, r *http.Request) {
 // 	// Set response content type
 // 	w.Header().Set("Content-Type", "application/json")
-	
+
 // 	// Get the input number from the query parameter
 // 	numStr := r.URL.Query().Get("number")
-	
+
 // 	if numStr == "" {
 // 		w.WriteHeader(http.StatusBadRequest)
 // 		json.NewEncoder(w).Encode(map[string]string{
@@ -78,7 +76,7 @@ func BBVerifyBlock(block Block) bool {
 // 		})
 // 		return
 // 	}
-	
+
 // 	// Parse the input number
 // 	num, err := strconv.ParseInt(numStr, 10, 64)
 // 	if err != nil {
@@ -88,19 +86,19 @@ func BBVerifyBlock(block Block) bool {
 // 		})
 // 		return
 // 	}
-	
+
 // 	// Generate the pseudorandom number
 // 	pseudoRandom := generatePseudoRandom(num)
-	
+
 // 	// Create response data
 // 	response := ResponseData{
 // 		InputNumber:  num,
 // 		PseudoRandom: pseudoRandom,
 // 	}
-	
+
 // 	// Log the operation
 // 	log.Printf("Generated pseudorandom number %d from input %d", pseudoRandom, num)
-	
+
 // 	// Return success status
 // 	w.WriteHeader(http.StatusOK)
 // 	json.NewEncoder(w).Encode(response)
@@ -180,19 +178,18 @@ func BBVerifyBlock(block Block) bool {
 // }
 
 // func main() {
-	// // Define the endpoint
-	// http.HandleFunc("/random", randomHandler)
-	// http.HandleFunc("/execute-transactions", executeTransactionHandler)
-	// http.HandleFunc("/verify-block", verifyBlockHandler)
-	// // http.HandleFunc("/verify-signature", randomHandler)
-	
-	// // Set the port
-	// port := 8080
-	// fmt.Printf("Server starting on port %d...\n", port)
-	// fmt.Printf("Access the Random API at: http://localhost:%d/random?number=YOUR_NUMBER\n", port)
-	
-	// // Start the server
-	// log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))
+// // Define the endpoint
+// http.HandleFunc("/random", randomHandler)
+// http.HandleFunc("/execute-transactions", executeTransactionHandler)
+// http.HandleFunc("/verify-block", verifyBlockHandler)
+// // http.HandleFunc("/verify-signature", randomHandler)
 
-	
+// // Set the port
+// port := 8080
+// fmt.Printf("Server starting on port %d...\n", port)
+// fmt.Printf("Access the Random API at: http://localhost:%d/random?number=YOUR_NUMBER\n", port)
+
+// // Start the server
+// log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))
+
 // }

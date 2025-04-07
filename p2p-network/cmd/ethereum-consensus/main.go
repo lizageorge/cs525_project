@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"log"
-	"math/rand"
 	"os"
 	"os/signal"
 	"sync"
@@ -246,18 +245,6 @@ func (c *Client) handleGossipBlock(gossip_payload GossipPayload) {
 	log.Printf("✅ Sent gossiped block to network: %s", gossip_payload.ID)
 }
 
-func transactionMempool() []Transaction {
-	var transactions []Transaction
-	// Split the string by commas and create Transaction objects
-	rand.Seed(time.Now().UnixNano())
-	for i := 0; i < 10; i++ {
-		// Generate a random float between 20 and 70
-		amount := 20 + rand.Float64()*(70-20)
-		transactions = append(transactions, Transaction{ID: fmt.Sprintf("%d", i), Amount: amount})
-	}
-	return transactions
-}
-
 func main() {
 	// Websocket setup
 	conn, err := setupWebSocket()
@@ -291,18 +278,19 @@ func main() {
 	// -----
 
 	// mempool of transactions:
-	transactions := transactionMempool()
+	transactions := "tx1:30.45,tx2:20.00,tx3:15.75,tx4:50.00,tx5:10.00"
 
 	epoch := 1
-	posposer := BBgeneratePseudoRandom(epoch)
+	proposer := BBgeneratePseudoRandom(int64(epoch))
 	// call BB to get proposer ID
 
 	// if self = proposer
-	vmIDNumber := int(c.VMID[2] - '0')
+	vmIDNumber := int64(c.VMID[2] - '0')
 	if vmIDNumber == proposer {
 		// generate block (BB)
 		block := BBExecuteTransactions(transactions)
 	} else {
+		
 		// add vote to block
 		// attest (BB)
 	}
