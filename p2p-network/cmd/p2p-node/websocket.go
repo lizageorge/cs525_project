@@ -32,6 +32,8 @@ func (n *Node) broadcastToClients(msgType string, data interface{}) {
 			delete(n.wsClients, client)
 		}
 	}
+
+	fmt.Println("Broadcasted message to WebSocket clients:", msgType, data)
 }
 
 
@@ -89,7 +91,6 @@ func (n *Node) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 
 			if cmd.Action == "gossip" && cmd.Text != "" && cmd.ID != "" {
 				fmt.Println("Received gossip command:", cmd.Text)
-
 
 				log.Printf("📣 Initiating gossip via WebSocket: %s", cmd.Text)
 				n.InitiateGossip(cmd.ID,cmd.Text)

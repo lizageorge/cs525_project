@@ -196,7 +196,7 @@ func (c *Client) sendGossipBlock(msgId string, unencoded_block Block) error {
 	cmd := map[string]string{
 		"action": "gossip",
 		"text":   encodedBlock,
-		"id":     c.generateMsgID(),
+		"id":     msgId,
 	}
 
 	jsonCmd, err := json.Marshal(cmd)
