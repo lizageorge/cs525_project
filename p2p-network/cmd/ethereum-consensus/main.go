@@ -1,4 +1,4 @@
-package p2p_network
+package main
 
 import (
 	"encoding/json"
@@ -11,7 +11,7 @@ import (
 
 	"github.com/gorilla/websocket"
 
-	"p2p_network/pkg/messaging"
+	// "p2p-network/pkg/messaging"
 )
 
 // TODO this should def be refer to the same as in node code
@@ -102,7 +102,7 @@ func WaitForInterrupt(done chan struct{}, conn *websocket.Conn) {
 // sendGossipMessage sends a message to the WebSocket server
 func sendGossipMessage(conn *websocket.Conn, block string, transactions string, votes int) error {
 	// Encode block intro string first
-	encodedBlock, err := messaging.EncodeBlock(messaging.Block{
+	encodedBlock, err := EncodeBlock(Block{
 		Hash:         block,
 		Transactions: transactions,
 		Votes:        votes,

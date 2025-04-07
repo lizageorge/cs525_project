@@ -1,4 +1,4 @@
-module p2p_network
+module p2p-network
 
 go 1.24.1
 
