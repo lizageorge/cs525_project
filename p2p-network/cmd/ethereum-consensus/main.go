@@ -7,10 +7,10 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"sync"
 	"time"
 
 	"github.com/gorilla/websocket"
-
 	// "p2p-network/pkg/messaging"
 )
 
@@ -20,6 +20,34 @@ type GossipPayload struct {
 	Text   string `json:"text"`
 	Time   string `json:"time"`
 	Origin string `json:"origin"`
+}
+
+// Keeps track of seen message IDs
+type Client struct {
+	VMID		string // TODO have to read from file
+	seenMessages map[string]bool
+	mutex        sync.RWMutex
+}
+
+func NewClient() *Client {
+	return &Client{
+		seenMessages: make(map[string]bool),
+	}
+}
+func (mt *Client) HasSeen(id string) bool {
+	mt.mutex.RLock()
+	defer mt.mutex.RUnlock()
+	return mt.seenMessages[id]
+}
+
+func (mt *Client) MarkAsSeen(id string) {
+	mt.mutex.Lock()
+	defer mt.mutex.Unlock()
+	mt.seenMessages[id] = true
+}
+
+func (c *Client) generateMsgID() string {
+	return fmt.Sprintf("%s-%d", c.VMID[:8], time.Now().UnixNano())
 }
 
 func setupWebSocket() (*websocket.Conn, error) {
@@ -106,7 +134,7 @@ func WaitForInterrupt(done chan struct{}, conn *websocket.Conn) {
 }
 
 // sendGossipMessage sends a message to the WebSocket server
-func sendGossipMessage(conn *websocket.Conn, block string, transactions string, votes int) error {
+func (c *Client) sendGossipMessage(conn *websocket.Conn, msgId string, block string, transactions string, votes int) error {
 	// Encode block intro string first
 	encodedBlock, err := EncodeBlock(Block{
 		Hash:         block,
@@ -114,13 +142,15 @@ func sendGossipMessage(conn *websocket.Conn, block string, transactions string, 
 		Votes:        votes,
 	})
 	if err != nil {
-		return fmt.Errorf("Failed to encode block: %v", err)
+		return fmt.Errorf("failed to encode block: %v", err)
 	}
 
-	log.Printf("Sending gossip message: %s", block)
+	// Generate message ID
+	log.Printf("Sending gossip message with ID: %s", msgId)
 	cmd := map[string]string{
 		"action": "gossip",
 		"text":   encodedBlock,
+		"id":     c.generateMsgID(),
 	}
 
 	jsonCmd, err := json.Marshal(cmd)
@@ -153,14 +183,21 @@ func main() {
 
 	go handleWebSocketMessages(conn, done)
 
+	// Initialize the client
+	c := NewClient()
+	c.VMID = "vmid1234567890" // TODO read from file
+
 	// MAIN FUNCTIONALITY
 	// Send a single block as gossip message
 	block := "abcdef"
 	transactions := "tx1,tx2,tx3"
 	votes := 3
-	if err := sendGossipMessage(conn, block, transactions, votes); err != nil {
+	msgId := c.generateMsgID()
+	if err := c.sendGossipMessage(conn, msgId, block, transactions, votes); err != nil {
 		log.Fatalf("%v", err)
 	}
+	// mark this message as seen
+	c.MarkAsSeen(msgId)
 
 	// -----
 

@@ -103,9 +103,9 @@ func (n *Node) SendMessage(targetPeer PeerInfo, msg Message) error {
 
 
 // InitiateGossip starts a new gossip message from this node
-func (n *Node) InitiateGossip(text string) {
+func (n *Node) InitiateGossip(msgID string, text string) {
 	// Create gossip payload with unique message ID
-	msgID := fmt.Sprintf("%s-%d", n.NodeID[:8], time.Now().UnixNano())
+	// msgID := fmt.Sprintf("%s-%d", n.NodeID[:8], time.Now().UnixNano())
 	payload := GossipPayload{
 		ID:     msgID,
 		Text:   text,

@@ -263,7 +263,9 @@ func (n *Node) handleUserInput() {
 
 			msgText = strings.TrimSpace(msgText)
 			if msgText != "" {
-				n.InitiateGossip(msgText)
+				// Generate a unique message ID
+				msgID := fmt.Sprintf("%s-%d", n.NodeID[:8], time.Now().UnixNano())
+				n.InitiateGossip(msgText, msgID)
 			}
 		}
 	}

@@ -79,6 +79,7 @@ func (n *Node) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 			var cmd struct {
 				Action string `json:"action"`
 				Text   string `json:"text"`
+				ID 	string `json:"id"`
 			}
 
 			if err := json.Unmarshal(message, &cmd); err != nil {
@@ -86,9 +87,9 @@ func (n *Node) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 
-			if cmd.Action == "gossip" && cmd.Text != "" {
+			if cmd.Action == "gossip" && cmd.Text != "" && cmd.ID != "" {
 				log.Printf("📣 Initiating gossip via WebSocket: %s", cmd.Text)
-				n.InitiateGossip(cmd.Text)
+				n.InitiateGossip(cmd.Text, cmd.ID)
 				conn.WriteJSON(map[string]string{"status": "ok", "message": "Gossip initiated"})
 			}
 		}
