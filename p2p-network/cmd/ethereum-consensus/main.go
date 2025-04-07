@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"strconv"
 	"sync"
 	"time"
 
@@ -64,10 +65,11 @@ func NewClient(conn *websocket.Conn) *Client {
 }
 
 func (c *Client) checkProposer() bool {
-	if c.proposerThisEpoch == int(c.VMID[2]-'0') {
-		return true
+	vmIDNumber, err := strconv.Atoi(c.VMID[2:])
+	if err != nil {
+		log.Fatalf("Failed to extract number from VMID: %v", err)
 	}
-	return false
+	return c.proposerThisEpoch == vmIDNumber
 }
 
 func (mt *Client) HasSeen(id string) bool {
