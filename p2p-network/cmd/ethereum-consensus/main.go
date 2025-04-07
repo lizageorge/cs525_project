@@ -31,8 +31,9 @@ type Client struct {
 	seenMessages      map[string]bool // TODO this should have a pruning function
 	seenMessagesMutex sync.RWMutex
 	conn              *websocket.Conn
-	votedThisEpoch    bool
 	numPeers          int
+	votedThisEpoch    bool
+	proposerThisEpoch int
 }
 
 func NewClient(conn *websocket.Conn) *Client {
@@ -61,6 +62,14 @@ func NewClient(conn *websocket.Conn) *Client {
 		numPeers:       len(peerData.VmPeers), // TODO this should be actively managed, get this info from network node
 	}
 }
+
+func (c *Client) checkProposer() bool {
+	if c.proposerThisEpoch == int(c.VMID[2]-'0') {
+		return true
+	}
+	return false
+}
+
 func (mt *Client) HasSeen(id string) bool {
 	mt.seenMessagesMutex.RLock()
 	defer mt.seenMessagesMutex.RUnlock()
@@ -209,14 +218,15 @@ func (c *Client) handleGossipBlock(gossip_payload GossipPayload) {
 		gossip_payload.Origin, block.Hash)
 
 	// if block msg id is seen, ignore
-	if c.HasSeen(gossip_payload.ID) {
+	if c.HasSeen(gossip_payload.ID) && !c.checkProposer() {
 		log.Printf("Already seen this message, ignoring: %s", gossip_payload.ID)
 		return
 	}
 
-	if !c.votedThisEpoch {
+	if !c.checkProposer() && !c.votedThisEpoch {
 		// TODO call BB to get attest block
 		block.Votes += 1
+		c.votedThisEpoch = true
 
 		gossip_payload.ID = c.generateMsgID()
 		gossip_payload.Text, err = EncodeBlock(block)
@@ -264,42 +274,40 @@ func main() {
 	go c.handleWebSocketMessages(done)
 
 	// MAIN FUNCTIONALITY
-	// (test) Send a single block as gossip message
-	// block := "abcdef"
-	// transactions := "tx1,tx2,tx3"
-	// votes := 3
-	// msgId := c.generateMsgID()
-	// if err := c.sendGossipMessage(conn, msgId, block, transactions, votes); err != nil {
-	// 	log.Fatalf("%v", err)
-	// }
-	// // mark this message as seen
-	// c.MarkAsSeen(msgId)
-
 	// -----
 
 	// mempool of transactions:
 	transactions := "tx1:30.45,tx2:20.00,tx3:15.75,tx4:50.00,tx5:10.00"
 
-	epoch := 1
-	proposer := BBgeneratePseudoRandom(int64(epoch))
-	// call BB to get proposer ID
+	epoch := 1 // TODO implement multiple epochs
+	c.proposerThisEpoch = int(BBgeneratePseudoRandom(int64(epoch)))
 
-	// if self = proposer
-	vmIDNumber := int64(c.VMID[2] - '0')
-	if vmIDNumber == proposer {
+	if c.checkProposer() {
 		// generate block (BB)
 		block := BBExecuteTransactions(transactions)
-	} else {
-		
-		// add vote to block
-		// attest (BB)
+		block_encoded, err := EncodeBlock(block)
+		if err != nil {
+			log.Printf("Failed to encode block: %v", err)
+			return
+		}
+
+		new_gossip_payload := GossipPayload{
+			ID:     c.generateMsgID(),
+			Text:   block_encoded,
+			Time:   time.Now().Format(time.RFC3339),
+			Origin: c.VMID,
+		}
+
+		// Mark this block id as seen and forward it to rest of network
+		c.MarkAsSeen(new_gossip_payload.ID)
+		if err := c.sendGossipBlock(new_gossip_payload.ID, block); err != nil {
+			log.Printf("Failed to send gossip message: %v", err)
+			return
+		}
+		log.Printf("✅ Sent gossiped block to network: %s", new_gossip_payload.ID)
+
 	}
-
-	// send block to gossip network
-	// mark as seen
-
 	// constantly listening for blocks -> handlegossipblock
-
 	// -----
 
 	c.WaitForInterrupt(done)
