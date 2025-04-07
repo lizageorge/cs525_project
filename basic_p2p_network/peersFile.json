@@ -1,0 +1,9 @@
+{
+    "vmName": "vm02",
+    "vmPeers": [
+        {
+            "addr": "/ip4/172.22.154.250/tcp/9000/p2p/12D3KooWJpgCgvPTaCtmCrixW7TAMggrEPzRvCRWqTzdWkhMMGG9",
+            "name": "vm01"
+        }
+    ]
+}
