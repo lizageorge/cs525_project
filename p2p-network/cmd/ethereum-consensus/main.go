@@ -224,15 +224,16 @@ func (c *Client) handleGossipBlock(gossip_payload GossipPayload) {
 	}
 
 	if !c.checkProposer() && !c.votedThisEpoch {
-		// TODO call BB to get attest block
-		block.Votes += 1
-		c.votedThisEpoch = true
+		if BBVerifyBlock(block) {
+			block.Votes += 1
+			c.votedThisEpoch = true
 
-		gossip_payload.ID = c.generateMsgID()
-		gossip_payload.Text, err = EncodeBlock(block)
-		if err != nil {
-			log.Printf("Failed to encode block: %v", err)
-			return
+			gossip_payload.ID = c.generateMsgID()
+			gossip_payload.Text, err = EncodeBlock(block)
+			if err != nil {
+				log.Printf("Failed to encode block: %v", err)
+				return
+			}
 		}
 	}
 
