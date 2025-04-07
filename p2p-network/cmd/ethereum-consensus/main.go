@@ -225,6 +225,7 @@ func (c *Client) handleGossipBlock(gossip_payload GossipPayload) {
 
 	if !c.checkProposer() && !c.votedThisEpoch {
 		if BBVerifyBlock(block) {
+			log.("✅ Block %s is valid, voting for it", block.Hash)
 			block.Votes += 1
 			c.votedThisEpoch = true
 
@@ -238,6 +239,7 @@ func (c *Client) handleGossipBlock(gossip_payload GossipPayload) {
 	}
 
 	if block.Votes >= int(float64(c.numPeers)*(0.66)) {
+		log.Printf("✅ Block %s has enough votes, adding to local chain", block.Hash)
 		err = addToLocalChain(block.Transactions)
 		if err != nil {
 			log.Printf("Failed to add block to local chain: %v", err)
@@ -283,9 +285,11 @@ func main() {
 	// epoch := 1 // TODO implement multiple epochs
 	// c.proposerThisEpoch = int(BBgeneratePseudoRandom(int64(epoch)))
 	c.proposerThisEpoch = 3 // TODO remove this hardcoded value
+	log.Printf("Proposer for this epoch is: %d", c.proposerThisEpoch)
 
 	if c.checkProposer() {
-		// generate block (BB)
+		log.Printf("Proposer %s is generating a block...", c.VMID)
+
 		block := BBExecuteTransactions(transactions)
 		block_encoded, err := EncodeBlock(block)
 		if err != nil {
