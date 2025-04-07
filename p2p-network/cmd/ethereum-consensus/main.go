@@ -29,11 +29,12 @@ type Client struct {
 	VMID           string          // TODO have to read from file
 	seenMessages   map[string]bool // TODO this should have a pruning function
 	seenMessagesMutex          sync.RWMutex
+	conn *websocket.Conn
 	votedThisEpoch bool
 	numPeers       int
 }
 
-func NewClient() *Client {
+func NewClient(conn *websocket.Conn) *Client {
 	// Read VMID from file
 	peerDataJSON, err := os.ReadFile(INPUT_FILE_PATH)
 	if err != nil {
@@ -54,6 +55,7 @@ func NewClient() *Client {
 	return &Client{
 		VMID:           peerData.VmName,
 		seenMessages:   make(map[string]bool),
+		conn: 		conn,
 		votedThisEpoch: false,                 // TODO this should be reset with every epoch, once that's implementec
 		numPeers:       len(peerData.VmPeers), // TODO this should be actively managed, get this info from network node
 	}
@@ -87,10 +89,10 @@ func setupWebSocket() (*websocket.Conn, error) {
 	return conn, nil
 }
 
-func (c *Client) handleWebSocketMessages(conn *websocket.Conn, done chan struct{}) {
+func (c *Client) handleWebSocketMessages(done chan struct{}) {
 	defer close(done)
 	for {
-		_, message, err := conn.ReadMessage()
+		_, message, err := c.conn.ReadMessage()
 		if err != nil {
 			log.Printf("WebSocket read error: %v", err)
 			return
@@ -121,7 +123,7 @@ func (c *Client) handleWebSocketMessages(conn *websocket.Conn, done chan struct{
 	}
 }
 
-func WaitForInterrupt(done chan struct{}, conn *websocket.Conn) {
+func (c *Client) WaitForInterrupt(done chan struct{}) {
 	// Set up channel to receive interrupt signals
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt)
@@ -134,7 +136,7 @@ func WaitForInterrupt(done chan struct{}, conn *websocket.Conn) {
 		log.Println("Interrupt received, closing connection...")
 
 		// Cleanly close the connection
-		err := conn.WriteMessage(
+		err := c.conn.WriteMessage(
 			websocket.CloseMessage,
 			websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""),
 		)
@@ -151,7 +153,7 @@ func WaitForInterrupt(done chan struct{}, conn *websocket.Conn) {
 }
 
 // sendGossipBlock sends a message to the WebSocket server
-func (c *Client) sendGossipBlock(conn *websocket.Conn, msgId string, block string, transactions string, votes int) error {
+func (c *Client) sendGossipBlock(msgId string, block string, transactions string, votes int) error {
 	// Encode block intro string first
 	encodedBlock, err := EncodeBlock(Block{
 		Hash:         block,
@@ -175,7 +177,7 @@ func (c *Client) sendGossipBlock(conn *websocket.Conn, msgId string, block strin
 		return fmt.Errorf("failed to marshal command: %v", err)
 	}
 
-	if err := conn.WriteMessage(websocket.TextMessage, jsonCmd); err != nil {
+	if err := c.conn.WriteMessage(websocket.TextMessage, jsonCmd); err != nil {
 		return fmt.Errorf("failed to send message: %v", err)
 	}
 
@@ -240,9 +242,9 @@ func main() {
 
 
 	// Initialize the client
-	c := NewClient()
+	c := NewClient(conn)
 
-	go c.handleWebSocketMessages(conn, done)
+	go c.handleWebSocketMessages(done)
 
 	// MAIN FUNCTIONALITY
 	// (test) Send a single block as gossip message
@@ -274,5 +276,5 @@ func main() {
 
 	// -----
 
-	WaitForInterrupt(done, conn)
+	c.WaitForInterrupt(done)
 }
