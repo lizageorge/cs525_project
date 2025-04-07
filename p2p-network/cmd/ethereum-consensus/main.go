@@ -85,7 +85,7 @@ func (mt *Client) MarkAsSeen(id string) {
 }
 
 func (c *Client) generateMsgID() string {
-	return fmt.Sprintf("%s-%d", c.VMID[2], time.Now().UnixNano())
+    return fmt.Sprintf("%d", time.Now().UnixNano())
 }
 
 func addToLocalChain(transactions string) error {
@@ -323,5 +323,5 @@ func main() {
 
 // func main() {
 // 	c := NewClient(nil) // TODO pass the connection
-// 	print(c.generateMsgID())
+//     fmt.Println(c.generateMsgID()) // Use fmt.Println instead of print
 // }
