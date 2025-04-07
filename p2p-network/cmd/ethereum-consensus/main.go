@@ -9,6 +9,7 @@ import (
 	"os/signal"
 	"sync"
 	"time"
+	"math/rand"
 
 	"github.com/gorilla/websocket"
 	// "p2p-network/pkg/messaging"
@@ -189,6 +190,18 @@ func (c *Client) sendGossipBlock(conn *websocket.Conn, msgId string, block strin
 	return nil
 }
 
+func transactionMempool() []Transaction{
+	var transactions []Transaction
+	// Split the string by commas and create Transaction objects
+	rand.Seed(time.Now().UnixNano())
+	for i := 0; i < 10; i++ {
+		// Generate a random float between 20 and 70
+		amount := 20 + rand.Float64()*(70-20)
+		transactions = append(transactions, Transaction{ID: fmt.Sprintf("%d", i), Amount: amount})
+	}
+	return transactions
+}
+
 func main() {
 	// Websocket setup
 	conn, err := setupWebSocket()
@@ -221,15 +234,26 @@ func main() {
 
 	// -----
 
+	// mempool of transactions:
+	transactions := transactionMempool()
+	
 
+	epoch := 1
+	posposer := BBgeneratePseudoRandom(epoch)
 	// call BB to get proposer ID
 
 	// if self = proposer
-	// generate block (BB)
+	vmIDNumber := int(c.VMID[2] - '0')
+	if vmIDNumber == proposer{
+		// generate block (BB)
+		block := BBExecuteTransactions(transactions)
+	}else{
+		// add vote to block
+		// attest (BB)
+	}
+	
 
-	// add vote to block
 
-	// attest (BB)
 
 	// send block to gossip network
 	// mark as seen
