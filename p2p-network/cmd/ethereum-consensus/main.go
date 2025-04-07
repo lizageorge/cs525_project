@@ -238,15 +238,10 @@ func (c *Client) handleGossipBlock(gossip_payload GossipPayload) {
 			c.votedThisEpoch = true
 
 			gossip_payload.ID = c.generateMsgID()
-			// gossip_payload.Text, err = EncodeBlock(block)
-			// if err != nil {
-			// 	log.Printf("Failed to encode block: %v", err)
-			// 	return
-			// }
 		}
 	}
 
-	if block.Votes >= int(float64(c.numPeers)*(0.66)) {
+	if block.Votes >= int(float64(c.numPeers - 1)*(0.66)) {
 		log.Printf("✅ Block %s has enough votes, adding to local chain", block.Hash)
 		err = addToLocalChain(block.Transactions)
 		if err != nil {
@@ -255,6 +250,8 @@ func (c *Client) handleGossipBlock(gossip_payload GossipPayload) {
 		}
 
 		log.Printf("✅ Block %s has enough votes, adding to local chain", block.Hash)
+	} else {
+		log.Printf("❌ Block %s does not have enough votes - ", block.Votes)
 	}
 
 	// Mark this block id as seen and forward it to rest of network
@@ -290,9 +287,8 @@ func main() {
 	// mempool of transactions:
 	transactions := "tx1:30.45,tx2:20.00,tx3:15.75,tx4:50.00,tx5:10.00"
 
-	// epoch := 1 // TODO implement multiple epochs
-	// c.proposerThisEpoch = int(BBgeneratePseudoRandom(int64(epoch)))
-	c.proposerThisEpoch = 3 // TODO remove this hardcoded value
+	epoch := 1 // TODO implement multiple epochs
+	c.proposerThisEpoch = int(BBgeneratePseudoRandom(int64(epoch)))
 	log.Printf("Proposer for this epoch is: %d", c.proposerThisEpoch)
 
 	if c.checkProposer() {
