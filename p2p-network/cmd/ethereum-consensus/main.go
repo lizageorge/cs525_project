@@ -28,7 +28,7 @@ type GossipPayload struct {
 type Client struct {
 	VMID           string          // TODO have to read from file
 	seenMessages   map[string]bool // TODO this should have a pruning function
-	mutex          sync.RWMutex
+	seenMessagesMutex          sync.RWMutex
 	votedThisEpoch bool
 	numPeers       int
 }
@@ -59,14 +59,14 @@ func NewClient() *Client {
 	}
 }
 func (mt *Client) HasSeen(id string) bool {
-	mt.mutex.RLock()
-	defer mt.mutex.RUnlock()
+	mt.seenMessagesMutex.RLock()
+	defer mt.seenMessagesMutex.RUnlock()
 	return mt.seenMessages[id]
 }
 
 func (mt *Client) MarkAsSeen(id string) {
-	mt.mutex.Lock()
-	defer mt.mutex.Unlock()
+	mt.seenMessagesMutex.Lock()
+	defer mt.seenMessagesMutex.Unlock()
 	mt.seenMessages[id] = true
 }
 
@@ -201,7 +201,6 @@ func (c *Client) handleGossipBlock(gossip_payload GossipPayload) {
 		return
 	}
 
-	// if i haven't voted yet
 	if !c.votedThisEpoch {
 		// TODO call BB to get attest block
 		block.Votes += 1
@@ -221,7 +220,8 @@ func (c *Client) handleGossipBlock(gossip_payload GossipPayload) {
 
 	// mark this block id as seen
 	c.MarkAsSeen(gossip_payload.ID)
-	// TODO forward it
+	// forward it to rest of network
+
 
 }
 
