@@ -167,7 +167,9 @@ func (n *Node) handleStream(stream network.Stream) {
 		case "hello_ack":
 			log.Printf("✅ Acknowledgment from peer %s", msg.FromName)
 		case "gossip":
+			log.Printf("💬 Gossip message from peer %s", msg.FromName)
 			if payload, ok := msg.Payload.(map[string]interface{}); ok {
+				fmt.Println("Received gossip payload:", payload)
 				n.broadcastToClients("gossip_received", map[string]interface{}{
 					"id":     payload["id"],
 					"origin": payload["origin"],
