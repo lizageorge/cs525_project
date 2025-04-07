@@ -92,7 +92,7 @@ func (n *Node) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 
 
 				log.Printf("📣 Initiating gossip via WebSocket: %s", cmd.Text)
-				n.InitiateGossip(cmd.Text, cmd.ID)
+				n.InitiateGossip(cmd.ID,cmd.Text)
 				conn.WriteJSON(map[string]string{"status": "ok", "message": "Gossip initiated"})
 			}
 		}
