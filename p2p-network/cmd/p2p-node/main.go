@@ -17,8 +17,8 @@ import (
 func main() {
 	// Parse command line arguments
 	port := flag.Int("port", 9000, "Port to listen on")
-	keyPath := flag.String("keyPath", "../inputs/keyPath.pem", "Path to private key file")
-	peersFilePath := flag.String("peersFile", "../inputs/peersFile.json", "Path to file containing peer addresses and this node's name")
+	keyPath := flag.String("keyPath", "../../inputs/keyPath.pem", "Path to private key file")
+	peersFilePath := flag.String("peersFile", "../../inputs/peersFile.json", "Path to file containing peer addresses and this node's name")
 	flag.Parse()
 
 	// Read peer data from file

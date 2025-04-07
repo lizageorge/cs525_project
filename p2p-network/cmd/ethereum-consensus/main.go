@@ -14,8 +14,8 @@ import (
 	// "p2p-network/pkg/messaging"
 )
 
-const INPUT_FILE_PATH = "../inputs/peersFile.json"
-const LOCAL_CHAIN_FILE_PATH = "../inputs/localChain.txt"
+const INPUT_FILE_PATH = "../../inputs/peersFile.json"
+const LOCAL_CHAIN_FILE_PATH = "../../inputs/localChain.txt"
 
 // TODO this should def be refer to the same as in node code
 type GossipPayload struct {
