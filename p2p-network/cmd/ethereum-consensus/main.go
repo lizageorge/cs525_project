@@ -85,7 +85,7 @@ func (mt *Client) MarkAsSeen(id string) {
 }
 
 func (c *Client) generateMsgID() string {
-    return fmt.Sprintf("%d", time.Now().UnixNano())
+	return fmt.Sprintf("%d", time.Now().UnixNano())
 }
 
 func addToLocalChain(transactions string) error {
@@ -181,10 +181,13 @@ func (c *Client) WaitForInterrupt(done chan struct{}) {
 // sendGossipBlock sends a message to the WebSocket server
 func (c *Client) sendGossipBlock(msgId string, unencoded_block Block) error {
 	// Encode block into string first
+	fmt.Println("Going to encode block: ", unencoded_block)
+	// TODO check if this is needed
 	encodedBlock, err := EncodeBlock(unencoded_block)
 	if err != nil {
 		return fmt.Errorf("failed to encode block: %v", err)
 	}
+	fmt.Println("Encoded block: ", encodedBlock)
 
 	// Generate message ID
 	log.Printf("Sending gossip message with ID: %s", msgId)
@@ -233,11 +236,11 @@ func (c *Client) handleGossipBlock(gossip_payload GossipPayload) {
 			c.votedThisEpoch = true
 
 			gossip_payload.ID = c.generateMsgID()
-			gossip_payload.Text, err = EncodeBlock(block)
-			if err != nil {
-				log.Printf("Failed to encode block: %v", err)
-				return
-			}
+			// gossip_payload.Text, err = EncodeBlock(block)
+			// if err != nil {
+			// 	log.Printf("Failed to encode block: %v", err)
+			// 	return
+			// }
 		}
 	}
 
@@ -294,26 +297,29 @@ func main() {
 		log.Printf("Proposer %s is generating a block...", c.VMID)
 
 		block := BBExecuteTransactions(transactions)
-		block_encoded, err := EncodeBlock(block)
-		if err != nil {
-			log.Printf("Failed to encode block: %v", err)
-			return
-		}
 
-		new_gossip_payload := GossipPayload{
-			ID:     c.generateMsgID(),
-			Text:   block_encoded,
-			Time:   time.Now().Format(time.RFC3339),
-			Origin: c.VMID,
-		}
+		// block_encoded, err := EncodeBlock(block)
+		// if err != nil {
+		// 	log.Printf("Failed to encode block: %v", err)
+		// 	return
+		// }
+
+		// new_gossip_payload := GossipPayload{
+		// 	ID:     c.generateMsgID(),
+		// 	Text:   block_encoded,
+		// 	Time:   time.Now().Format(time.RFC3339),
+		// 	Origin: c.VMID,
+		// }
+
+		new_gossip_Id := c.generateMsgID()
 
 		// Mark this block id as seen and forward it to rest of network
-		c.MarkAsSeen(new_gossip_payload.ID)
-		if err := c.sendGossipBlock(new_gossip_payload.ID, block); err != nil {
+		c.MarkAsSeen(new_gossip_Id)
+		if err := c.sendGossipBlock(new_gossip_Id, block); err != nil {
 			log.Printf("Failed to send gossip message: %v", err)
 			return
 		}
-		log.Printf("✅ Sent gossiped block to network: %s", new_gossip_payload.ID)
+		log.Printf("✅ Sent gossiped block to network: %s", new_gossip_Id)
 
 	}
 	// constantly listening for blocks -> handlegossipblock
@@ -323,6 +329,28 @@ func main() {
 }
 
 // func main() {
-// 	c := NewClient(nil) // TODO pass the connection
-//     fmt.Println(c.generateMsgID()) // Use fmt.Println instead of print
+// 	// c := NewClient(nil) // TODO pass the connection
+// 	// fmt.Println(c.generateMsgID()) // Use fmt.Println instead of print
+
+// 	block := Block{
+// 		Hash:         "abc123",
+// 		Transactions: "tx1,tx2,tx3",
+// 		Votes:        5,
+// 	}
+
+// 	// Encode the Block
+// 	encodedBlock, err := EncodeBlock(block)
+// 	if err != nil {
+// 		log.Printf("Error encoding block: %v", err)
+// 		return
+// 	}
+// 	fmt.Println("Encoded Block:", encodedBlock)
+
+// 	toDecode := encodedBlock
+// 	_, err = DecodeBlock(toDecode)
+// 	if err != nil {
+// 		log.Printf("Failed to decode block: %v", err)
+// 		return
+// 	}
+
 // }
