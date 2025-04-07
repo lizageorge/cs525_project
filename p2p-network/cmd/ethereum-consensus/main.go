@@ -26,9 +26,11 @@ type GossipPayload struct {
 
 // Keeps track of seen message IDs
 type Client struct {
-	VMID		string // TODO have to read from file
-	seenMessages map[string]bool // TODO this should have a pruning function
-	mutex        sync.RWMutex
+	VMID           string          // TODO have to read from file
+	seenMessages   map[string]bool // TODO this should have a pruning function
+	mutex          sync.RWMutex
+	votedThisEpoch bool
+	numPeers       int
 }
 
 func NewClient() *Client {
@@ -49,10 +51,11 @@ func NewClient() *Client {
 		log.Fatalf("❌ Failed to parse peers file: %s", err)
 	}
 
-	
 	return &Client{
-		VMID: peerData.VmName,
-		seenMessages: make(map[string]bool),
+		VMID:           peerData.VmName,
+		seenMessages:   make(map[string]bool),
+		votedThisEpoch: false,                 // TODO this should be reset with every epoch, once that's implementec
+		numPeers:       len(peerData.VmPeers), // TODO this should be actively managed, get this info from network node
 	}
 }
 func (mt *Client) HasSeen(id string) bool {
@@ -84,7 +87,7 @@ func setupWebSocket() (*websocket.Conn, error) {
 	return conn, nil
 }
 
-func handleWebSocketMessages(conn *websocket.Conn, done chan struct{}) {
+func (c *Client) handleWebSocketMessages(conn *websocket.Conn, done chan struct{}) {
 	defer close(done)
 	for {
 		_, message, err := conn.ReadMessage()
@@ -110,14 +113,7 @@ func handleWebSocketMessages(conn *websocket.Conn, done chan struct{}) {
 				Origin: data["origin"].(string),
 			}
 
-			// Decode the block (assuming its a block)
-			block, err := DecodeBlock(gossip_payload.Text)
-			if err != nil {
-				log.Printf("Failed to decode block: %v", err)
-				continue
-			}
-			fmt.Printf("\n📨 Received gossiped block from %s :\n   %s\n\n",
-				gossip_payload.Origin, block.Hash)
+			c.handleGossipBlock(gossip_payload) // (TODO: currently assuming its a block)
 		} else if status, ok := msg["status"].(string); ok && status == "ok" {
 			serverMsg, _ := msg["message"].(string)
 			log.Printf("Server response: %s", serverMsg)
@@ -189,6 +185,46 @@ func (c *Client) sendGossipBlock(conn *websocket.Conn, msgId string, block strin
 	return nil
 }
 
+func (c *Client) handleGossipBlock(gossip_payload GossipPayload) {
+	// Decode the block
+	block, err := DecodeBlock(gossip_payload.Text)
+	if err != nil {
+		log.Printf("Failed to decode block: %v", err)
+		return
+	}
+	fmt.Printf("\n📨 Received gossiped block from %s :\n   %s\n\n",
+		gossip_payload.Origin, block.Hash)
+
+	// if block msg id is seen, ignore
+	if c.HasSeen(gossip_payload.ID) {
+		log.Printf("Already seen this message, ignoring: %s", gossip_payload.ID)
+		return
+	}
+
+	// if i haven't voted yet
+	if !c.votedThisEpoch {
+		// TODO call BB to get attest block
+		block.Votes += 1
+
+		gossip_payload.ID = c.generateMsgID()
+		gossip_payload.Text, err = EncodeBlock(block)
+		if err != nil {
+			log.Printf("Failed to encode block: %v", err)
+			return
+		}
+	}
+
+	if block.Votes > c.numPeers/2 { // TODO check if that's what "enough votes" means
+		// TODO add to local chain
+		log.Printf("✅ Block %s has enough votes, adding to local chain", block.Hash)
+	}
+
+	// mark this block id as seen
+	c.MarkAsSeen(gossip_payload.ID)
+	// TODO forward it
+
+}
+
 func main() {
 	// Websocket setup
 	conn, err := setupWebSocket()
@@ -202,10 +238,11 @@ func main() {
 
 	done := make(chan struct{})
 
-	go handleWebSocketMessages(conn, done)
 
 	// Initialize the client
 	c := NewClient()
+
+	go c.handleWebSocketMessages(conn, done)
 
 	// MAIN FUNCTIONALITY
 	// (test) Send a single block as gossip message
@@ -221,7 +258,6 @@ func main() {
 
 	// -----
 
-
 	// call BB to get proposer ID
 
 	// if self = proposer
@@ -234,19 +270,7 @@ func main() {
 	// send block to gossip network
 	// mark as seen
 
-	// constantly listening for blocks
-	// if block msg id is seen
-	// ignore
-
-	// if i haven't voted yet
-	// attest (BB)
-	// add vote to block
-	// change block id
-	// if enough votes,
-	// add to local chain
-
-	// mark this block id as seen
-	// forward it
+	// constantly listening for blocks -> handlegossipblock
 
 	// -----
 
