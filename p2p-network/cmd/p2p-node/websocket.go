@@ -88,6 +88,9 @@ func (n *Node) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 			}
 
 			if cmd.Action == "gossip" && cmd.Text != "" && cmd.ID != "" {
+				fmt.Println("Received gossip command:", cmd.Text)
+
+
 				log.Printf("📣 Initiating gossip via WebSocket: %s", cmd.Text)
 				n.InitiateGossip(cmd.Text, cmd.ID)
 				conn.WriteJSON(map[string]string{"status": "ok", "message": "Gossip initiated"})
