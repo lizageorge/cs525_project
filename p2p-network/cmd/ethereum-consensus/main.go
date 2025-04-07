@@ -85,7 +85,7 @@ func (mt *Client) MarkAsSeen(id string) {
 }
 
 func (c *Client) generateMsgID() string {
-	return fmt.Sprintf("%s-%d", c.VMID[:8], time.Now().UnixNano())
+	return fmt.Sprintf("%s-%d", c.VMID[2], time.Now().UnixNano())
 }
 
 func addToLocalChain(transactions string) error {
@@ -320,3 +320,8 @@ func main() {
 
 	c.WaitForInterrupt(done)
 }
+
+// func main() {
+// 	c := NewClient(nil) // TODO pass the connection
+// 	print(c.generateMsgID())
+// }
