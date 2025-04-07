@@ -225,7 +225,7 @@ func (c *Client) handleGossipBlock(gossip_payload GossipPayload) {
 
 	if !c.checkProposer() && !c.votedThisEpoch {
 		if BBVerifyBlock(block) {
-			log.("✅ Block %s is valid, voting for it", block.Hash)
+			log.Printf("✅ Block %s is valid, voting for it", block.Hash)
 			block.Votes += 1
 			c.votedThisEpoch = true
 
