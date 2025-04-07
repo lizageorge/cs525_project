@@ -153,13 +153,9 @@ func (c *Client) WaitForInterrupt(done chan struct{}) {
 }
 
 // sendGossipBlock sends a message to the WebSocket server
-func (c *Client) sendGossipBlock(msgId string, block string, transactions string, votes int) error {
-	// Encode block intro string first
-	encodedBlock, err := EncodeBlock(Block{
-		Hash:         block,
-		Transactions: transactions,
-		Votes:        votes,
-	})
+func (c *Client) sendGossipBlock(msgId string, unencoded_block Block) error {
+	// Encode block into string first
+	encodedBlock, err := EncodeBlock(unencoded_block)
 	if err != nil {
 		return fmt.Errorf("failed to encode block: %v", err)
 	}
@@ -223,7 +219,11 @@ func (c *Client) handleGossipBlock(gossip_payload GossipPayload) {
 	// mark this block id as seen
 	c.MarkAsSeen(gossip_payload.ID)
 	// forward it to rest of network
-
+	if err := c.sendGossipBlock(gossip_payload.ID, block); err != nil {
+		log.Printf("Failed to send gossip message: %v", err)
+		return
+	}
+	log.Printf("✅ Sent gossiped block to network: %s", gossip_payload.ID)
 
 }
 
