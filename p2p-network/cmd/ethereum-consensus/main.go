@@ -133,6 +133,8 @@ func (c *Client) handleWebSocketMessages(done chan struct{}) {
 		msgType, _ := msg["type"].(string)
 		if msgType == "gossip_received" {
 			data, _ := msg["data"].(map[string]interface{})
+			fmt.Println("Received gossip message: ", data)
+
 			// parse data into GossipPayload
 			gossip_payload := GossipPayload{
 				ID:     data["id"].(string),
@@ -261,7 +263,7 @@ func (c *Client) handleGossipBlock(gossip_payload GossipPayload) {
 		log.Printf("Failed to send gossip message: %v", err)
 		return
 	}
-	log.Printf("✅ Sent gossiped block to network: %s", gossip_payload.ID)
+	fmt.Println("✅ Sent gossiped block to network", block)
 }
 
 func main() {
@@ -319,7 +321,7 @@ func main() {
 			log.Printf("Failed to send gossip message: %v", err)
 			return
 		}
-		log.Printf("✅ Sent gossiped block to network: %s", new_gossip_Id)
+		fmt.Println("✅ Sent gossiped block to network", block)
 
 	}
 	// constantly listening for blocks -> handlegossipblock
