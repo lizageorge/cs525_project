@@ -281,7 +281,7 @@ func (n *Node) Start() {
 
 	// Start a heartbeat to maintain connections
 	go func() {
-		ticker := time.NewTicker(30 * time.Second)
+		ticker := time.NewTicker(5 * time.Second)
 		defer ticker.Stop()
 
 		for n.Running {
