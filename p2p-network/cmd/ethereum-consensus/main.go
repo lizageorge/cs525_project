@@ -211,6 +211,7 @@ func (c *Client) sendGossipBlock(msgId string, unencoded_block Block) error {
 
 func (c *Client) handleGossipBlock(gossip_payload GossipPayload) {
 	// Decode the block
+	log.Printf("Going to decode block: %s", gossip_payload.Text)
 	block, err := DecodeBlock(gossip_payload.Text)
 	if err != nil {
 		log.Printf("Failed to decode block: %v", err)
