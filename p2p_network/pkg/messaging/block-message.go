@@ -1,11 +1,12 @@
-package main
+package messaging
 
 import (
 	"encoding/json"
-	"fmt"
+	// "fmt"
 )
 
 // Block represents a block with a hash, transactions, and votes
+// TODO need to figure out how to move to some external file and share properly
 type Block struct {
 	Hash        string `json:"hash"`
 	Transactions string `json:"transactions"`
