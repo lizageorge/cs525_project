@@ -1,0 +1,542 @@
+AAA,progname,nmon
+AAA,command,nmon -f 
+AAA,version,16p
+AAA,disks_per_line,150
+AAA,max_disks,256,set by -d option
+AAA,disks,10,
+AAA,host,sp25-cs525-0711
+AAA,user,ljain2
+AAA,OS,Linux,5.14.0-503.34.1.el9_5.x86_64,#1 SMP PREEMPT_DYNAMIC Mon Mar 17 21:49:47 EDT 2025,x86_64
+AAA,runname,sp25-cs525-0711
+AAA,time,21:09.25
+AAA,date,06-APR-2025
+AAA,interval,300
+AAA,snapshots,288
+AAA,cpus,2
+AAA,x86,VendorId,GenuineIntel
+AAA,x86,ModelName,Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz
+AAA,x86,MHz,2095.077
+AAA,x86,bogomips,4190.15
+AAA,x86,ProcessorChips,1
+AAA,x86,Cores,2
+AAA,x86,hyperthreads,0
+AAA,x86,VirtualCPUs,2
+AAA,proc_stat_variables,8
+AAA,boottime,05:03 PM 06-Apr-2025
+AAA,note0, Warning - use the UNIX sort command to order this file before loading into a spreadsheet
+AAA,note1, The First Column is simply to get the output sorted in the right order
+AAA,note2, The T0001-T9999 column is a snapshot number. To work out the actual time; see the ZZZ section at the end
+CPU001,CPU 1 sp25-cs525-0711,User%,Sys%,Wait%,Idle%,Steal%
+CPU002,CPU 2 sp25-cs525-0711,User%,Sys%,Wait%,Idle%,Steal%
+CPU_ALL,CPU Total sp25-cs525-0711,User%,Sys%,Wait%,Idle%,Steal%,Busy,CPUs
+MEM,Memory MB sp25-cs525-0711,memtotal,hightotal,lowtotal,swaptotal,memfree,highfree,lowfree,swapfree,memshared,cached,active,bigfree,buffers,swapcached,inactive
+PROC,Processes sp25-cs525-0711,Runnable,Blocked,pswitch,syscall,read,write,fork,exec,sem,msg
+NET,Network I/O sp25-cs525-0711,lo-read-KB/s,ens33-read-KB/s,lo-write-KB/s,ens33-write-KB/s
+NETPACKET,Network Packets sp25-cs525-0711,lo-read/s,ens33-read/s,lo-write/s,ens33-write/s
+DISKBUSY,Disk %Busy sp25-cs525-0711,sda,sda1,sda2,sda3,dm-0,dm-1,dm-2,dm-3,dm-4,dm-5
+DISKREAD,Disk Read KB/s sp25-cs525-0711,sda,sda1,sda2,sda3,dm-0,dm-1,dm-2,dm-3,dm-4,dm-5
+DISKWRITE,Disk Write KB/s sp25-cs525-0711,sda,sda1,sda2,sda3,dm-0,dm-1,dm-2,dm-3,dm-4,dm-5
+DISKXFER,Disk transfers per second sp25-cs525-0711,sda,sda1,sda2,sda3,dm-0,dm-1,dm-2,dm-3,dm-4,dm-5
+DISKBSIZE,Disk Block Size sp25-cs525-0711,sda,sda1,sda2,sda3,dm-0,dm-1,dm-2,dm-3,dm-4,dm-5
+JFSFILE,JFS Filespace %Used sp25-cs525-0711,/dev,/run,/
+BBBP,000,/etc/release
+BBBP,001,/etc/release,"NAME=QRed Hat Enterprise LinuxQ"
+BBBP,002,/etc/release,"VERSION=Q9.5 (Plow)Q"
+BBBP,003,/etc/release,"ID=QrhelQ"
+BBBP,004,/etc/release,"ID_LIKE=QfedoraQ"
+BBBP,005,/etc/release,"VERSION_ID=Q9.5Q"
+BBBP,006,/etc/release,"PLATFORM_ID=Qplatform:el9Q"
+BBBP,007,/etc/release,"PRETTY_NAME=QRed Hat Enterprise Linux 9.5 (Plow)Q"
+BBBP,008,/etc/release,"ANSI_COLOR=Q0;31Q"
+BBBP,009,/etc/release,"LOGO=Qfedora-logo-iconQ"
+BBBP,010,/etc/release,"CPE_NAME=Qcpe:/o:redhat:enterprise_linux:9::baseosQ"
+BBBP,011,/etc/release,"HOME_URL=Qhttps://www.redhat.com/Q"
+BBBP,012,/etc/release,"DOCUMENTATION_URL=Qhttps://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9Q"
+BBBP,013,/etc/release,"BUG_REPORT_URL=Qhttps://issues.redhat.com/Q"
+BBBP,014,/etc/release,""
+BBBP,015,/etc/release,"REDHAT_BUGZILLA_PRODUCT=QRed Hat Enterprise Linux 9Q"
+BBBP,016,/etc/release,"REDHAT_BUGZILLA_PRODUCT_VERSION=9.5"
+BBBP,017,/etc/release,"REDHAT_SUPPORT_PRODUCT=QRed Hat Enterprise LinuxQ"
+BBBP,018,/etc/release,"REDHAT_SUPPORT_PRODUCT_VERSION=Q9.5Q"
+BBBP,019,/etc/release,"Red Hat Enterprise Linux release 9.5 (Plow)"
+BBBP,020,/etc/release,"Red Hat Enterprise Linux release 9.5 (Plow)"
+BBBP,021,lsb_release
+BBBP,022,fdisk-l
+BBBP,023,lsblk
+BBBP,024,lsblk,"NAME                             MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS"
+BBBP,025,lsblk,"sda                                8:0    0  100G  0 disk "
+BBBP,026,lsblk,"├─sda1                             8:1    0  200M  0 part /boot/efi"
+BBBP,027,lsblk,"├─sda2                             8:2    0    2G  0 part /boot"
+BBBP,028,lsblk,"└─sda3                             8:3    0 97.8G  0 part "
+BBBP,029,lsblk,"  ├─sp25_cs525_0711_sys-root     253:0    0   32G  0 lvm  /"
+BBBP,030,lsblk,"  ├─sp25_cs525_0711_sys-swap     253:1    0    4G  0 lvm  [SWAP]"
+BBBP,031,lsblk,"  ├─sp25_cs525_0711_sys-srv      253:2    0 17.8G  0 lvm  /srv"
+BBBP,032,lsblk,"  ├─sp25_cs525_0711_sys-reserved 253:3    0   32G  0 lvm  "
+BBBP,033,lsblk,"  ├─sp25_cs525_0711_sys-tmp      253:4    0    4G  0 lvm  /tmp"
+BBBP,034,lsblk,"  └─sp25_cs525_0711_sys-var      253:5    0    8G  0 lvm  /var"
+BBBP,035,lsblk,"sr0                               11:0    1 1024M  0 rom  "
+BBBP,036,lscpu
+BBBP,037,lscpu,"Architecture:                         x86_64"
+BBBP,038,lscpu,"CPU op-mode(s):                       32-bit, 64-bit"
+BBBP,039,lscpu,"Address sizes:                        45 bits physical, 48 bits virtual"
+BBBP,040,lscpu,"Byte Order:                           Little Endian"
+BBBP,041,lscpu,"CPU(s):                               2"
+BBBP,042,lscpu,"On-line CPU(s) list:                  0,1"
+BBBP,043,lscpu,"Vendor ID:                            GenuineIntel"
+BBBP,044,lscpu,"Model name:                           Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz"
+BBBP,045,lscpu,"CPU family:                           6"
+BBBP,046,lscpu,"Model:                                85"
+BBBP,047,lscpu,"Thread(s) per core:                   1"
+BBBP,048,lscpu,"Core(s) per socket:                   2"
+BBBP,049,lscpu,"Socket(s):                            1"
+BBBP,050,lscpu,"Stepping:                             7"
+BBBP,051,lscpu,"BogoMIPS:                             4190.15"
+BBBP,052,lscpu,"Flags:                                fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon nopl xtopology tsc_reliable nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 avx2 smep bmi2 invpcid avx512f avx512dq rdseed adx smap clflushopt clwb avx512cd avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves arat pku ospke avx512_vnni md_clear flush_l1d arch_capabilities"
+BBBP,053,lscpu,"Hypervisor vendor:                    VMware"
+BBBP,054,lscpu,"Virtualization type:                  full"
+BBBP,055,lscpu,"L1d cache:                            64 KiB (2 instances)"
+BBBP,056,lscpu,"L1i cache:                            64 KiB (2 instances)"
+BBBP,057,lscpu,"L2 cache:                             2 MiB (2 instances)"
+BBBP,058,lscpu,"L3 cache:                             22 MiB (1 instance)"
+BBBP,059,lscpu,"NUMA node(s):                         1"
+BBBP,060,lscpu,"NUMA node0 CPU(s):                    0,1"
+BBBP,061,lscpu,"Vulnerability Gather data sampling:   Unknown: Dependent on hypervisor status"
+BBBP,062,lscpu,"Vulnerability Itlb multihit:          KVM: Mitigation: VMX unsupported"
+BBBP,063,lscpu,"Vulnerability L1tf:                   Not affected"
+BBBP,064,lscpu,"Vulnerability Mds:                    Not affected"
+BBBP,065,lscpu,"Vulnerability Meltdown:               Not affected"
+BBBP,066,lscpu,"Vulnerability Mmio stale data:        Vulnerable: Clear CPU buffers attempted, no microcode; SMT Host state unknown"
+BBBP,067,lscpu,"Vulnerability Reg file data sampling: Not affected"
+BBBP,068,lscpu,"Vulnerability Retbleed:               Mitigation; Enhanced IBRS"
+BBBP,069,lscpu,"Vulnerability Spec rstack overflow:   Not affected"
+BBBP,070,lscpu,"Vulnerability Spec store bypass:      Mitigation; Speculative Store Bypass disabled via prctl"
+BBBP,071,lscpu,"Vulnerability Spectre v1:             Mitigation; usercopy/swapgs barriers and __user pointer sanitization"
+BBBP,072,lscpu,"Vulnerability Spectre v2:             Mitigation; Enhanced / Automatic IBRS; IBPB conditional; RSB filling; PBRSB-eIBRS SW sequence; BHI SW loop, KVM SW loop"
+BBBP,073,lscpu,"Vulnerability Srbds:                  Not affected"
+BBBP,074,lscpu,"Vulnerability Tsx async abort:        Not affected"
+BBBP,075,lshw
+BBBP,076,/proc/cpuinfo
+BBBP,077,/proc/cpuinfo,"processor	: 0"
+BBBP,078,/proc/cpuinfo,"vendor_id	: GenuineIntel"
+BBBP,079,/proc/cpuinfo,"cpu family	: 6"
+BBBP,080,/proc/cpuinfo,"model		: 85"
+BBBP,081,/proc/cpuinfo,"model name	: Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz"
+BBBP,082,/proc/cpuinfo,"stepping	: 7"
+BBBP,083,/proc/cpuinfo,"microcode	: 0x5003707"
+BBBP,084,/proc/cpuinfo,"cpu MHz		: 2095.077"
+BBBP,085,/proc/cpuinfo,"cache size	: 22528 KB"
+BBBP,086,/proc/cpuinfo,"physical id	: 0"
+BBBP,087,/proc/cpuinfo,"siblings	: 2"
+BBBP,088,/proc/cpuinfo,"core id		: 0"
+BBBP,089,/proc/cpuinfo,"cpu cores	: 2"
+BBBP,090,/proc/cpuinfo,"apicid		: 0"
+BBBP,091,/proc/cpuinfo,"initial apicid	: 0"
+BBBP,092,/proc/cpuinfo,"fpu		: yes"
+BBBP,093,/proc/cpuinfo,"fpu_exception	: yes"
+BBBP,094,/proc/cpuinfo,"cpuid level	: 22"
+BBBP,095,/proc/cpuinfo,"wp		: yes"
+BBBP,096,/proc/cpuinfo,"flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon nopl xtopology tsc_reliable nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 avx2 smep bmi2 invpcid avx512f avx512dq rdseed adx smap clflushopt clwb avx512cd avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves arat pku ospke avx512_vnni md_clear flush_l1d arch_capabilities"
+BBBP,097,/proc/cpuinfo,"bugs		: spectre_v1 spectre_v2 spec_store_bypass swapgs itlb_multihit mmio_stale_data retbleed eibrs_pbrsb gds bhi"
+BBBP,098,/proc/cpuinfo,"bogomips	: 4190.15"
+BBBP,099,/proc/cpuinfo,"clflush size	: 64"
+BBBP,100,/proc/cpuinfo,"cache_alignment	: 64"
+BBBP,101,/proc/cpuinfo,"address sizes	: 45 bits physical, 48 bits virtual"
+BBBP,102,/proc/cpuinfo,"power management:"
+BBBP,103,/proc/cpuinfo,""
+BBBP,104,/proc/cpuinfo,"processor	: 1"
+BBBP,105,/proc/cpuinfo,"vendor_id	: GenuineIntel"
+BBBP,106,/proc/cpuinfo,"cpu family	: 6"
+BBBP,107,/proc/cpuinfo,"model		: 85"
+BBBP,108,/proc/cpuinfo,"model name	: Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz"
+BBBP,109,/proc/cpuinfo,"stepping	: 7"
+BBBP,110,/proc/cpuinfo,"microcode	: 0x5003707"
+BBBP,111,/proc/cpuinfo,"cpu MHz		: 2095.077"
+BBBP,112,/proc/cpuinfo,"cache size	: 22528 KB"
+BBBP,113,/proc/cpuinfo,"physical id	: 0"
+BBBP,114,/proc/cpuinfo,"siblings	: 2"
+BBBP,115,/proc/cpuinfo,"core id		: 1"
+BBBP,116,/proc/cpuinfo,"cpu cores	: 2"
+BBBP,117,/proc/cpuinfo,"apicid		: 1"
+BBBP,118,/proc/cpuinfo,"initial apicid	: 1"
+BBBP,119,/proc/cpuinfo,"fpu		: yes"
+BBBP,120,/proc/cpuinfo,"fpu_exception	: yes"
+BBBP,121,/proc/cpuinfo,"cpuid level	: 22"
+BBBP,122,/proc/cpuinfo,"wp		: yes"
+BBBP,123,/proc/cpuinfo,"flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ss ht syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon nopl xtopology tsc_reliable nonstop_tsc cpuid tsc_known_freq pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm 3dnowprefetch ssbd ibrs ibpb stibp ibrs_enhanced fsgsbase tsc_adjust bmi1 avx2 smep bmi2 invpcid avx512f avx512dq rdseed adx smap clflushopt clwb avx512cd avx512bw avx512vl xsaveopt xsavec xgetbv1 xsaves arat pku ospke avx512_vnni md_clear flush_l1d arch_capabilities"
+BBBP,124,/proc/cpuinfo,"bugs		: spectre_v1 spectre_v2 spec_store_bypass swapgs itlb_multihit mmio_stale_data retbleed eibrs_pbrsb gds bhi"
+BBBP,125,/proc/cpuinfo,"bogomips	: 4190.15"
+BBBP,126,/proc/cpuinfo,"clflush size	: 64"
+BBBP,127,/proc/cpuinfo,"cache_alignment	: 64"
+BBBP,128,/proc/cpuinfo,"address sizes	: 45 bits physical, 48 bits virtual"
+BBBP,129,/proc/cpuinfo,"power management:"
+BBBP,130,/proc/cpuinfo,""
+BBBP,131,/proc/meminfo
+BBBP,132,/proc/meminfo,"MemTotal:        3745880 kB"
+BBBP,133,/proc/meminfo,"MemFree:         1040668 kB"
+BBBP,134,/proc/meminfo,"MemAvailable:    2502488 kB"
+BBBP,135,/proc/meminfo,"Buffers:           11696 kB"
+BBBP,136,/proc/meminfo,"Cached:          1548776 kB"
+BBBP,137,/proc/meminfo,"SwapCached:         3840 kB"
+BBBP,138,/proc/meminfo,"Active:           719196 kB"
+BBBP,139,/proc/meminfo,"Inactive:        1290728 kB"
+BBBP,140,/proc/meminfo,"Active(anon):     331080 kB"
+BBBP,141,/proc/meminfo,"Inactive(anon):   123332 kB"
+BBBP,142,/proc/meminfo,"Active(file):     388116 kB"
+BBBP,143,/proc/meminfo,"Inactive(file):  1167396 kB"
+BBBP,144,/proc/meminfo,"Unevictable:           0 kB"
+BBBP,145,/proc/meminfo,"Mlocked:               0 kB"
+BBBP,146,/proc/meminfo,"SwapTotal:       4194300 kB"
+BBBP,147,/proc/meminfo,"SwapFree:        4190436 kB"
+BBBP,148,/proc/meminfo,"Zswap:                 0 kB"
+BBBP,149,/proc/meminfo,"Zswapped:              0 kB"
+BBBP,150,/proc/meminfo,"Dirty:                 4 kB"
+BBBP,151,/proc/meminfo,"Writeback:             0 kB"
+BBBP,152,/proc/meminfo,"AnonPages:        422272 kB"
+BBBP,153,/proc/meminfo,"Mapped:           184488 kB"
+BBBP,154,/proc/meminfo,"Shmem:              5084 kB"
+BBBP,155,/proc/meminfo,"KReclaimable:     195072 kB"
+BBBP,156,/proc/meminfo,"Slab:             311076 kB"
+BBBP,157,/proc/meminfo,"SReclaimable:     195072 kB"
+BBBP,158,/proc/meminfo,"SUnreclaim:       116004 kB"
+BBBP,159,/proc/meminfo,"KernelStack:        5536 kB"
+BBBP,160,/proc/meminfo,"PageTables:         6224 kB"
+BBBP,161,/proc/meminfo,"SecPageTables:         0 kB"
+BBBP,162,/proc/meminfo,"NFS_Unstable:          0 kB"
+BBBP,163,/proc/meminfo,"Bounce:                0 kB"
+BBBP,164,/proc/meminfo,"WritebackTmp:          0 kB"
+BBBP,165,/proc/meminfo,"CommitLimit:     6067240 kB"
+BBBP,166,/proc/meminfo,"Committed_AS:    1366876 kB"
+BBBP,167,/proc/meminfo,"VmallocTotal:   34359738367 kB"
+BBBP,168,/proc/meminfo,"VmallocUsed:      164500 kB"
+BBBP,169,/proc/meminfo,"VmallocChunk:          0 kB"
+BBBP,170,/proc/meminfo,"Percpu:             1032 kB"
+BBBP,171,/proc/meminfo,"HardwareCorrupted:     0 kB"
+BBBP,172,/proc/meminfo,"AnonHugePages:    110592 kB"
+BBBP,173,/proc/meminfo,"ShmemHugePages:        0 kB"
+BBBP,174,/proc/meminfo,"ShmemPmdMapped:        0 kB"
+BBBP,175,/proc/meminfo,"FileHugePages:         0 kB"
+BBBP,176,/proc/meminfo,"FilePmdMapped:         0 kB"
+BBBP,177,/proc/meminfo,"CmaTotal:              0 kB"
+BBBP,178,/proc/meminfo,"CmaFree:               0 kB"
+BBBP,179,/proc/meminfo,"Unaccepted:            0 kB"
+BBBP,180,/proc/meminfo,"HugePages_Total:       0"
+BBBP,181,/proc/meminfo,"HugePages_Free:        0"
+BBBP,182,/proc/meminfo,"HugePages_Rsvd:        0"
+BBBP,183,/proc/meminfo,"HugePages_Surp:        0"
+BBBP,184,/proc/meminfo,"Hugepagesize:       2048 kB"
+BBBP,185,/proc/meminfo,"Hugetlb:               0 kB"
+BBBP,186,/proc/meminfo,"DirectMap4k:      138684 kB"
+BBBP,187,/proc/meminfo,"DirectMap2M:     4055040 kB"
+BBBP,188,/proc/meminfo,"DirectMap1G:     2097152 kB"
+BBBP,189,/proc/stat
+BBBP,190,/proc/stat,"cpu  49801 4979 15733 2873145 622 1709 994 0 0 0"
+BBBP,191,/proc/stat,"cpu0 25366 1556 7497 1437936 249 828 457 0 0 0"
+BBBP,192,/proc/stat,"cpu1 24434 3423 8236 1435208 373 880 537 0 0 0"
+BBBP,193,/proc/stat,"intr 4734594 22 9 0 0 0 0 0 0 0 0 0 0 15 0 0 0 0 0 0 0 0 0 0 0 141964 111446 0 58541 7301 1999 0 4000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
+BBBP,194,/proc/stat,"ctxt 8629122"
+BBBP,195,/proc/stat,"btime 1743977015"
+BBBP,196,/proc/stat,"processes 68706"
+BBBP,197,/proc/stat,"procs_running 4"
+BBBP,198,/proc/stat,"procs_blocked 0"
+BBBP,199,/proc/stat,"softirq 2743791 0 649859 6 251898 64889 0 2180 840322 0 934637"
+BBBP,200,/proc/version
+BBBP,201,/proc/version,"Linux version 5.14.0-503.34.1.el9_5.x86_64 (mockbuild@x86-64-01.build.eng.rdu2.redhat.com) (gcc (GCC) 11.5.0 20240719 (Red Hat 11.5.0-5), GNU ld version 2.35.2-54.el9) #1 SMP PREEMPT_DYNAMIC Mon Mar 17 21:49:47 EDT 2025"
+BBBP,202,/proc/net/dev
+BBBP,203,/proc/net/dev,"Inter-|   Receive                                                |  Transmit"
+BBBP,204,/proc/net/dev," face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed"
+BBBP,205,/proc/net/dev,"    lo:    2500      50    0    0    0     0          0         0     2500      50    0    0    0     0       0          0"
+BBBP,206,/proc/net/dev," ens33: 980683378  172482    0   99    0     0          0       236 46797636  128899    0    0    0     0       0          0"
+BBBP,207,/proc/diskinfo
+BBBP,208,/proc/diskstats
+BBBP,209,/proc/diskstats,"   8       0 sda 41137 269 2053017 16081 22432 33481 3869674 54477 0 16162 70559 0 0 0 0 0 0"
+BBBP,210,/proc/diskstats,"   8       1 sda1 197 198 14840 34 1 0 1 0 0 26 35 0 0 0 0 0 0"
+BBBP,211,/proc/diskstats,"   8       2 sda2 453 0 105843 291 149 19 122877 512 0 298 804 0 0 0 0 0 0"
+BBBP,212,/proc/diskstats,"   8       3 sda3 40321 71 1923054 15689 22282 33462 3746796 53965 0 18745 69654 0 0 0 0 0 0"
+BBBP,213,/proc/diskstats,"  11       0 sr0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
+BBBP,214,/proc/diskstats," 253       0 dm-0 31891 0 1267807 11961 42787 0 2020288 93234 0 35426 105195 0 0 0 0 0 0"
+BBBP,215,/proc/diskstats," 253       1 dm-1 98 0 4440 28 960 0 7680 2559 0 17 2587 0 0 0 0 0 0"
+BBBP,216,/proc/diskstats," 253       2 dm-2 150 0 2427 46 7 0 4136 7 0 42 53 0 0 0 0 0 0"
+BBBP,217,/proc/diskstats," 253       3 dm-3 48 0 2088 11 0 0 0 0 0 4 11 0 0 0 0 0 0"
+BBBP,218,/proc/diskstats," 253       4 dm-4 124 0 10781 41 2420 0 207574 6353 0 354 6394 0 0 0 0 0 0"
+BBBP,219,/proc/diskstats," 253       5 dm-5 7464 0 535919 2779 8662 0 1507118 18651 0 33545 21430 0 0 0 0 0 0"
+BBBP,220,/sbin/multipath
+BBBP,221,/dev/mapper
+BBBP,222,/dev/mapper,"total 0"
+BBBP,223,/dev/mapper,"crw-------. 1 root root 10, 236 Apr  6 17:03 control"
+BBBP,224,/dev/mapper,"lrwxrwxrwx. 1 root root       7 Apr  6 17:03 sp25_cs525_0711_sys-reserved -> ../dm-3"
+BBBP,225,/dev/mapper,"lrwxrwxrwx. 1 root root       7 Apr  6 17:03 sp25_cs525_0711_sys-root -> ../dm-0"
+BBBP,226,/dev/mapper,"lrwxrwxrwx. 1 root root       7 Apr  6 17:03 sp25_cs525_0711_sys-srv -> ../dm-2"
+BBBP,227,/dev/mapper,"lrwxrwxrwx. 1 root root       7 Apr  6 17:03 sp25_cs525_0711_sys-swap -> ../dm-1"
+BBBP,228,/dev/mapper,"lrwxrwxrwx. 1 root root       7 Apr  6 17:03 sp25_cs525_0711_sys-tmp -> ../dm-4"
+BBBP,229,/dev/mapper,"lrwxrwxrwx. 1 root root       7 Apr  6 17:03 sp25_cs525_0711_sys-var -> ../dm-5"
+BBBP,230,/dev/mpath
+BBBP,231,/dev/dm-*
+BBBP,232,/dev/dm-*,"brw-rw----. 1 root disk 253, 0 Apr  6 17:03 /dev/dm-0"
+BBBP,233,/dev/dm-*,"brw-rw----. 1 root disk 253, 1 Apr  6 17:03 /dev/dm-1"
+BBBP,234,/dev/dm-*,"brw-rw----. 1 root disk 253, 2 Apr  6 17:03 /dev/dm-2"
+BBBP,235,/dev/dm-*,"brw-rw----. 1 root disk 253, 3 Apr  6 17:03 /dev/dm-3"
+BBBP,236,/dev/dm-*,"brw-rw----. 1 root disk 253, 4 Apr  6 17:03 /dev/dm-4"
+BBBP,237,/dev/dm-*,"brw-rw----. 1 root disk 253, 5 Apr  6 17:03 /dev/dm-5"
+BBBP,238,/dev/md*
+BBBP,239,/dev/sd*
+BBBP,240,/dev/sd*,"brw-rw----. 1 root disk 8, 0 Apr  6 17:03 /dev/sda"
+BBBP,241,/dev/sd*,"brw-rw----. 1 root disk 8, 1 Apr  6 17:03 /dev/sda1"
+BBBP,242,/dev/sd*,"brw-rw----. 1 root disk 8, 2 Apr  6 17:03 /dev/sda2"
+BBBP,243,/dev/sd*,"brw-rw----. 1 root disk 8, 3 Apr  6 17:03 /dev/sda3"
+BBBP,244,/proc/partitions
+BBBP,245,/proc/partitions,"major minor  #blocks  name"
+BBBP,246,/proc/partitions,""
+BBBP,247,/proc/partitions,"   8        0  104857600 sda"
+BBBP,248,/proc/partitions,"   8        1     204800 sda1"
+BBBP,249,/proc/partitions,"   8        2    2097152 sda2"
+BBBP,250,/proc/partitions,"   8        3  102553600 sda3"
+BBBP,251,/proc/partitions,"  11        0    1048575 sr0"
+BBBP,252,/proc/partitions," 253        0   33554432 dm-0"
+BBBP,253,/proc/partitions," 253        1    4194304 dm-1"
+BBBP,254,/proc/partitions," 253        2   18665472 dm-2"
+BBBP,255,/proc/partitions," 253        3   33554432 dm-3"
+BBBP,256,/proc/partitions," 253        4    4194304 dm-4"
+BBBP,257,/proc/partitions," 253        5    8388608 dm-5"
+BBBP,258,/proc/1/stat
+BBBP,259,/proc/1/stat,"1 (systemd) S 0 1 1 0 -1 4194560 42864 10370602 242 865 175 99 21220 6631 20 0 1 0 14 112590848 4504 18446744073709551615 1 1 0 0 0 0 671173123 4096 1260 0 0 0 17 1 0 0 0 0 0 0 0 0 0 0 0 0 0"
+BBBP,260,/proc/net/rpc/nfs
+BBBP,261,/proc/net/rpc/nfsd
+BBBP,262,/proc/modules
+BBBP,263,/proc/modules,"binfmt_misc 28672 1 - Live 0x0000000000000000"
+BBBP,264,/proc/modules,"nft_fib_inet 12288 1 - Live 0x0000000000000000"
+BBBP,265,/proc/modules,"nft_fib_ipv4 12288 1 nft_fib_inet, Live 0x0000000000000000"
+BBBP,266,/proc/modules,"nft_fib_ipv6 12288 1 nft_fib_inet, Live 0x0000000000000000"
+BBBP,267,/proc/modules,"nft_fib 12288 3 nft_fib_inet,nft_fib_ipv4,nft_fib_ipv6, Live 0x0000000000000000"
+BBBP,268,/proc/modules,"nft_reject_inet 12288 6 - Live 0x0000000000000000"
+BBBP,269,/proc/modules,"nf_reject_ipv4 16384 1 nft_reject_inet, Live 0x0000000000000000"
+BBBP,270,/proc/modules,"nf_reject_ipv6 24576 1 nft_reject_inet, Live 0x0000000000000000"
+BBBP,271,/proc/modules,"nft_reject 12288 1 nft_reject_inet, Live 0x0000000000000000"
+BBBP,272,/proc/modules,"nft_ct 24576 7 - Live 0x0000000000000000"
+BBBP,273,/proc/modules,"nft_chain_nat 12288 3 - Live 0x0000000000000000"
+BBBP,274,/proc/modules,"nf_nat 65536 1 nft_chain_nat, Live 0x0000000000000000"
+BBBP,275,/proc/modules,"nf_conntrack 229376 2 nft_ct,nf_nat, Live 0x0000000000000000"
+BBBP,276,/proc/modules,"nf_defrag_ipv6 24576 1 nf_conntrack, Live 0x0000000000000000"
+BBBP,277,/proc/modules,"nf_defrag_ipv4 12288 1 nf_conntrack, Live 0x0000000000000000"
+BBBP,278,/proc/modules,"ip_set 69632 0 - Live 0x0000000000000000"
+BBBP,279,/proc/modules,"nf_tables 356352 194 nft_fib_inet,nft_fib_ipv4,nft_fib_ipv6,nft_fib,nft_reject_inet,nft_reject,nft_ct,nft_chain_nat, Live 0x0000000000000000"
+BBBP,280,/proc/modules,"nfnetlink 20480 3 ip_set,nf_tables, Live 0x0000000000000000"
+BBBP,281,/proc/modules,"tls 159744 1 - Live 0x0000000000000000"
+BBBP,282,/proc/modules,"rfkill 40960 1 - Live 0x0000000000000000"
+BBBP,283,/proc/modules,"vsock_loopback 12288 0 - Live 0x0000000000000000"
+BBBP,284,/proc/modules,"vmw_vsock_virtio_transport_common 61440 1 vsock_loopback, Live 0x0000000000000000"
+BBBP,285,/proc/modules,"vmw_vsock_vmci_transport 49152 1 - Live 0x0000000000000000"
+BBBP,286,/proc/modules,"vsock 69632 5 vsock_loopback,vmw_vsock_virtio_transport_common,vmw_vsock_vmci_transport, Live 0x0000000000000000"
+BBBP,287,/proc/modules,"vfat 16384 1 - Live 0x0000000000000000"
+BBBP,288,/proc/modules,"fat 102400 1 vfat, Live 0x0000000000000000"
+BBBP,289,/proc/modules,"intel_rapl_msr 20480 0 - Live 0x0000000000000000"
+BBBP,290,/proc/modules,"intel_rapl_common 45056 1 intel_rapl_msr, Live 0x0000000000000000"
+BBBP,291,/proc/modules,"intel_uncore_frequency_common 16384 0 - Live 0x0000000000000000"
+BBBP,292,/proc/modules,"isst_if_mbox_msr 16384 0 - Live 0x0000000000000000"
+BBBP,293,/proc/modules,"isst_if_common 28672 1 isst_if_mbox_msr, Live 0x0000000000000000"
+BBBP,294,/proc/modules,"nfit 90112 0 - Live 0x0000000000000000"
+BBBP,295,/proc/modules,"libnvdimm 253952 1 nfit, Live 0x0000000000000000"
+BBBP,296,/proc/modules,"rapl 24576 0 - Live 0x0000000000000000"
+BBBP,297,/proc/modules,"vmw_balloon 28672 0 - Live 0x0000000000000000"
+BBBP,298,/proc/modules,"pcspkr 12288 0 - Live 0x0000000000000000"
+BBBP,299,/proc/modules,"vmw_vmci 131072 2 vmw_vsock_vmci_transport,vmw_balloon, Live 0x0000000000000000"
+BBBP,300,/proc/modules,"i2c_piix4 28672 0 - Live 0x0000000000000000"
+BBBP,301,/proc/modules,"joydev 28672 0 - Live 0x0000000000000000"
+BBBP,302,/proc/modules,"auth_rpcgss 196608 0 - Live 0x0000000000000000"
+BBBP,303,/proc/modules,"sunrpc 884736 5 auth_rpcgss, Live 0x0000000000000000"
+BBBP,304,/proc/modules,"xfs 2584576 5 - Live 0x0000000000000000"
+BBBP,305,/proc/modules,"libcrc32c 12288 4 nf_nat,nf_conntrack,nf_tables,xfs, Live 0x0000000000000000"
+BBBP,306,/proc/modules,"vmwgfx 450560 1 - Live 0x0000000000000000"
+BBBP,307,/proc/modules,"drm_ttm_helper 12288 1 vmwgfx, Live 0x0000000000000000"
+BBBP,308,/proc/modules,"ttm 106496 2 vmwgfx,drm_ttm_helper, Live 0x0000000000000000"
+BBBP,309,/proc/modules,"sr_mod 28672 0 - Live 0x0000000000000000"
+BBBP,310,/proc/modules,"cdrom 90112 1 sr_mod, Live 0x0000000000000000"
+BBBP,311,/proc/modules,"drm_kms_helper 274432 2 vmwgfx, Live 0x0000000000000000"
+BBBP,312,/proc/modules,"ata_generic 16384 0 - Live 0x0000000000000000"
+BBBP,313,/proc/modules,"drm 782336 6 vmwgfx,drm_ttm_helper,ttm,drm_kms_helper, Live 0x0000000000000000"
+BBBP,314,/proc/modules,"ata_piix 45056 0 - Live 0x0000000000000000"
+BBBP,315,/proc/modules,"ahci 49152 0 - Live 0x0000000000000000"
+BBBP,316,/proc/modules,"sd_mod 94208 8 - Live 0x0000000000000000"
+BBBP,317,/proc/modules,"libahci 61440 1 ahci, Live 0x0000000000000000"
+BBBP,318,/proc/modules,"t10_pi 20480 1 sd_mod, Live 0x0000000000000000"
+BBBP,319,/proc/modules,"sg 53248 0 - Live 0x0000000000000000"
+BBBP,320,/proc/modules,"libata 520192 4 ata_generic,ata_piix,ahci,libahci, Live 0x0000000000000000"
+BBBP,321,/proc/modules,"crct10dif_pclmul 12288 1 - Live 0x0000000000000000"
+BBBP,322,/proc/modules,"crc32_pclmul 12288 0 - Live 0x0000000000000000"
+BBBP,323,/proc/modules,"crc32c_intel 24576 1 - Live 0x0000000000000000"
+BBBP,324,/proc/modules,"ghash_clmulni_intel 16384 0 - Live 0x0000000000000000"
+BBBP,325,/proc/modules,"vmxnet3 98304 0 - Live 0x0000000000000000"
+BBBP,326,/proc/modules,"vmw_pvscsi 40960 8 - Live 0x0000000000000000"
+BBBP,327,/proc/modules,"serio_raw 16384 0 - Live 0x0000000000000000"
+BBBP,328,/proc/modules,"dm_mirror 28672 0 - Live 0x0000000000000000"
+BBBP,329,/proc/modules,"dm_region_hash 28672 1 dm_mirror, Live 0x0000000000000000"
+BBBP,330,/proc/modules,"dm_log 24576 2 dm_mirror,dm_region_hash, Live 0x0000000000000000"
+BBBP,331,/proc/modules,"dm_mod 249856 20 dm_mirror,dm_log, Live 0x0000000000000000"
+BBBP,332,/proc/modules,"fuse 212992 1 - Live 0x0000000000000000"
+BBBP,333,ifconfig
+BBBP,334,ifconfig,"ens33: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500"
+BBBP,335,ifconfig,"        inet 172.22.150.233  netmask 255.255.254.0  broadcast 172.22.151.255"
+BBBP,336,ifconfig,"        inet6 fe80::250:56ff:fe8c:4c54  prefixlen 64  scopeid 0x20<link>"
+BBBP,337,ifconfig,"        ether 00:50:56:8c:4c:54  txqueuelen 1000  (Ethernet)"
+BBBP,338,ifconfig,"        RX packets 172487  bytes 980684018 (935.2 MiB)"
+BBBP,339,ifconfig,"        RX errors 0  dropped 99  overruns 0  frame 0"
+BBBP,340,ifconfig,"        TX packets 128903  bytes 46804473 (44.6 MiB)"
+BBBP,341,ifconfig,"        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0"
+BBBP,342,ifconfig,""
+BBBP,343,ifconfig,"lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536"
+BBBP,344,ifconfig,"        inet 127.0.0.1  netmask 255.0.0.0"
+BBBP,345,ifconfig,"        inet6 ::1  prefixlen 128  scopeid 0x10<host>"
+BBBP,346,ifconfig,"        loop  txqueuelen 1000  (Local Loopback)"
+BBBP,347,ifconfig,"        RX packets 50  bytes 2500 (2.4 KiB)"
+BBBP,348,ifconfig,"        RX errors 0  dropped 0  overruns 0  frame 0"
+BBBP,349,ifconfig,"        TX packets 50  bytes 2500 (2.4 KiB)"
+BBBP,350,ifconfig,"        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0"
+BBBP,351,ifconfig,""
+BBBP,352,/bin/df-m
+BBBP,353,/bin/df-m,"Filesystem                           1M-blocks  Used Available Use% Mounted on"
+BBBP,354,/bin/df-m,"devtmpfs                                     4     0         4   0% /dev"
+BBBP,355,/bin/df-m,"tmpfs                                     1830     1      1830   1% /dev/shm"
+BBBP,356,/bin/df-m,"tmpfs                                      732     9       723   2% /run"
+BBBP,357,/bin/df-m,"efivarfs                                     1     1         1  23% /sys/firmware/efi/efivars"
+BBBP,358,/bin/df-m,"ddev/mapper/sp25_cs525_0711_sys-root     32704  5644     27061  18% /"
+BBBP,359,/bin/df-m,"ddev/mapper/sp25_cs525_0711_sys-var       8128   743      7386  10% /var"
+BBBP,360,/bin/df-m,"ddev/mapper/sp25_cs525_0711_sys-tmp       4032   114      3919   3% /tmp"
+BBBP,361,/bin/df-m,"ddev/sda2                                 1984   416      1569  21% /boot"
+BBBP,362,/bin/df-m,"ddev/mapper/sp25_cs525_0711_sys-srv      18164   159     18006   1% /srv"
+BBBP,363,/bin/df-m,"ddev/sda1                                  200     8       193   4% /boot/efi"
+BBBP,364,/bin/df-m,"tmpfs                                      366     1       366   1% /run/user/1064457"
+BBBP,365,/bin/mount
+BBBP,366,/bin/mount,"proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)"
+BBBP,367,/bin/mount,"sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime,seclabel)"
+BBBP,368,/bin/mount,"devtmpfs on /dev type devtmpfs (rw,nosuid,seclabel,size=4096k,nr_inodes=462792,mode=755,inode64)"
+BBBP,369,/bin/mount,"securityfs on /sys/kernel/security type securityfs (rw,nosuid,nodev,noexec,relatime)"
+BBBP,370,/bin/mount,"tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev,seclabel,inode64)"
+BBBP,371,/bin/mount,"devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,seclabel,gid=5,mode=620,ptmxmode=000)"
+BBBP,372,/bin/mount,"tmpfs on /run type tmpfs (rw,nosuid,nodev,seclabel,size=749176k,nr_inodes=819200,mode=755,inode64)"
+BBBP,373,/bin/mount,"cgroup2 on /sys/fs/cgroup type cgroup2 (rw,nosuid,nodev,noexec,relatime,seclabel,nsdelegate,memory_recursiveprot)"
+BBBP,374,/bin/mount,"pstore on /sys/fs/pstore type pstore (rw,nosuid,nodev,noexec,relatime,seclabel)"
+BBBP,375,/bin/mount,"efivarfs on /sys/firmware/efi/efivars type efivarfs (rw,nosuid,nodev,noexec,relatime)"
+BBBP,376,/bin/mount,"bpf on /sys/fs/bpf type bpf (rw,nosuid,nodev,noexec,relatime,mode=700)"
+BBBP,377,/bin/mount,"ddev/mapper/sp25_cs525_0711_sys-root on / type xfs (rw,relatime,seclabel,attr2,inode64,logbufs=8,logbsize=32k,noquota)"
+BBBP,378,/bin/mount,"selinuxfs on /sys/fs/selinux type selinuxfs (rw,nosuid,noexec,relatime)"
+BBBP,379,/bin/mount,"systemd-1 on /proc/sys/fs/binfmt_misc type autofs (rw,relatime,fd=29,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=19561)"
+BBBP,380,/bin/mount,"debugfs on /sys/kernel/debug type debugfs (rw,nosuid,nodev,noexec,relatime,seclabel)"
+BBBP,381,/bin/mount,"hugetlbfs on /dev/hugepages type hugetlbfs (rw,relatime,seclabel,pagesize=2M)"
+BBBP,382,/bin/mount,"mqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime,seclabel)"
+BBBP,383,/bin/mount,"tracefs on /sys/kernel/tracing type tracefs (rw,nosuid,nodev,noexec,relatime,seclabel)"
+BBBP,384,/bin/mount,"configfs on /sys/kernel/config type configfs (rw,nosuid,nodev,noexec,relatime)"
+BBBP,385,/bin/mount,"fusectl on /sys/fs/fuse/connections type fusectl (rw,nosuid,nodev,noexec,relatime)"
+BBBP,386,/bin/mount,"none on /run/credentials/systemd-sysctl.service type ramfs (ro,nosuid,nodev,noexec,relatime,seclabel,mode=700)"
+BBBP,387,/bin/mount,"none on /run/credentials/systemd-tmpfiles-setup-dev.service type ramfs (ro,nosuid,nodev,noexec,relatime,seclabel,mode=700)"
+BBBP,388,/bin/mount,"ddev/mapper/sp25_cs525_0711_sys-var on /var type xfs (rw,relatime,seclabel,attr2,inode64,logbufs=8,logbsize=32k,noquota)"
+BBBP,389,/bin/mount,"ddev/mapper/sp25_cs525_0711_sys-tmp on /tmp type xfs (rw,relatime,seclabel,attr2,inode64,logbufs=8,logbsize=32k,noquota)"
+BBBP,390,/bin/mount,"ddev/sda2 on /boot type xfs (rw,relatime,seclabel,attr2,inode64,logbufs=8,logbsize=32k,noquota)"
+BBBP,391,/bin/mount,"ddev/mapper/sp25_cs525_0711_sys-srv on /srv type xfs (rw,relatime,seclabel,attr2,inode64,logbufs=8,logbsize=32k,noquota)"
+BBBP,392,/bin/mount,"ddev/sda1 on /boot/efi type vfat (rw,relatime,fmask=0077,dmask=0077,codepage=437,iocharset=ascii,shortname=winnt,errors=remount-ro)"
+BBBP,393,/bin/mount,"none on /run/credentials/systemd-tmpfiles-setup.service type ramfs (ro,nosuid,nodev,noexec,relatime,seclabel,mode=700)"
+BBBP,394,/bin/mount,"sunrpc on /var/lib/nfs/rpc_pipefs type rpc_pipefs (rw,relatime)"
+BBBP,395,/bin/mount,"tmpfs on /run/user/1064457 type tmpfs (rw,nosuid,nodev,relatime,seclabel,size=374588k,nr_inodes=93647,mode=700,uid=1064457,gid=1064457,inode64)"
+BBBP,396,/bin/mount,"binfmt_misc on /proc/sys/fs/binfmt_misc type binfmt_misc (rw,nosuid,nodev,noexec,relatime)"
+BBBP,397,/etc/fstab
+BBBP,398,/etc/fstab,""
+BBBP,399,/etc/fstab,"#"
+BBBP,400,/etc/fstab,"# /etc/fstab"
+BBBP,401,/etc/fstab,"# Created by anaconda on Thu Dec  5 03:23:16 2024"
+BBBP,402,/etc/fstab,"#"
+BBBP,403,/etc/fstab,"# Accessible filesystems, by reference, are maintained under '/dev/disk/'."
+BBBP,404,/etc/fstab,"# See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info."
+BBBP,405,/etc/fstab,"#"
+BBBP,406,/etc/fstab,"# After editing this file, run 'systemctl daemon-reload' to update systemd"
+BBBP,407,/etc/fstab,"# units generated from this file."
+BBBP,408,/etc/fstab,"#"
+BBBP,409,/etc/fstab,"ddev/mapper/sp25_cs525_0711_sys-root /                       xfs     defaults        0 0"
+BBBP,410,/etc/fstab,"UUID=0eac1069-d095-4d53-91a1-1bd0558863aa /boot                   xfs     defaults        0 0"
+BBBP,411,/etc/fstab,"UUID=CA0B-D96E          /boot/efi               vfat    defaults,uid=0,gid=0,umask=077,shortname=winnt 0 2"
+BBBP,412,/etc/fstab,"ddev/mapper/sp25_cs525_0711_sys-srv /srv                    xfs     defaults        0 0"
+BBBP,413,/etc/fstab,"ddev/mapper/sp25_cs525_0711_sys-tmp /tmp                    xfs     defaults        0 0"
+BBBP,414,/etc/fstab,"ddev/mapper/sp25_cs525_0711_sys-var /var                    xfs     defaults        0 0"
+BBBP,415,/etc/fstab,"ddev/mapper/sp25_cs525_0711_sys-swap none                    swap    defaults        0 0"
+BBBP,416,netstat -r
+BBBP,417,netstat -r,"Kernel IP routing table"
+BBBP,418,netstat -r,"Destination     Gateway         Genmask         Flags   MSS Window  irtt Iface"
+BBBP,419,netstat -r,"default         0017-csvm4-net. 0.0.0.0         UG        0 0          0 ens33"
+BBBP,420,netstat -r,"172.22.150.0    0.0.0.0         255.255.254.0   U         0 0          0 ens33"
+BBBP,421,uptime
+BBBP,422,uptime," 21:09:25 up  4:05,  3 users,  load average: 0.14, 0.11, 0.04"
+BBBP,423,getconf PAGESIZE
+BBBP,424,getconf PAGESIZE,"4096"
+ZZZZ,T0001,21:09:26,06-APR-2025
+CPU001,T0001,5.2,10.3,0.9,83.6,0.0
+CPU002,T0001,9.5,5.2,0.0,85.3,0.0
+CPU_ALL,T0001,7.4,7.8,0.4,84.4,0.0,,2
+MEM,T0001,3658.1,-0.0,-0.0,4096.0,1019.5,-0.0,-0.0,4092.2,5.0,1513.3,703.2,-1.0,11.4,3.8,1260.5
+VM,Paging and Virtual Memory,nr_dirty,nr_writeback,nr_unstable,nr_page_table_pages,nr_mapped,nr_slab_reclaimable,pgpgin,pgpgout,pswpin,pswpout,pgfree,pgactivate,pgdeactivate,pgfault,pgmajfault,pginodesteal,slabs_scanned,kswapd_steal,kswapd_inodesteal,pageoutrun,allocstall,pgrotated,pgalloc_high,pgalloc_normal,pgalloc_dma,pgrefill_high,pgrefill_normal,pgrefill_dma,pgsteal_high,pgsteal_normal,pgsteal_dma,pgscan_kswapd_high,pgscan_kswapd_normal,pgscan_kswapd_dma,pgscan_direct_high,pgscan_direct_normal,pgscan_direct_dma
+VM,T0001,10,0,0,1580,46122,48768,1400,0,0,0,12357,0,0,20469,8,0,0,0,0,0,0,0,0,12101,0,0,0,0,0,0,0,0,0,0,0,0,0
+PROC,T0001,1,0,0.0,-1.0,-1.0,-1.0,0.0,-1.0,-1.0,-1.0
+NET,T0001,0.0,6.1,0.0,24.3
+NETPACKET,T0001,0.0,29.2,0.0,26.6
+JFSFILE,T0001,0.0,1.2,17.3
+DISKBUSY,T0001,0.9,0.0,0.0,1.7,1.7,0.0,0.0,0.0,0.0,0.0
+DISKREAD,T0001,1201.0,0.0,0.0,1201.0,1201.0,0.0,0.0,0.0,0.0,0.0
+DISKWRITE,T0001,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+DISKXFER,T0001,21.4,0.0,0.0,21.4,21.4,0.0,0.0,0.0,0.0,0.0
+DISKBSIZE,T0001,56.0,0.0,0.0,56.0,56.0,0.0,0.0,0.0,0.0,0.0
+ZZZZ,T0002,21:14:26,06-APR-2025
+CPU001,T0002,1.4,0.6,0.0,98.0,0.0
+CPU002,T0002,1.3,0.6,0.0,98.1,0.0
+CPU_ALL,T0002,1.3,0.6,0.0,98.0,0.0,,2
+MEM,T0002,3658.1,-0.0,-0.0,4096.0,1017.6,-0.0,-0.0,4092.2,5.0,1513.4,757.6,-1.0,11.4,3.8,1188.9
+VM,T0002,7,0,0,1478,44261,48771,0,25563,0,0,400208,0,0,383027,20,0,0,0,0,0,0,0,0,192531,0,0,0,0,0,0,0,0,0,0,0,0,0
+PROC,T0002,1,0,608.1,-1.0,-1.0,-1.0,5.1,-1.0,-1.0,-1.0
+NET,T0002,0.0,0.4,0.0,1.0
+NETPACKET,T0002,0.0,3.0,0.0,2.9
+JFSFILE,T0002,0.0,1.2,17.3
+DISKBUSY,T0002,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+DISKREAD,T0002,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+DISKWRITE,T0002,85.2,0.0,0.0,85.2,5.2,0.0,0.0,0.0,78.4,1.6
+DISKXFER,T0002,0.9,0.0,0.0,0.9,0.4,0.0,0.0,0.0,0.4,0.2
+DISKBSIZE,T0002,99.5,0.0,0.0,99.5,11.9,0.0,0.0,0.0,196.0,6.4
+ZZZZ,T0003,21:19:26,06-APR-2025
+CPU001,T0003,0.4,0.3,0.0,99.3,0.0
+CPU002,T0003,0.4,0.3,0.0,99.3,0.0
+CPU_ALL,T0003,0.4,0.3,0.0,99.3,0.0,,2
+MEM,T0003,3658.1,-0.0,-0.0,4096.0,1017.9,-0.0,-0.0,4092.2,5.0,1513.5,761.9,-1.0,11.4,3.8,1183.0
+VM,T0003,2,0,0,1478,44264,48771,16,604,0,0,65367,0,0,88848,0,0,0,0,0,0,0,0,0,58836,0,0,0,0,0,0,0,0,0,0,0,0,0
+PROC,T0003,1,0,416.0,-1.0,-1.0,-1.0,1.5,-1.0,-1.0,-1.0
+NET,T0003,0.0,0.5,0.0,0.5
+NETPACKET,T0003,0.0,4.1,0.0,3.1
+JFSFILE,T0003,0.0,1.2,17.3
+DISKBUSY,T0003,0.0,0.0,0.0,0.7,0.0,0.0,0.0,0.0,0.0,0.7
+DISKREAD,T0003,0.1,0.0,0.0,0.1,0.1,0.0,0.0,0.0,0.0,0.0
+DISKWRITE,T0003,2.0,0.0,0.0,2.0,0.7,0.0,0.0,0.0,0.0,1.3
+DISKXFER,T0003,0.3,0.0,0.0,0.3,0.2,0.0,0.0,0.0,0.0,0.2
+DISKBSIZE,T0003,6.5,0.0,0.0,6.5,4.3,0.0,0.0,0.0,0.8,6.2
+ZZZZ,T0004,21:24:26,06-APR-2025
+CPU001,T0004,0.5,0.3,0.0,99.2,0.0
+CPU002,T0004,0.4,0.3,0.0,99.4,0.0
+CPU_ALL,T0004,0.4,0.3,0.0,99.3,0.0,,2
+MEM,T0004,3658.1,-0.0,-0.0,4096.0,1019.3,-0.0,-0.0,4092.2,5.0,1513.6,767.8,-1.0,11.4,3.8,1179.0
+VM,T0004,0,0,0,1478,44264,48771,0,629,0,0,67529,0,0,86671,0,0,0,0,0,0,0,0,0,56306,0,0,0,0,0,0,0,0,0,0,0,0,0
+PROC,T0004,1,0,393.0,-1.0,-1.0,-1.0,1.4,-1.0,-1.0,-1.0
+NET,T0004,0.0,0.2,0.0,0.2
+NETPACKET,T0004,0.0,1.9,0.0,1.8
+JFSFILE,T0004,0.0,1.2,17.3
+DISKBUSY,T0004,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+DISKREAD,T0004,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+DISKWRITE,T0004,2.1,0.0,0.0,2.1,1.2,0.0,0.0,0.0,0.0,0.9
+DISKXFER,T0004,0.4,0.0,0.0,0.4,0.3,0.0,0.0,0.0,0.0,0.2
+DISKBSIZE,T0004,5.6,0.0,0.0,5.6,4.1,0.0,0.0,0.0,2.5,5.7
+ZZZZ,T0005,21:29:26,06-APR-2025
+CPU001,T0005,1.8,0.5,0.0,97.7,0.0
+CPU002,T0005,1.5,0.5,0.0,98.0,0.0
+CPU_ALL,T0005,1.7,0.5,0.0,97.8,0.0,,2
+MEM,T0005,3658.1,-0.0,-0.0,4096.0,1035.1,-0.0,-0.0,4092.2,5.0,1513.6,773.2,-1.0,11.4,3.8,1179.1
+VM,T0005,2,0,0,1491,44368,48797,2048,1028,0,0,241687,0,0,262975,0,0,0,0,0,0,0,0,0,89438,0,0,0,0,0,0,0,0,0,0,0,0,0
+PROC,T0005,1,0,536.4,-1.0,-1.0,-1.0,3.6,-1.0,-1.0,-1.0
+NET,T0005,0.0,97.7,0.0,1.2
+NETPACKET,T0005,0.0,13.8,0.0,9.5
+JFSFILE,T0005,0.0,1.2,17.3
+DISKBUSY,T0005,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+DISKREAD,T0005,6.8,0.0,0.0,6.8,0.0,0.0,0.0,0.0,0.0,0.0
+DISKWRITE,T0005,3.4,0.0,0.0,3.4,0.8,0.0,0.0,0.0,0.2,2.4
+DISKXFER,T0005,0.5,0.0,0.0,0.5,0.2,0.0,0.0,0.0,0.0,0.3
+DISKBSIZE,T0005,19.6,0.0,0.0,19.6,4.2,0.0,0.0,0.0,5.6,7.3
