@@ -168,7 +168,6 @@ func (n *Node) handleStream(stream network.Stream) {
 			log.Printf("✅ Acknowledgment from peer %s", msg.FromName)
 		case "gossip":
 			if payload, ok := msg.Payload.(map[string]interface{}); ok {
-				// If this is a block (assuming it is), then encode and pass on to client
 				n.broadcastToClients("gossip_received", map[string]interface{}{
 					"id":     payload["id"],
 					"origin": payload["origin"],

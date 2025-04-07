@@ -61,8 +61,14 @@ func handleWebSocketMessages(conn *websocket.Conn, done chan struct{}) {
 				Origin: data["origin"].(string),
 			}
 
-			fmt.Printf("\n📨 Received gossip from %s :\n   %s\n\n",
-				gossip_payload.Origin, gossip_payload.Text)
+			// Decode the block (assuming its a block)
+			block, err := DecodeBlock(gossip_payload.Text)
+			if err != nil {
+				log.Printf("Failed to decode block: %v", err)
+				continue
+			}
+			fmt.Printf("\n📨 Received gossiped block from %s :\n   %s\n\n",
+				gossip_payload.Origin, block.Hash)
 		} else if status, ok := msg["status"].(string); ok && status == "ok" {
 			serverMsg, _ := msg["message"].(string)
 			log.Printf("Server response: %s", serverMsg)
