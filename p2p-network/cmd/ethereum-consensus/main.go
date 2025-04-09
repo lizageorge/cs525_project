@@ -12,7 +12,6 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
-	// "p2p-network/pkg/messaging"
 )
 
 const INPUT_FILE_PATH = "../../inputs/peersFile.json"
@@ -26,7 +25,6 @@ type GossipPayload struct {
 	Origin string `json:"origin"`
 }
 
-// Keeps track of seen message IDs
 type Client struct {
 	VMID              string          // TODO have to read from file
 	seenMessages      map[string]bool // TODO this should have a pruning function
@@ -241,7 +239,7 @@ func (c *Client) handleGossipBlock(gossip_payload GossipPayload) {
 		}
 	}
 
-	if block.Votes >= int(float64(c.numPeers - 1)*(0.66)) {
+	if block.Votes >= int(float64(c.numPeers-1)*(0.66)) {
 		log.Printf("✅ Block %s has enough votes, adding to local chain", block.Hash)
 		err = addToLocalChain(block.Transactions)
 		if err != nil {
@@ -296,19 +294,6 @@ func main() {
 
 		block := BBExecuteTransactions(transactions)
 
-		// block_encoded, err := EncodeBlock(block)
-		// if err != nil {
-		// 	log.Printf("Failed to encode block: %v", err)
-		// 	return
-		// }
-
-		// new_gossip_payload := GossipPayload{
-		// 	ID:     c.generateMsgID(),
-		// 	Text:   block_encoded,
-		// 	Time:   time.Now().Format(time.RFC3339),
-		// 	Origin: c.VMID,
-		// }
-
 		new_gossip_Id := c.generateMsgID()
 
 		// Mark this block id as seen and forward it to rest of network
@@ -325,30 +310,3 @@ func main() {
 
 	c.WaitForInterrupt(done)
 }
-
-// func main() {
-// 	// c := NewClient(nil) // TODO pass the connection
-// 	// fmt.Println(c.generateMsgID()) // Use fmt.Println instead of print
-
-// 	block := Block{
-// 		Hash:         "abc123",
-// 		Transactions: "tx1,tx2,tx3",
-// 		Votes:        5,
-// 	}
-
-// 	// Encode the Block
-// 	encodedBlock, err := EncodeBlock(block)
-// 	if err != nil {
-// 		log.Printf("Error encoding block: %v", err)
-// 		return
-// 	}
-// 	fmt.Println("Encoded Block:", encodedBlock)
-
-// 	toDecode := encodedBlock
-// 	_, err = DecodeBlock(toDecode)
-// 	if err != nil {
-// 		log.Printf("Failed to decode block: %v", err)
-// 		return
-// 	}
-
-// }
