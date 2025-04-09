@@ -2,7 +2,6 @@ package messaging
 
 import (
 	"encoding/json"
-	// "fmt"
 )
 
 // Block represents a block with a hash, transactions, and votes

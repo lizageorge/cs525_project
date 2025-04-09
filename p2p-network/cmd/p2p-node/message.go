@@ -8,6 +8,8 @@ import (
 	"math/rand"
 	"time"
 
+	"p2p-network/shared"
+
 	"github.com/libp2p/go-libp2p/core/peer"
 	"github.com/libp2p/go-libp2p/core/protocol"
 )
@@ -18,13 +20,6 @@ type Message struct {
 	FromID   string      `json:"fromID"`
 	FromName string      `json:"fromName"`
 	Payload  interface{} `json:"payload"`
-}
-
-type GossipPayload struct {
-	ID     string `json:"id"`
-	Text   string `json:"text"`
-	Time   string `json:"time"`
-	Origin string `json:"origin"`
 }
 
 // forwardGossipMessage forwards a gossip message to B random peers
@@ -101,7 +96,7 @@ func (n *Node) SendMessage(targetPeer PeerInfo, msg Message) error {
 
 // InitiateGossip starts a new gossip message from this node
 func (n *Node) InitiateGossip(msgID string, text string) {
-	payload := GossipPayload{
+	payload := shared.GossipPayload{
 		ID:     msgID,
 		Text:   text,
 		Time:   time.Now().Format(time.RFC3339),

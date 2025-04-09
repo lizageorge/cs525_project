@@ -11,22 +11,16 @@ import (
 	"sync"
 	"time"
 
+	"p2p-network/shared"
+
 	"github.com/gorilla/websocket"
 )
 
 const INPUT_FILE_PATH = "../../inputs/peersFile.json"
 const LOCAL_CHAIN_FILE_PATH = "../../inputs/localChain.txt"
 
-// TODO this should def be refer to the same as in node code
-type GossipPayload struct {
-	ID     string `json:"id"`
-	Text   string `json:"text"`
-	Time   string `json:"time"`
-	Origin string `json:"origin"`
-}
-
 type Client struct {
-	VMID              string          // TODO have to read from file
+	VMID              string
 	seenMessages      map[string]bool // TODO this should have a pruning function
 	seenMessagesMutex sync.RWMutex
 	conn              *websocket.Conn
@@ -134,7 +128,7 @@ func (c *Client) handleWebSocketMessages(done chan struct{}) {
 			fmt.Println("Received gossip message: ", data)
 
 			// parse data into GossipPayload
-			gossip_payload := GossipPayload{
+			gossip_payload := shared.GossipPayload{
 				ID:     data["id"].(string),
 				Text:   data["text"].(string),
 				Time:   data["time"].(string),
@@ -212,7 +206,7 @@ func (c *Client) sendGossipBlock(msgId string, unencoded_block Block) error {
 	return nil
 }
 
-func (c *Client) handleGossipBlock(gossip_payload GossipPayload) {
+func (c *Client) handleGossipBlock(gossip_payload shared.GossipPayload) {
 	// Decode the block
 	log.Printf("Going to decode block: %s", gossip_payload.Text)
 	block, err := DecodeBlock(gossip_payload.Text)
