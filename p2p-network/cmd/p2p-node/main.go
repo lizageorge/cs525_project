@@ -12,9 +12,6 @@ import (
 	"time"
 )
 
-
-
-
 func main() {
 	// Parse command line arguments
 	port := flag.Int("port", 9000, "Port to listen on")
@@ -48,7 +45,7 @@ func main() {
 
 	// Pause briefly to allow peers to start
 	time.Sleep(2 * time.Second)
-	
+
 	// Connect to each peer
 	for _, peer := range peerData.VmPeers {
 		addr := strings.TrimSpace(peer.Address)

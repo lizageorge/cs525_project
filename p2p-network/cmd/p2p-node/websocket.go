@@ -36,7 +36,6 @@ func (n *Node) broadcastToClients(msgType string, data interface{}) {
 	fmt.Println("Broadcasted message to WebSocket clients:", msgType, data)
 }
 
-
 func (n *Node) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 	upgrader := websocket.Upgrader{
 		ReadBufferSize:  1024,
@@ -81,7 +80,7 @@ func (n *Node) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 			var cmd struct {
 				Action string `json:"action"`
 				Text   string `json:"text"`
-				ID 	string `json:"id"`
+				ID     string `json:"id"`
 			}
 
 			if err := json.Unmarshal(message, &cmd); err != nil {
@@ -93,7 +92,7 @@ func (n *Node) handleWebSocket(w http.ResponseWriter, r *http.Request) {
 				fmt.Println("Received gossip command:", cmd.Text)
 
 				log.Printf("📣 Initiating gossip via WebSocket: %s", cmd.Text)
-				n.InitiateGossip(cmd.ID,cmd.Text)
+				n.InitiateGossip(cmd.ID, cmd.Text)
 				conn.WriteJSON(map[string]string{"status": "ok", "message": "Gossip initiated"})
 			}
 		}

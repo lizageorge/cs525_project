@@ -13,7 +13,6 @@ import (
 )
 
 // Message types and related functions
-
 type Message struct {
 	Type     string      `json:"type"`
 	FromID   string      `json:"fromID"`
@@ -27,7 +26,6 @@ type GossipPayload struct {
 	Time   string `json:"time"`
 	Origin string `json:"origin"`
 }
-
 
 // forwardGossipMessage forwards a gossip message to B random peers
 func (n *Node) forwardGossipMessage(msg Message, excludePeerID string) {
@@ -101,22 +99,14 @@ func (n *Node) SendMessage(targetPeer PeerInfo, msg Message) error {
 	return nil
 }
 
-
 // InitiateGossip starts a new gossip message from this node
 func (n *Node) InitiateGossip(msgID string, text string) {
-	// Create gossip payload with unique message ID
-	// msgID := fmt.Sprintf("%s-%d", n.NodeID[:8], time.Now().UnixNano())
 	payload := GossipPayload{
 		ID:     msgID,
 		Text:   text,
 		Time:   time.Now().Format(time.RFC3339),
 		Origin: n.NodeName,
 	}
-
-	// // Mark this message as seen by current node
-	// n.SeenMsgsLock.Lock()
-	// n.SeenMsgs[msgID] = true
-	// n.SeenMsgsLock.Unlock()
 
 	msg := Message{
 		Type:     "gossip",

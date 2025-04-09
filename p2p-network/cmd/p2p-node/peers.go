@@ -10,12 +10,10 @@ import (
 	"github.com/multiformats/go-multiaddr"
 )
 
-
 type PeerInfo struct {
 	PeerAddr peer.AddrInfo
 	PeerName string
 }
-
 
 // Connect establishes connection to a peer
 func (n *Node) Connect(addr string, name string) error {
@@ -82,7 +80,6 @@ func (n *Node) AddPeer(peerID peer.ID, peerName string) PeerInfo {
 	return newPeer
 }
 
-
 // ListPeers prints out all connected peers
 func (n *Node) ListPeers() {
 	n.PeersLock.RLock()
@@ -93,7 +90,6 @@ func (n *Node) ListPeers() {
 		log.Printf("  - %s", peer.PeerName)
 	}
 }
-
 
 // Broadcast sends a message to all connected peers
 func (n *Node) Broadcast(msg Message) {
