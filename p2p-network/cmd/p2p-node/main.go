@@ -9,6 +9,7 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
+	"time"
 )
 
 
@@ -45,6 +46,9 @@ func main() {
 		log.Fatalf("❌ Failed to create node: %s", err)
 	}
 
+	// Pause briefly to allow peers to start
+	time.Sleep(2 * time.Second)
+	
 	// Connect to each peer
 	for _, peer := range peerData.VmPeers {
 		addr := strings.TrimSpace(peer.Address)
