@@ -299,6 +299,9 @@ func main() {
 
 	done := make(chan struct{})
 
+	// Wait for all peers to connect to their websockets
+	time.Sleep(2 * time.Second)
+
 	// Initialize the client
 	c := NewClient(conn)
 
