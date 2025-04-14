@@ -1,4 +1,4 @@
-package main
+package blackbox
 
 import (
 	"crypto/sha256"
