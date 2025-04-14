@@ -245,7 +245,7 @@ func (c *Client) handleGossipBlock(gossip_payload common.GossipPayload) {
 	fmt.Printf("\n📨 Received gossiped block from %s :\n   %s\n\n",
 		gossip_payload.Origin, gossip_payload.ID)
 
-	if c.HasSeen(gossip_payload.ID) {
+	if !c.HasSeen(gossip_payload.ID) {
 		// if self hasn't voted yet:
 		// attest (BB)
 		// add vote to block
@@ -278,7 +278,6 @@ func (c *Client) handleGossipBlock(gossip_payload common.GossipPayload) {
 			fmt.Println("✅ Sent gossiped block to network", block)
 		}
 	} else {
-
 		if block.Votes > c.getVotesSeen(gossip_payload.ID) {
 			if block.Votes >= int(float64(c.numPeers-1)*(0.66)) {
 				log.Printf("✅ Block %s has enough votes, adding to local chain", block.Hash)
