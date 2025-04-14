@@ -260,23 +260,24 @@ func (c *Client) handleGossipBlock(gossip_payload common.GossipPayload) {
 				block.Votes += 1
 				c.votedThisEpoch = true
 			}
-			if block.Votes >= int(float64(c.numPeers-1)*(0.66)) {
-				log.Printf("✅ Block %s has enough votes, adding to local chain", block.Hash)
-				err = c.addToLocalChain(block.Transactions, block.Hash)
-				if err != nil {
-					log.Printf("Failed to add block to local chain: %v", err)
-					return
-				}
-			} else {
-				log.Printf("❌ Block %s does not have enough votes, only has %d - ", gossip_payload.ID, block.Votes)
-			}
-			c.UpdateVotesSeen(gossip_payload.ID, block.Votes)
-			if err := c.sendGossipBlock(gossip_payload.ID, block); err != nil {
-				log.Printf("Failed to send gossip message: %v", err)
+			
+		}
+		if block.Votes >= int(float64(c.numPeers-1)*(0.66)) {
+			log.Printf("✅ Block %s has enough votes, adding to local chain", block.Hash)
+			err = c.addToLocalChain(block.Transactions, block.Hash)
+			if err != nil {
+				log.Printf("Failed to add block to local chain: %v", err)
 				return
 			}
-			fmt.Println("✅ Sent gossiped block to network", block)
+		} else {
+			log.Printf("❌ Block %s does not have enough votes, only has %d - ", gossip_payload.ID, block.Votes)
 		}
+		c.UpdateVotesSeen(gossip_payload.ID, block.Votes)
+		if err := c.sendGossipBlock(gossip_payload.ID, block); err != nil {
+			log.Printf("Failed to send gossip message: %v", err)
+			return
+		}
+		fmt.Println("✅ Sent gossiped block to network", block)
 	} else {
 		if block.Votes > c.getVotesSeen(gossip_payload.ID) {
 			if block.Votes >= int(float64(c.numPeers-1)*(0.66)) {
@@ -286,16 +287,16 @@ func (c *Client) handleGossipBlock(gossip_payload common.GossipPayload) {
 					log.Printf("Failed to add block to local chain: %v", err)
 					return
 				}
+			} else {
+				log.Printf("❌ Block %s does not have enough votes, only has %d - ", gossip_payload.ID, block.Votes)
+			}
 
-				c.UpdateVotesSeen(gossip_payload.ID, block.Votes)
+			c.UpdateVotesSeen(gossip_payload.ID, block.Votes)
 				if err := c.sendGossipBlock(gossip_payload.ID, block); err != nil {
 					log.Printf("Failed to send gossip message: %v", err)
 					return
 				}
 				fmt.Println("✅ Sent gossiped block to network", block)
-			} else {
-				log.Printf("❌ Block %s does not have enough votes, only has %d - ", gossip_payload.ID, block.Votes)
-			}
 		} else {
 			log.Printf("Already seen this message with %d votes, ignoring: %s", block.Votes, gossip_payload.ID)
 		}
