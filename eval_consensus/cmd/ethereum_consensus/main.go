@@ -54,6 +54,7 @@ func NewClient(conn *websocket.Conn) *Client {
 	return &Client{
 		VMID:           peerData.VmName,
 		seenMessages:   make(map[string]int),
+		addedBlocks: make(map[string]bool),
 		conn:           conn,
 		votedThisEpoch: false,                 // TODO this should be reset with every epoch, once that's implementec
 		numPeers:       len(peerData.VmPeers), // TODO this should be actively managed, get this info from network node
