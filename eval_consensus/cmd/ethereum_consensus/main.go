@@ -54,7 +54,7 @@ func NewClient(conn *websocket.Conn) *Client {
 	return &Client{
 		VMID:           peerData.VmName,
 		seenMessages:   make(map[string]int),
-		addedBlocks: make(map[string]bool),
+		addedBlocks:    make(map[string]bool),
 		conn:           conn,
 		votedThisEpoch: false,                 // TODO this should be reset with every epoch, once that's implementec
 		numPeers:       len(peerData.VmPeers), // TODO this should be actively managed, get this info from network node
@@ -106,8 +106,10 @@ func (c *Client) generateMsgID() string {
 	return strconv.Itoa(rand.Intn(99999))
 }
 
-func (c *Client)addToLocalChain(transactions string, hash string) error {
-	if(c.checkAddedBlock(hash)){return nil}
+func (c *Client) addToLocalChain(transactions string, hash string) error {
+	if c.checkAddedBlock(hash) {
+		return nil
+	}
 	c.addBlock(hash)
 	f, err := os.OpenFile(LOCAL_CHAIN_FILE_PATH, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
@@ -243,31 +245,7 @@ func (c *Client) handleGossipBlock(gossip_payload common.GossipPayload) {
 	fmt.Printf("\n📨 Received gossiped block from %s :\n   %s\n\n",
 		gossip_payload.Origin, gossip_payload.ID)
 
-	// if block msg id is seen, ignore
-	if c.HasSeen(gossip_payload.ID) && !c.checkProposer() {
-		if block.Votes > c.getVotesSeen(gossip_payload.ID) {
-			if block.Votes >= int(float64(c.numPeers-1)*(0.66)) {
-				log.Printf("✅ Block %s has enough votes, adding to local chain", block.Hash)
-				err = c.addToLocalChain(block.Transactions, block.Hash)
-				if err != nil {
-					log.Printf("Failed to add block to local chain: %v", err)
-					return
-				}
-
-				c.UpdateVotesSeen(gossip_payload.ID, block.Votes)
-				if err := c.sendGossipBlock(gossip_payload.ID, block); err != nil {
-					log.Printf("Failed to send gossip message: %v", err)
-					return
-				}
-				fmt.Println("✅ Sent gossiped block to network", block)
-			} else {
-				log.Printf("❌ Block %s does not have enough votes, only has %d - ", gossip_payload.ID, block.Votes)
-			}
-		} else {
-			log.Printf("Already seen this message with %d votes, ignoring: %s", block.Votes, gossip_payload.ID)
-		}
-
-	} else {
+	if c.HasSeen(gossip_payload.ID) {
 		// if self hasn't voted yet:
 		// attest (BB)
 		// add vote to block
@@ -299,9 +277,30 @@ func (c *Client) handleGossipBlock(gossip_payload common.GossipPayload) {
 			}
 			fmt.Println("✅ Sent gossiped block to network", block)
 		}
+	} else {
 
+		if block.Votes > c.getVotesSeen(gossip_payload.ID) {
+			if block.Votes >= int(float64(c.numPeers-1)*(0.66)) {
+				log.Printf("✅ Block %s has enough votes, adding to local chain", block.Hash)
+				err = c.addToLocalChain(block.Transactions, block.Hash)
+				if err != nil {
+					log.Printf("Failed to add block to local chain: %v", err)
+					return
+				}
+
+				c.UpdateVotesSeen(gossip_payload.ID, block.Votes)
+				if err := c.sendGossipBlock(gossip_payload.ID, block); err != nil {
+					log.Printf("Failed to send gossip message: %v", err)
+					return
+				}
+				fmt.Println("✅ Sent gossiped block to network", block)
+			} else {
+				log.Printf("❌ Block %s does not have enough votes, only has %d - ", gossip_payload.ID, block.Votes)
+			}
+		} else {
+			log.Printf("Already seen this message with %d votes, ignoring: %s", block.Votes, gossip_payload.ID)
+		}
 	}
-
 }
 
 func main() {
