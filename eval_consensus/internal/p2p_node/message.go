@@ -1,6 +1,5 @@
 package p2p_node
 
-// TODO rename this outer dir to p2p-node and delete the inner dir
 import (
 	"context"
 	"encoding/json"

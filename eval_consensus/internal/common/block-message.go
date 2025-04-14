@@ -4,13 +4,6 @@ import (
 	"encoding/json"
 )
 
-// Block represents a block with a hash, transactions, and votes
-// TODO need to figure out how to move to some external file and share properly
-type Block struct {
-	Hash         string `json:"hash"`
-	Transactions string `json:"transactions"`
-	Votes        int    `json:"votes"`
-}
 
 // EncodeBlock encodes a Block object into a JSON string
 func EncodeBlock(block Block) (string, error) {
