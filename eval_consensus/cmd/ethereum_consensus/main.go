@@ -24,11 +24,13 @@ const LOCAL_CHAIN_FILE_PATH = "../inputs/localChain.txt"
 type Client struct {
 	VMID              string
 	seenMessages      map[string]int // TODO this should have a pruning function
+	addedBlocks       map[string]bool
 	seenMessagesMutex sync.RWMutex
 	conn              *websocket.Conn
 	numPeers          int
 	votedThisEpoch    bool
 	proposerThisEpoch int
+	addedBlocksMutex  sync.RWMutex
 }
 
 func NewClient(conn *websocket.Conn) *Client {
@@ -75,6 +77,18 @@ func (mt *Client) HasSeen(id string) bool {
 	return false
 }
 
+func (mt *Client) addBlock(hash string) {
+	mt.addedBlocksMutex.Lock()
+	defer mt.addedBlocksMutex.Unlock()
+	mt.addedBlocks[hash] = true
+}
+
+func (mt *Client) checkAddedBlock(hash string) bool {
+	mt.addedBlocksMutex.RLock()
+	defer mt.addedBlocksMutex.RUnlock()
+	return mt.addedBlocks[hash]
+}
+
 func (mt *Client) getVotesSeen(id string) int {
 	mt.seenMessagesMutex.RLock()
 	defer mt.seenMessagesMutex.RUnlock()
@@ -91,7 +105,9 @@ func (c *Client) generateMsgID() string {
 	return strconv.Itoa(rand.Intn(99999))
 }
 
-func addToLocalChain(transactions string) error {
+func (c *Client)addToLocalChain(transactions string, hash string) error {
+	if(c.checkAddedBlock(hash)){return nil}
+	c.addBlock(hash)
 	f, err := os.OpenFile(LOCAL_CHAIN_FILE_PATH, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
 	if err != nil {
 		return err
@@ -99,9 +115,10 @@ func addToLocalChain(transactions string) error {
 
 	defer f.Close()
 
-	if _, err = f.WriteString(transactions); err != nil {
+	if _, err = f.WriteString(hash + "\n" + transactions + "\n"); err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -230,7 +247,7 @@ func (c *Client) handleGossipBlock(gossip_payload common.GossipPayload) {
 		if block.Votes > c.getVotesSeen(gossip_payload.ID) {
 			if block.Votes >= int(float64(c.numPeers-1)*(0.66)) {
 				log.Printf("✅ Block %s has enough votes, adding to local chain", block.Hash)
-				err = addToLocalChain(block.Transactions)
+				err = c.addToLocalChain(block.Transactions, block.Hash)
 				if err != nil {
 					log.Printf("Failed to add block to local chain: %v", err)
 					return
@@ -266,7 +283,7 @@ func (c *Client) handleGossipBlock(gossip_payload common.GossipPayload) {
 			}
 			if block.Votes >= int(float64(c.numPeers-1)*(0.66)) {
 				log.Printf("✅ Block %s has enough votes, adding to local chain", block.Hash)
-				err = addToLocalChain(block.Transactions)
+				err = c.addToLocalChain(block.Transactions, block.Hash)
 				if err != nil {
 					log.Printf("Failed to add block to local chain: %v", err)
 					return
