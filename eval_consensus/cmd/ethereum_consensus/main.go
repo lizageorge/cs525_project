@@ -126,7 +126,7 @@ func (c *Client) handleWebSocketMessages(done chan struct{}) {
 		msgType, _ := msg["type"].(string)
 		if msgType == "gossip_received" {
 			data, _ := msg["data"].(map[string]interface{})
-			fmt.Println("Received gossip message: ", data)
+			// fmt.Println("Received gossip message: ", data)
 
 			// parse data into GossipPayload
 			gossip_payload := common.GossipPayload{
@@ -176,13 +176,11 @@ func (c *Client) WaitForInterrupt(done chan struct{}) {
 // sendGossipBlock sends a message to the WebSocket server
 func (c *Client) sendGossipBlock(msgId string, unencoded_block common.Block) error {
 	// Encode block into string first
-	fmt.Println("Going to encode block: ", unencoded_block)
 	// TODO check if this is needed
 	encodedBlock, err := common.EncodeBlock(unencoded_block)
 	if err != nil {
 		return fmt.Errorf("failed to encode block: %v", err)
 	}
-	fmt.Println("Encoded block: ", encodedBlock)
 
 	// Generate message ID
 	log.Printf("Sending gossip message with ID: %s", msgId)
@@ -209,14 +207,13 @@ func (c *Client) sendGossipBlock(msgId string, unencoded_block common.Block) err
 
 func (c *Client) handleGossipBlock(gossip_payload common.GossipPayload) {
 	// Decode the block
-	log.Printf("Going to decode block: %s", gossip_payload.Text)
 	block, err := common.DecodeBlock(gossip_payload.Text)
 	if err != nil {
 		log.Printf("Failed to decode block: %v", err)
 		return
 	}
 	fmt.Printf("\n📨 Received gossiped block from %s :\n   %s\n\n",
-		gossip_payload.Origin, block.Hash)
+		gossip_payload.Origin, gossip_payload.ID)
 
 	// if block msg id is seen, ignore
 	if c.HasSeen(gossip_payload.ID) && !c.checkProposer() {
@@ -244,7 +241,7 @@ func (c *Client) handleGossipBlock(gossip_payload common.GossipPayload) {
 
 		log.Printf("✅ Block %s has enough votes, adding to local chain", block.Hash)
 	} else {
-		log.Printf("❌ Block %s does not have enough votes - ", block.Votes)
+		log.Printf("❌ Block %s does not have enough votes, only has %d - ", gossip_payload.ID, block.Votes)
 	}
 
 	// Mark this block id as seen and forward it to rest of network
