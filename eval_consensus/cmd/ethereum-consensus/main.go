@@ -17,8 +17,8 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-const INPUT_FILE_PATH = "../../inputs/peersFile.json"
-const LOCAL_CHAIN_FILE_PATH = "../../inputs/localChain.txt"
+const INPUT_FILE_PATH = "../inputs/peersFile.json"
+const LOCAL_CHAIN_FILE_PATH = "../inputs/localChain.txt"
 
 type Client struct {
 	VMID              string
