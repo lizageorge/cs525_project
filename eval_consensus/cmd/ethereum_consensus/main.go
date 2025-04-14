@@ -79,7 +79,7 @@ func (mt *Client) MarkAsSeen(id string) {
 }
 
 func (c *Client) generateMsgID() string {
-	return string(rand.Intn(99999))
+	return strconv.Itoa(rand.Intn(99999))
 }
 
 func addToLocalChain(transactions string) error {
