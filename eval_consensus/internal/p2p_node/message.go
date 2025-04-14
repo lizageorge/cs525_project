@@ -9,7 +9,7 @@ import (
 	"math/rand"
 	"time"
 
-	"p2p-network/shared"
+	"eval_consensus/internal/common"
 
 	"github.com/libp2p/go-libp2p/core/peer"
 	"github.com/libp2p/go-libp2p/core/protocol"
@@ -97,7 +97,7 @@ func (n *Node) SendMessage(targetPeer PeerInfo, msg Message) error {
 
 // InitiateGossip starts a new gossip message from this node
 func (n *Node) InitiateGossip(msgID string, text string) {
-	payload := shared.GossipPayload{
+	payload := common.GossipPayload{
 		ID:     msgID,
 		Text:   text,
 		Time:   time.Now().Format(time.RFC3339),

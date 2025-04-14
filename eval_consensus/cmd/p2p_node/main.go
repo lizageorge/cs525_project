@@ -10,6 +10,8 @@ import (
 	"strings"
 	"syscall"
 	"time"
+
+	"eval_consensus/internal/p2p_node"
 )
 
 func main() {
@@ -38,7 +40,7 @@ func main() {
 	}
 
 	// Create node
-	node, err := NewNode(*port, *keyPath, peerData.VmName)
+	node, err := p2p_node.NewNode(*port, *keyPath, peerData.VmName)
 	if err != nil {
 		log.Fatalf("❌ Failed to create node: %s", err)
 	}

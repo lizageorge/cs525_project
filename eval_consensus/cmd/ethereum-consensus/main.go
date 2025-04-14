@@ -11,7 +11,8 @@ import (
 	"sync"
 	"time"
 
-	"p2p-network/shared"
+	"eval_consensus/internal/common"
+	"eval_consensus/internal/blackbox"
 
 	"github.com/gorilla/websocket"
 )
@@ -128,7 +129,7 @@ func (c *Client) handleWebSocketMessages(done chan struct{}) {
 			fmt.Println("Received gossip message: ", data)
 
 			// parse data into GossipPayload
-			gossip_payload := shared.GossipPayload{
+			gossip_payload := common.GossipPayload{
 				ID:     data["id"].(string),
 				Text:   data["text"].(string),
 				Time:   data["time"].(string),
@@ -173,11 +174,11 @@ func (c *Client) WaitForInterrupt(done chan struct{}) {
 }
 
 // sendGossipBlock sends a message to the WebSocket server
-func (c *Client) sendGossipBlock(msgId string, unencoded_block Block) error {
+func (c *Client) sendGossipBlock(msgId string, unencoded_block common.Block) error {
 	// Encode block into string first
 	fmt.Println("Going to encode block: ", unencoded_block)
 	// TODO check if this is needed
-	encodedBlock, err := EncodeBlock(unencoded_block)
+	encodedBlock, err := common.EncodeBlock(unencoded_block)
 	if err != nil {
 		return fmt.Errorf("failed to encode block: %v", err)
 	}
@@ -206,10 +207,10 @@ func (c *Client) sendGossipBlock(msgId string, unencoded_block Block) error {
 	return nil
 }
 
-func (c *Client) handleGossipBlock(gossip_payload shared.GossipPayload) {
+func (c *Client) handleGossipBlock(gossip_payload common.GossipPayload) {
 	// Decode the block
 	log.Printf("Going to decode block: %s", gossip_payload.Text)
-	block, err := DecodeBlock(gossip_payload.Text)
+	block, err := common.DecodeBlock(gossip_payload.Text)
 	if err != nil {
 		log.Printf("Failed to decode block: %v", err)
 		return
@@ -224,7 +225,7 @@ func (c *Client) handleGossipBlock(gossip_payload shared.GossipPayload) {
 	}
 
 	if !c.checkProposer() && !c.votedThisEpoch {
-		if BBVerifyBlock(block) {
+		if blackbox.BBVerifyBlock(block) {
 			log.Printf("✅ Block %s is valid, voting for it", block.Hash)
 			block.Votes += 1
 			c.votedThisEpoch = true
@@ -280,13 +281,13 @@ func main() {
 	transactions := "tx1:30.45,tx2:20.00,tx3:15.75,tx4:50.00,tx5:10.00"
 
 	epoch := 1 // TODO implement multiple epochs
-	c.proposerThisEpoch = int(BBgeneratePseudoRandom(int64(epoch)))
+	c.proposerThisEpoch = int(blackbox.BBgeneratePseudoRandom(int64(epoch)))
 	log.Printf("Proposer for this epoch is: %d", c.proposerThisEpoch)
 
 	if c.checkProposer() {
 		log.Printf("Proposer %s is generating a block...", c.VMID)
 
-		block := BBExecuteTransactions(transactions)
+		block := blackbox.BBExecuteTransactions(transactions)
 
 		new_gossip_Id := c.generateMsgID()
 
