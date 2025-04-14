@@ -5,14 +5,15 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
 	"os/signal"
 	"strconv"
 	"sync"
 	"time"
 
-	"eval_consensus/internal/common"
 	"eval_consensus/internal/blackbox"
+	"eval_consensus/internal/common"
 
 	"github.com/gorilla/websocket"
 )
@@ -78,7 +79,7 @@ func (mt *Client) MarkAsSeen(id string) {
 }
 
 func (c *Client) generateMsgID() string {
-	return fmt.Sprintf("%d", time.Now().UnixNano())
+	return string(rand.Intn(99999))
 }
 
 func addToLocalChain(transactions string) error {
