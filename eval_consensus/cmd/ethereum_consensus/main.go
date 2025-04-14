@@ -227,7 +227,6 @@ func (c *Client) handleGossipBlock(gossip_payload common.GossipPayload) {
 
 	// if block msg id is seen, ignore
 	if c.HasSeen(gossip_payload.ID) && !c.checkProposer() {
-		log.Printf("Already seen this message, ignoring: %s", gossip_payload.ID)
 		if block.Votes > c.getVotesSeen(gossip_payload.ID) {
 			if block.Votes >= int(float64(c.numPeers-1)*(0.66)) {
 				log.Printf("✅ Block %s has enough votes, adding to local chain", block.Hash)
@@ -246,6 +245,8 @@ func (c *Client) handleGossipBlock(gossip_payload common.GossipPayload) {
 			} else {
 				log.Printf("❌ Block %s does not have enough votes, only has %d - ", gossip_payload.ID, block.Votes)
 			}
+		} else {
+			log.Printf("Already seen this message with %d votes, ignoring: %s", block.Votes, gossip_payload.ID)
 		}
 
 	} else {
