@@ -7,11 +7,11 @@ import threading
 from collections import deque
 
 # Configuration
-NUM_PEERS = 20
+NUM_PEERS = 100
 BLOCK_TIME = 5  # seconds between blocks
 MIN_TRANSACTIONS_PER_BLOCK = 1
 MAX_TRANSACTIONS_PER_BLOCK = 5
-SIMULATION_TIME = 120  # seconds to run the simulation 
+SIMULATION_TIME = 300  # seconds to run the simulation 
 DEBUG = True  # Enable detailed logging
 
 # Reduce the threshold for faster consensus in simulation
@@ -679,6 +679,18 @@ class PosSimulator:
 
 # Run the simulation
 if __name__ == "__main__":
+    start_time = time.time()
+
     simulator = PosSimulator()
     simulator.initialize()
     simulator.run()
+
+    end_time = time.time()
+
+    start_time = time.strftime(
+        "%Y-%m-%d %H:%M:%S", time.localtime(start_time)
+    )
+    end_time = time.strftime(
+        "%Y-%m-%d %H:%M:%S", time.localtime(end_time)
+    )
+    print(f"Simulation started at {start_time} and ended at {end_time}")
