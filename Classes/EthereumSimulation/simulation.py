@@ -11,7 +11,7 @@ NUM_PEERS = 20
 BLOCK_TIME = 5  # seconds between blocks
 MIN_TRANSACTIONS_PER_BLOCK = 1
 MAX_TRANSACTIONS_PER_BLOCK = 5
-SIMULATION_TIME = 120  # seconds to run the simulation
+SIMULATION_TIME = 12  # seconds to run the simulation  TODO
 DEBUG = True  # Enable detailed logging
 
 # Reduce the threshold for faster consensus in simulation
@@ -433,7 +433,7 @@ class PosSimulator:
         self.current_round = 0
         self.running = False
         self.start_time = None
-    
+
     def initialize(self):
         """Set up the simulation"""
         # Create peers with random stake
@@ -443,15 +443,15 @@ class PosSimulator:
             peer = Peer(i, stake, self.message_bus)
             self.peers.append(peer)
             peer.start()
-        
+
         total_stake = sum(peer.stake for peer in self.peers)
         print(f"Initialized {NUM_PEERS} peers with total stake: {total_stake:.2f}")
-        
+
         # Display stake distribution
         print("Stake distribution:")
         for i, peer in enumerate(self.peers):
             print(f"Peer {i}: {peer.stake:.2f} ({(peer.stake/total_stake)*100:.1f}%)")
-    
+
     def get_messages_for_peer(self, peer_id: int):
         """Get all messages that should be delivered to a specific peer"""
         deliverable = self.message_bus.get_deliverable_messages()
@@ -469,12 +469,12 @@ class PosSimulator:
             self.message_bus.messages.append(msg)
 
         return messages_for_peer
-    
+
     def run(self):
         """Run the simulation"""
         self.running = True
         self.start_time = time.time()
-        
+
         try:
             self.simulation_loop()
         except KeyboardInterrupt:
@@ -482,113 +482,132 @@ class PosSimulator:
         finally:
             self.running = False
             self.print_results()
-    
+
     def simulation_loop(self):
         """Main simulation loop"""
         last_block_time = time.time()
         last_status_time = time.time()
-        
+
         while self.running and time.time() - self.start_time < SIMULATION_TIME:
             current_time = time.time()
-            
+
             # Process messages for all peers
             for peer in self.peers:
                 peer.process_messages()
-            
+
             # Generate random transactions
             if random.random() < 0.1:  # 10% chance each loop
                 peer_id = random.randint(0, NUM_PEERS - 1)
                 tx = self.peers[peer_id].create_transaction()
                 if DEBUG:
                     print(f"[Peer {peer_id}] Created {tx}")
-            
+
             # Time to propose a new block?
             if current_time - last_block_time >= BLOCK_TIME:
                 # Select proposer for this round
                 self.current_round += 1
                 proposer_id = self.peers[0].select_proposer(self.current_round)
-                
+
                 # Set validator status for all peers
                 for i, peer in enumerate(self.peers):
                     peer.is_current_validator = (i == proposer_id)
-                
+
                 # New block height is the current finalized height + 1
                 next_height = self.peers[0].finalized_height + 1
-                
+
                 # Tell validator to propose a block
                 print(f"\nRound {self.current_round}: Peer {proposer_id} selected as validator for height {next_height}")
                 self.peers[proposer_id].propose_block(next_height)
-                
+
                 last_block_time = current_time
-            
+
             # Print status every 10 seconds
             if current_time - last_status_time >= 10:
                 self.print_status()
                 last_status_time = current_time
-            
+
             # Small sleep to prevent CPU hogging
             time.sleep(0.01)
-    
+
     def print_status(self):
         """Print current simulation status"""
         heights = [peer.finalized_height for peer in self.peers]
         avg_height = sum(heights) / len(heights)
-        
+
         print(f"\nStatus at {time.time() - self.start_time:.1f}s:")
         print(f"Average blockchain height: {avg_height:.1f}")
         print(f"Heights: min={min(heights)}, max={max(heights)}")
-        
+
         # Show pending blocks for a random peer
         sample_peer = random.choice(self.peers)
         print(f"Peer {sample_peer.id} has {len(sample_peer.pending_blocks)} pending blocks")
-        
+
         # Check vote status for current height
         next_height = max(heights) + 1
         vote_counts = {}
-        
+
         for peer in self.peers:
-            for block_id, block in peer.pending_blocks.items():
+            for _, block in peer.pending_blocks.items():
                 if block.height == next_height:
                     validator = block.validator
                     if validator not in vote_counts:
                         vote_counts[validator] = []
                     vote_counts[validator].append(len(block.votes))
-        
+
         if vote_counts:
             print("Votes for current height blocks:")
             for validator, counts in vote_counts.items():
                 print(f"  Validator {validator}: votes seen by peers: {counts}")
-                
+
             # Calculate total stake for the current height
             total_stake = sum(peer.stake for peer in self.peers)
             threshold = total_stake * CONSENSUS_THRESHOLD
             print(f"  Consensus threshold: {threshold:.2f} of {total_stake:.2f} total stake")
-    
+
     def print_results(self):
         """Print simulation results"""
         print("\n===== SIMULATION RESULTS =====")
         print(f"Ran for {time.time() - self.start_time:.2f} seconds")
-        
+
+        lens = [len(peer.blockchain) for peer in self.peers]
+
         # Find the peer with the most blocks
-        max_height = max(peer.finalized_height for peer in self.peers)
-        print(f"Maximum blockchain height: {max_height}")
-        
+        max_height, max_peer = max((length, i) for i, length in enumerate(lens))
+        min_height, min_peer = min((length, i) for i, length in enumerate(lens))
+        print(f"Maximum blockchain height: {max_height} with peer {max_peer}")
+        print(f"Minimum blockchain height: {min_height} with peer {min_peer}")
+
         # Check if all peers are in sync
-        heights = [peer.finalized_height for peer in self.peers]
-        if all(h == heights[0] for h in heights):
+        if all(h == lens[0] for h in lens):
             print("All peers are in sync!")
         else:
             print("Peers are out of sync:")
             for i, peer in enumerate(self.peers):
-                print(f"Peer {i}: height {peer.finalized_height}")
-        
+                print(f"Peer {i}: length {len(peer.blockchain)}")
+
+        # Check that all peers have the same minimum blockchain
+        sample_blockchain = self.peers[max_peer].blockchain
+        all_match = True
+        for i, peer in enumerate(self.peers):
+            if peer.blockchain != sample_blockchain[: len(peer.blockchain)]:
+                all_match = False
+        if all_match:
+            print(f"All blockchains match till minimum heights!")
+        else:
+            print(f"Blockchains do not match till minimum heights!")
+            for i, peer in enumerate(self.peers):
+                print(f"Peer {i}: {len(peer.blockchain)} blocks")
+                for block in peer.blockchain:
+                    print(f"  {block}")
+                # TODO why it say "0 txs"
+
         # Show block distribution (who created the blocks)
         if self.peers[0].blockchain:
             validator_counts = {}
             for peer in self.peers:
                 for block in peer.blockchain:
                     validator_counts[block.validator] = validator_counts.get(block.validator, 0) + 1
-            
+
             print("\nBlock validator distribution:")
             for proposer_id, count in sorted(validator_counts.items(), key=lambda x: x[1], reverse=True):
                 validator_stake = self.peers[proposer_id].stake
