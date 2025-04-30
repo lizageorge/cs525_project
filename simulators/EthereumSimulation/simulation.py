@@ -7,11 +7,11 @@ import threading
 from collections import deque
 
 # Configuration
-NUM_PEERS = 100
+NUM_PEERS = 20
 BLOCK_TIME = 5  # seconds between blocks
 MIN_TRANSACTIONS_PER_BLOCK = 1
-MAX_TRANSACTIONS_PER_BLOCK = 5
-SIMULATION_TIME = 300  # seconds to run the simulation 
+MAX_TRANSACTIONS_PER_BLOCK = 50
+MIN_FINAL_CHAIN_LENGTH = 10 # number of blocks to run simulation until
 DEBUG = True  # Enable detailed logging
 
 # Reduce the threshold for faster consensus in simulation
@@ -531,7 +531,7 @@ class PosSimulator:
         last_block_time = time.time()
         last_status_time = time.time()
 
-        while self.running and time.time() - self.start_time < SIMULATION_TIME:
+        while self.running:
             current_time = time.time()
 
             # Process messages for all peers
@@ -570,6 +570,14 @@ class PosSimulator:
             if current_time - last_status_time >= 10:
                 self.print_status()
                 last_status_time = current_time
+
+            # Check if the simulation should end
+            min_blockchain_length = min(len(peer.blockchain) for peer in self.peers)
+            if min_blockchain_length >= MIN_FINAL_CHAIN_LENGTH:
+                print(
+                    f"\nSimulation ending: Minimum blockchain length reached ({min_blockchain_length} blocks)"
+                )
+                break
 
             # Small sleep to prevent CPU hogging
             time.sleep(0.01)
@@ -623,8 +631,8 @@ class PosSimulator:
         # Find the peer with the most blocks
         max_height, max_peer = max((length, i) for i, length in enumerate(lens))
         min_height, min_peer = min((length, i) for i, length in enumerate(lens))
-        print(f"Maximum blockchain height: {max_height} with peer {max_peer}")
-        print(f"Minimum blockchain height: {min_height} with peer {min_peer}")
+        print(f"Maximum blockchain height: {max_height} for peer {max_peer}")
+        print(f"Minimum blockchain height: {min_height} for peer {min_peer}")
 
         # Check if all peers are in sync
         if all(h == lens[0] for h in lens):
