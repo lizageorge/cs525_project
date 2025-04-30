@@ -10,9 +10,9 @@ from collections import deque
 NUM_PEERS = 20
 BLOCK_TIME = 5  # seconds between blocks
 MIN_TRANSACTIONS_PER_BLOCK = 1
-MAX_TRANSACTIONS_PER_BLOCK = 5
-SIMULATION_TIME = 120  # seconds to run the simulation 
-DEBUG = True  # Enable detailed logging
+MAX_TRANSACTIONS_PER_BLOCK = 50
+MIN_FINAL_CHAIN_LENGTH = 10 # number of blocks to run simulation until
+DEBUG = False  # Enable detailed logging
 
 # Reduce the threshold for faster consensus in simulation
 CONSENSUS_THRESHOLD = 0.51  # 51% instead of 2/3 for faster convergence
@@ -439,7 +439,8 @@ class Peer:
         if block.height in self.votes_cast:
             del self.votes_cast[block.height]
 
-        print(f"[Peer {self.id}] Finalized {block}")
+        if DEBUG:
+            print(f"[Peer {self.id}] Finalized {block}")
 
     def receive_transaction(self, tx: Transaction):
         """Add a transaction to the pool"""
@@ -531,7 +532,7 @@ class PosSimulator:
         last_block_time = time.time()
         last_status_time = time.time()
 
-        while self.running and time.time() - self.start_time < SIMULATION_TIME:
+        while self.running:
             current_time = time.time()
 
             # Process messages for all peers
@@ -566,10 +567,18 @@ class PosSimulator:
 
                 last_block_time = current_time
 
-            # Print status every 10 seconds
-            if current_time - last_status_time >= 10:
+            # Print status every 10 seconds (on debug mode)
+            if DEBUG and (current_time - last_status_time >= 10):
                 self.print_status()
                 last_status_time = current_time
+
+            # Check if the simulation should end
+            min_blockchain_length = min(len(peer.blockchain) for peer in self.peers)
+            if min_blockchain_length >= MIN_FINAL_CHAIN_LENGTH:
+                print(
+                    f"\nSimulation ending: Minimum blockchain length reached ({min_blockchain_length} blocks)"
+                )
+                break
 
             # Small sleep to prevent CPU hogging
             time.sleep(0.01)
@@ -623,8 +632,8 @@ class PosSimulator:
         # Find the peer with the most blocks
         max_height, max_peer = max((length, i) for i, length in enumerate(lens))
         min_height, min_peer = min((length, i) for i, length in enumerate(lens))
-        print(f"Maximum blockchain height: {max_height} with peer {max_peer}")
-        print(f"Minimum blockchain height: {min_height} with peer {min_peer}")
+        print(f"Maximum blockchain height: {max_height} for peer {max_peer}")
+        print(f"Minimum blockchain height: {min_height} for peer {min_peer}")
 
         # Check if all peers are in sync
         if all(h == lens[0] for h in lens):
@@ -679,6 +688,18 @@ class PosSimulator:
 
 # Run the simulation
 if __name__ == "__main__":
+    start_time = time.time()
+
     simulator = PosSimulator()
     simulator.initialize()
     simulator.run()
+
+    end_time = time.time()
+
+    start_time = time.strftime(
+        "%Y-%m-%d %H:%M:%S", time.localtime(start_time)
+    )
+    end_time = time.strftime(
+        "%Y-%m-%d %H:%M:%S", time.localtime(end_time)
+    )
+    print(f"Simulation started at {start_time} and ended at {end_time}")
