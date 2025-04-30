@@ -12,7 +12,7 @@ BLOCK_TIME = 5  # seconds between blocks
 MIN_TRANSACTIONS_PER_BLOCK = 1
 MAX_TRANSACTIONS_PER_BLOCK = 50
 MIN_FINAL_CHAIN_LENGTH = 10 # number of blocks to run simulation until
-DEBUG = True  # Enable detailed logging
+DEBUG = False  # Enable detailed logging
 
 # Reduce the threshold for faster consensus in simulation
 CONSENSUS_THRESHOLD = 0.51  # 51% instead of 2/3 for faster convergence
@@ -439,7 +439,8 @@ class Peer:
         if block.height in self.votes_cast:
             del self.votes_cast[block.height]
 
-        print(f"[Peer {self.id}] Finalized {block}")
+        if DEBUG:
+            print(f"[Peer {self.id}] Finalized {block}")
 
     def receive_transaction(self, tx: Transaction):
         """Add a transaction to the pool"""
@@ -566,8 +567,8 @@ class PosSimulator:
 
                 last_block_time = current_time
 
-            # Print status every 10 seconds
-            if current_time - last_status_time >= 10:
+            # Print status every 10 seconds (on debug mode)
+            if DEBUG and (current_time - last_status_time >= 10):
                 self.print_status()
                 last_status_time = current_time
 
