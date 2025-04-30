@@ -5,13 +5,13 @@ import json
 from typing import List, Dict, Set, Any
 import threading
 from collections import deque
+import argparse
+
 
 # Configuration
-NUM_PEERS = 20
 BLOCK_TIME = 5  # seconds between blocks
 MIN_TRANSACTIONS_PER_BLOCK = 1
 MAX_TRANSACTIONS_PER_BLOCK = 50
-MIN_FINAL_CHAIN_LENGTH = 10 # number of blocks to run simulation until
 DEBUG = False  # Enable detailed logging
 
 # Reduce the threshold for faster consensus in simulation
@@ -91,9 +91,10 @@ class Block:
 class MessageBus:
     """Simulates network communication between peers"""
 
-    def __init__(self, latency_range=(0.05, 0.2)):
+    def __init__(self, num_peers, latency_range=(0.05, 0.2)):
         self.messages = deque()
         self.min_latency, self.max_latency = latency_range
+        self.num_peers = num_peers
 
     def broadcast(self, sender_id: int, msg_type: str, data: Any, exclude_ids=None):
         """Schedule a message to be delivered to all peers except those in exclude_ids"""
@@ -104,7 +105,7 @@ class MessageBus:
         if sender_id not in exclude_ids:
             exclude_ids.append(sender_id)
 
-        for peer_id in range(NUM_PEERS):
+        for peer_id in range(self.num_peers):
             if peer_id not in exclude_ids:
                 self.send(sender_id, peer_id, msg_type, data)
 
@@ -176,13 +177,13 @@ class Peer:
         # Nothing special needed at startup
         pass
 
-    def select_proposer(self, round_num: int) -> int:
+    def select_proposer(self, round_num: int, num_peers: int) -> int:
         """
         Deterministic validator selection based on stake weights
         All peers should arrive at the same conclusion
         """
         # Get all peer stakes (in a real network, this would be on-chain)
-        stakes = [simulator.peers[i].stake for i in range(NUM_PEERS)]
+        stakes = [simulator.peers[i].stake for i in range(num_peers)]
         total_stake = sum(stakes)
 
         # Generate a pseudo-random number based on the round number
@@ -192,12 +193,12 @@ class Peer:
 
         # Select validator weighted by stake
         cumulative = 0
-        for i in range(NUM_PEERS):
+        for i in range(num_peers):
             cumulative += stakes[i] / total_stake
             if random_value < cumulative:
                 return i
 
-        return NUM_PEERS - 1  # Fallback
+        return num_peers - 1  # Fallback
 
     def process_messages(self):
         """Process any messages delivered to this peer"""
@@ -449,11 +450,11 @@ class Peer:
         if not any(existing_tx.tx_hash == tx.tx_hash for existing_tx in self.tx_pool):
             self.tx_pool.append(tx)
 
-    def create_transaction(self):
+    def create_transaction(self, num_peers):
         """Create a random transaction"""
-        receiver = random.randint(0, NUM_PEERS - 1)
+        receiver = random.randint(0, num_peers - 1)
         while receiver == self.id:
-            receiver = random.randint(0, NUM_PEERS - 1)
+            receiver = random.randint(0, num_peers - 1)
 
         tx = Transaction(
             sender=self.id, receiver=receiver, amount=random.uniform(1, 100)
@@ -471,17 +472,20 @@ class Peer:
 class PosSimulator:
     """Manages the entire PoS simulation"""
 
-    def __init__(self):
-        self.message_bus = MessageBus()
+    
+    def __init__(self, num_peers: int, min_final_chain_length: int):
+        self.message_bus = MessageBus(num_peers=num_peers)
         self.peers = []
         self.current_round = 0
         self.running = False
         self.start_time = None
+        self.num_peers = num_peers
+        self.min_final_chain_length = min_final_chain_length
 
     def initialize(self):
         """Set up the simulation"""
         # Create peers with random stake
-        for i in range(NUM_PEERS):
+        for i in range(self.num_peers):
             # Random stake between 10 and 100
             stake = random.uniform(10, 100)
             peer = Peer(i, stake, self.message_bus)
@@ -489,7 +493,7 @@ class PosSimulator:
             peer.start()
 
         total_stake = sum(peer.stake for peer in self.peers)
-        print(f"Initialized {NUM_PEERS} peers with total stake: {total_stake:.2f}")
+        print(f"Initialized {self.num_peers} peers with total stake: {total_stake:.2f}")
 
         # Display stake distribution
         print("Stake distribution:")
@@ -541,8 +545,8 @@ class PosSimulator:
 
             # Generate random transactions
             if random.random() < 0.1:  # 10% chance each loop
-                peer_id = random.randint(0, NUM_PEERS - 1)
-                tx = self.peers[peer_id].create_transaction()
+                peer_id = random.randint(0, self.num_peers - 1)
+                tx = self.peers[peer_id].create_transaction(self.num_peers)
                 if DEBUG:
                     print(f"[Peer {peer_id}] Created {tx}")
 
@@ -550,7 +554,7 @@ class PosSimulator:
             if current_time - last_block_time >= BLOCK_TIME:
                 # Select proposer for this round
                 self.current_round += 1
-                proposer_id = self.peers[0].select_proposer(self.current_round)
+                proposer_id = self.peers[0].select_proposer(self.current_round, self.num_peers)
 
                 # Set validator status for all peers
                 for i, peer in enumerate(self.peers):
@@ -568,13 +572,13 @@ class PosSimulator:
                 last_block_time = current_time
 
             # Print status every 10 seconds (on debug mode)
-            if DEBUG and (current_time - last_status_time >= 10):
+            if current_time - last_status_time >= 10:
                 self.print_status()
                 last_status_time = current_time
 
             # Check if the simulation should end
             min_blockchain_length = min(len(peer.blockchain) for peer in self.peers)
-            if min_blockchain_length >= MIN_FINAL_CHAIN_LENGTH:
+            if min_blockchain_length >= self.min_final_chain_length:
                 print(
                     f"\nSimulation ending: Minimum blockchain length reached ({min_blockchain_length} blocks)"
                 )
@@ -688,9 +692,22 @@ class PosSimulator:
 
 # Run the simulation
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Run a Proof-of-Stake blockchain simulation.")
+    parser.add_argument(
+        "--num_peers", type=int, required=True, help="Number of peers in the simulation"
+    )
+    parser.add_argument(
+        "--min_final_chain_length",
+        type=int,
+        required=True,
+        help="Minimum blockchain length to finalize the simulation",
+    )
+    args = parser.parse_args()
+
+
     start_time = time.time()
 
-    simulator = PosSimulator()
+    simulator = PosSimulator(args.num_peers, args.min_final_chain_length)
     simulator.initialize()
     simulator.run()
 
