@@ -16,7 +16,7 @@ DEBUG = True  # Enable detailed logging
 any_peer_mined = False
 MIN_FINAL_CHAIN_LENGTH = 5
 # Difficulty for mining (number of leading zeros in the hash)
-DIFFICULTY = 5  # Adjust this for more or less difficulty
+DIFFICULTY = 4  # Adjust this for more or less difficulty
 
 class Transaction:
     def __init__(self, sender: int, receiver: int, amount: float):
