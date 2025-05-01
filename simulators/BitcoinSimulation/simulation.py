@@ -84,9 +84,10 @@ class Block:
 
 class MessageBus:
     """Simulates network communication between peers"""
-    def __init__(self, latency_range=(0.05, 0.2)):
+    def __init__(self, num_peers:int, latency_range=(0.05, 0.2)):
         self.messages = deque()
         self.min_latency, self.max_latency = latency_range
+        self.num_peers = num_peers
     
     def broadcast(self, sender_id: int, msg_type: str, data: Any, exclude_ids=None):
         """Schedule a message to be delivered to all peers except those in exclude_ids"""
@@ -97,7 +98,7 @@ class MessageBus:
         if sender_id not in exclude_ids:
             exclude_ids.append(sender_id)
         
-        for peer_id in range(NUM_PEERS):
+        for peer_id in range(self.num_peers):
             if peer_id not in exclude_ids:
                 self.send(sender_id, peer_id, msg_type, data)
     
@@ -133,10 +134,10 @@ class MessageBus:
 
 class Peer:
     """Represents a single node in the Proof of Work network"""
-    def __init__(self, peer_id: int, message_bus: MessageBus):
+    def __init__(self, peer_id: int, message_bus: MessageBus, num_peers:int):
         self.id = peer_id
         self.message_bus = message_bus
-        
+        self.num_peers = num_peers
         # Blockchain state
         self.blockchain: List[Block] = []
         self.pending_blocks: Dict[str, Block] = {}  # block_identifier -> Block
@@ -292,9 +293,9 @@ class Peer:
     
     def create_transaction(self):
         """Create a random transaction"""
-        receiver = random.randint(0, NUM_PEERS - 1)
+        receiver = random.randint(0, self.num_peers - 1)
         while receiver == self.id:
-            receiver = random.randint(0, NUM_PEERS - 1)
+            receiver = random.randint(0, self.num_peers - 1)
         
         tx = Transaction(
             sender=self.id,
@@ -332,7 +333,7 @@ class Peer:
 class PoWSimulator:
     """Manages the entire PoW simulation"""
     def __init__(self, num_peers: int, simulation_min_blocks: int):
-        self.message_bus = MessageBus()
+        self.message_bus = MessageBus(num_peers)
         self.peers = []
         self.current_round = 0
         self.running = False
@@ -345,7 +346,7 @@ class PoWSimulator:
     def initialize(self):
         """Set up the simulation"""
         for i in range(self.num_peers):
-            peer = Peer(i, self.message_bus)
+            peer = Peer(i, self.message_bus, self.num_peers)
             self.peers.append(peer)
             peer.start()
         
