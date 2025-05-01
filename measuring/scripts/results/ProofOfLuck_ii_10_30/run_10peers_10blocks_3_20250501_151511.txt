@@ -1,0 +1,37 @@
+Initialized 10 nodes
+
+Status at 10.0s:
+Heights: min=1, max=1
+Chain luck values: min=0.8151, max=0.8268, avg=0.8215
+Node 1 round status: in progress
+
+Status at 20.0s:
+Heights: min=3, max=3
+Chain luck values: min=1.3918, max=2.4110, avg=2.1510
+Node 4 round status: in progress
+
+Status at 30.0s:
+Heights: min=5, max=5
+Chain luck values: min=2.1638, max=4.0802, avg=3.5283
+Node 1 round status: in progress
+
+Status at 40.0s:
+Heights: min=7, max=7
+Chain luck values: min=3.3702, max=5.3597, avg=4.7183
+Node 4 round status: in progress
+
+Simulation ending: Minimum blockchain length reached (10 blocks)
+Final synchronization took 0.00 seconds
+
+===== SIMULATION RESULTS =====
+Ran for 47.00 seconds
+Maximum blockchain height: 10 for node 9
+Minimum blockchain height: 10 for node 0
+Maximum chain luck: 7.0351 for node 9
+All peers are in sync!
+All blockchains match till minimum heights!
+
+Block miner distribution:
+Node 9: 50 blocks (555.6%) - Expected: 10.0%
+Node 2: 40 blocks (444.4%) - Expected: 10.0%
+Simulation started at 2025-05-01 15:15:11 and ended at 2025-05-01 15:15:58
