@@ -9,7 +9,7 @@ import argparse
 
 
 # Configuration
-ROUND_TIME = 15  # seconds between rounds (as suggested in Section 6.3)
+ROUND_TIME = 5  # seconds between rounds (as suggested in Section 6.3)
 MIN_TRANSACTIONS_PER_BLOCK = 1
 MAX_TRANSACTIONS_PER_BLOCK = 50
 DEBUG = False  # Enable detailed logging
@@ -595,7 +595,7 @@ class PoLSimulator:
 
         # Check if all nodes are in sync
         if all(h == lens[0] for h in lens):
-            print("All nodes are in sync!")
+            print("All peers are in sync!")
         else:
             print("Nodes are out of sync:")
             for i, node in enumerate(self.nodes):

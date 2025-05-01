@@ -1,0 +1,142 @@
+Initialized 30 nodes
+
+Status at 10.0s:
+Heights: min=1, max=1
+Chain luck values: min=0.9180, max=0.9823, avg=0.9802
+Node 11 round status: waiting
+
+Status at 20.0s:
+Heights: min=3, max=3
+Chain luck values: min=1.9453, max=2.9461, avg=2.8529
+Node 15 round status: in progress
+
+Status at 30.0s:
+Heights: min=5, max=6
+Chain luck values: min=2.7475, max=5.8329, avg=4.3774
+Node 7 round status: in progress
+
+Status at 40.0s:
+Heights: min=7, max=8
+Chain luck values: min=4.2139, max=7.3501, avg=5.9882
+Node 13 round status: in progress
+
+Status at 50.0s:
+Heights: min=9, max=9
+Chain luck values: min=5.1051, max=8.4991, avg=7.1198
+Node 8 round status: in progress
+
+Status at 60.0s:
+Heights: min=11, max=11
+Chain luck values: min=5.9128, max=10.0768, avg=8.4431
+Node 0 round status: in progress
+
+Status at 70.0s:
+Heights: min=13, max=13
+Chain luck values: min=6.5770, max=11.8537, avg=9.5978
+Node 7 round status: in progress
+
+Status at 80.1s:
+Heights: min=15, max=15
+Chain luck values: min=7.1788, max=13.4978, avg=10.8049
+Node 27 round status: in progress
+
+Status at 90.1s:
+Heights: min=17, max=18
+Chain luck values: min=7.8491, max=14.8939, avg=11.8518
+Node 5 round status: in progress
+
+Status at 100.1s:
+Heights: min=19, max=20
+Chain luck values: min=9.5522, max=16.4757, avg=12.8161
+Node 29 round status: in progress
+
+Status at 110.1s:
+Heights: min=21, max=21
+Chain luck values: min=9.7412, max=17.5877, avg=13.7585
+Node 25 round status: in progress
+
+Status at 120.1s:
+Heights: min=23, max=23
+Chain luck values: min=11.1183, max=18.4017, avg=14.7435
+Node 25 round status: in progress
+
+Status at 130.1s:
+Heights: min=25, max=25
+Chain luck values: min=11.8353, max=19.6505, avg=15.7019
+Node 19 round status: in progress
+
+Status at 140.1s:
+Heights: min=27, max=28
+Chain luck values: min=12.3073, max=21.3503, avg=16.8285
+Node 6 round status: in progress
+
+Status at 150.1s:
+Heights: min=29, max=30
+Chain luck values: min=13.2092, max=22.7615, avg=17.8554
+Node 3 round status: in progress
+
+Status at 160.1s:
+Heights: min=31, max=32
+Chain luck values: min=14.4277, max=23.9092, avg=18.9275
+Node 21 round status: in progress
+
+Status at 170.1s:
+Heights: min=33, max=33
+Chain luck values: min=14.8119, max=24.9825, avg=19.7992
+Node 4 round status: in progress
+
+Status at 180.1s:
+Heights: min=35, max=36
+Chain luck values: min=15.8976, max=26.8505, avg=20.7668
+Node 21 round status: in progress
+
+Status at 190.1s:
+Heights: min=37, max=37
+Chain luck values: min=15.9916, max=27.9770, avg=21.7313
+Node 12 round status: in progress
+
+Status at 200.1s:
+Heights: min=39, max=40
+Chain luck values: min=17.4422, max=29.2418, avg=22.8186
+Node 2 round status: in progress
+
+Status at 210.1s:
+Heights: min=41, max=41
+Chain luck values: min=18.4790, max=30.8337, avg=23.8471
+Node 11 round status: in progress
+
+Status at 220.1s:
+Heights: min=43, max=43
+Chain luck values: min=19.5128, max=32.2300, avg=24.9159
+Node 14 round status: in progress
+
+Status at 230.1s:
+Heights: min=45, max=46
+Chain luck values: min=20.7148, max=33.3048, avg=25.9579
+Node 24 round status: in progress
+
+Status at 240.1s:
+Heights: min=47, max=48
+Chain luck values: min=21.7177, max=34.3458, avg=26.7851
+Node 0 round status: in progress
+
+Simulation ending: Minimum blockchain length reached (50 blocks)
+Final synchronization took 0.00 seconds
+
+===== SIMULATION RESULTS =====
+Ran for 246.99 seconds
+Maximum blockchain height: 50 for node 29
+Minimum blockchain height: 50 for node 0
+Maximum chain luck: 35.5114 for node 29
+All nodes are in sync!
+All blockchains match till minimum heights!
+
+Block miner distribution:
+Node 3: 720 blocks (1469.4%) - Expected: 3.3%
+Node 14: 420 blocks (857.1%) - Expected: 3.3%
+Node 29: 90 blocks (183.7%) - Expected: 3.3%
+Node 19: 90 blocks (183.7%) - Expected: 3.3%
+Node 18: 90 blocks (183.7%) - Expected: 3.3%
+Node 11: 30 blocks (61.2%) - Expected: 3.3%
+Node 4: 30 blocks (61.2%) - Expected: 3.3%
+Simulation started at 2025-05-01 00:54:53 and ended at 2025-05-01 00:59:00

@@ -1,0 +1,49 @@
+Initialized 10 peers with total stake: 526.40
+Stake distribution:
+Peer 0: 74.25 (14.1%)
+Peer 1: 25.85 (4.9%)
+Peer 2: 91.13 (17.3%)
+Peer 3: 91.35 (17.4%)
+Peer 4: 16.84 (3.2%)
+Peer 5: 42.65 (8.1%)
+Peer 6: 20.44 (3.9%)
+Peer 7: 54.97 (10.4%)
+Peer 8: 58.25 (11.1%)
+Peer 9: 50.67 (9.6%)
+
+Round 1: Peer 7 selected as validator for height 0
+
+Round 2: Peer 2 selected as validator for height 1
+
+Round 3: Peer 7 selected as validator for height 2
+
+Round 4: Peer 7 selected as validator for height 3
+
+Round 5: Peer 7 selected as validator for height 4
+
+Round 6: Peer 2 selected as validator for height 5
+
+Round 7: Peer 1 selected as validator for height 6
+
+Round 8: Peer 8 selected as validator for height 7
+
+Round 9: Peer 3 selected as validator for height 8
+
+Round 10: Peer 3 selected as validator for height 9
+
+Simulation ending: Minimum blockchain length reached (10 blocks)
+
+===== SIMULATION RESULTS =====
+Ran for 50.37 seconds
+Maximum blockchain height: 10 for peer 9
+Minimum blockchain height: 10 for peer 0
+All peers are in sync!
+All blockchains match till minimum heights!
+
+Block validator distribution:
+Peer 7: 40 blocks (400.0%) - Stake: 10.4%
+Peer 2: 20 blocks (200.0%) - Stake: 17.3%
+Peer 3: 20 blocks (200.0%) - Stake: 17.4%
+Peer 1: 10 blocks (100.0%) - Stake: 4.9%
+Peer 8: 10 blocks (100.0%) - Stake: 11.1%
+Simulation started at 2025-04-30 16:17:11 and ended at 2025-04-30 16:18:02
