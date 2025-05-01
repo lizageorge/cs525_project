@@ -9,7 +9,7 @@ import argparse
 
 
 # Configuration
-ROUND_TIME = 15  # seconds between rounds (as suggested in Section 6.3)
+ROUND_TIME = 5  # seconds between rounds (as suggested in Section 6.3)
 MIN_TRANSACTIONS_PER_BLOCK = 1
 MAX_TRANSACTIONS_PER_BLOCK = 50
 DEBUG = False  # Enable detailed logging
