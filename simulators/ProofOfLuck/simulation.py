@@ -124,10 +124,10 @@ class TEE:
 class MessageBus:
     """Simulates network communication between peers"""
 
-    def __init__(self, num_nodes, latency_range=(0.05, 0.2)):
+    def __init__(self, num_peers, latency_range=(0.05, 0.2)):
         self.messages = deque()
         self.min_latency, self.max_latency = latency_range
-        self.num_nodes = num_nodes
+        self.num_peers = num_peers
 
     def broadcast(self, sender_id: int, msg_type: str, data: Any, exclude_ids=None):
         """Schedule a message to be delivered to all peers except those in exclude_ids"""
@@ -138,7 +138,7 @@ class MessageBus:
         if sender_id not in exclude_ids:
             exclude_ids.append(sender_id)
 
-        for peer_id in range(self.num_nodes):
+        for peer_id in range(self.num_peers):
             if peer_id not in exclude_ids:
                 self.send(sender_id, peer_id, msg_type, data)
 
@@ -375,11 +375,11 @@ class Node:
         if not any(existing_tx.tx_hash == tx.tx_hash for existing_tx in self.tx_pool):
             self.tx_pool.append(tx)
 
-    def create_transaction(self, num_nodes):
+    def create_transaction(self, num_peers):
         """Create a random transaction"""
-        receiver = random.randint(0, num_nodes - 1)
+        receiver = random.randint(0, num_peers - 1)
         while receiver == self.id:
-            receiver = random.randint(0, num_nodes - 1)
+            receiver = random.randint(0, num_peers - 1)
 
         tx = Transaction(
             sender=self.id, receiver=receiver, amount=random.uniform(1, 100)
@@ -397,22 +397,22 @@ class Node:
 class PoLSimulator:
     """Manages the entire Proof of Luck simulation"""
     
-    def __init__(self, num_nodes: int, min_final_chain_length: int):
-        self.message_bus = MessageBus(num_nodes=num_nodes)
+    def __init__(self, num_peers: int, min_final_chain_length: int):
+        self.message_bus = MessageBus(num_peers=num_peers)
         self.nodes = []
         self.running = False
         self.start_time = None
-        self.num_nodes = num_nodes
+        self.num_peers = num_peers
         self.min_final_chain_length = min_final_chain_length
 
     def initialize(self):
         """Set up the simulation"""
         # Create nodes
-        for i in range(self.num_nodes):
+        for i in range(self.num_peers):
             node = Node(i, self.message_bus)
             self.nodes.append(node)
 
-        print(f"Initialized {self.num_nodes} nodes")
+        print(f"Initialized {self.num_peers} nodes")
         
         # Create genesis block
         genesis_block = Block(
@@ -474,8 +474,8 @@ class PoLSimulator:
 
             # Generate random transactions
             if random.random() < 0.1:  # 10% chance each loop
-                node_id = random.randint(0, self.num_nodes - 1)
-                tx = self.nodes[node_id].create_transaction(self.num_nodes)
+                node_id = random.randint(0, self.num_peers - 1)
+                tx = self.nodes[node_id].create_transaction(self.num_peers)
                 if DEBUG:
                     print(f"[Node {node_id}] Created {tx}")
 
@@ -638,7 +638,7 @@ class PoLSimulator:
                 miner_counts.items(), key=lambda x: x[1], reverse=True
             ):
                 blocks_percent = (count / (len(self.nodes[0].blockchain)-1)) * 100 if len(self.nodes[0].blockchain) > 1 else 0
-                expected_percent = (1 / self.num_nodes) * 100
+                expected_percent = (1 / self.num_peers) * 100
                 print(
                     f"Node {miner_id}: {count} blocks ({blocks_percent:.1f}%) - Expected: {expected_percent:.1f}%"
                 )
@@ -648,7 +648,7 @@ class PoLSimulator:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run a Proof of Luck blockchain simulation.")
     parser.add_argument(
-        "--num_nodes", type=int, required=True, help="Number of nodes in the simulation"
+        "--num_peers", type=int, required=True, help="Number of nodes in the simulation"
     )
     parser.add_argument(
         "--min_final_chain_length",
@@ -660,7 +660,7 @@ if __name__ == "__main__":
 
     start_time = time.time()
 
-    simulator = PoLSimulator(args.num_nodes, args.min_final_chain_length)
+    simulator = PoLSimulator(args.num_peers, args.min_final_chain_length)
     simulator.initialize()
     simulator.run()
 
