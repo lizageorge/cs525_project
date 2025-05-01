@@ -572,7 +572,7 @@ class PosSimulator:
                 last_block_time = current_time
 
             # Print status every 10 seconds (on debug mode)
-            if DEBUG and (current_time - last_status_time >= 10):
+            if current_time - last_status_time >= 10:
                 self.print_status()
                 last_status_time = current_time
 
