@@ -502,7 +502,8 @@ class PoLSimulator:
         Perform a final synchronization to ensure all nodes have consistent blockchains.
         This simulates allowing all network messages to be fully processed.
         """
-        print("\nPerforming final blockchain synchronization...")
+        if DEBUG:
+            print("\nPerforming final blockchain synchronization...")
 
         sync_time_start = time.time()
         
@@ -536,7 +537,8 @@ class PoLSimulator:
             # Small sleep to allow for any additional message processing
             time.sleep(0.05)
         
-        print(f"Synchronization completed in {synchronization_rounds} rounds")
+        if DEBUG:
+            print(f"Synchronization completed in {synchronization_rounds} rounds")
         
         # Find the chain with the highest luck
         best_chain = None
@@ -550,7 +552,8 @@ class PoLSimulator:
         # Ensure all nodes have the best chain
         for node in self.nodes:
             if node.current_chain_luck < best_luck:
-                print(f"Updating Node {node.id} to the best chain (luck: {best_luck:.4f})")
+                if DEBUG:
+                    print(f"Updating Node {node.id} to the best chain (luck: {best_luck:.4f})")
                 node.blockchain = best_chain.copy()
                 node.current_hash = best_chain[-1].hash
                 node.current_height = best_chain[-1].height
