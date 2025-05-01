@@ -1,0 +1,147 @@
+Initialized 50 nodes
+
+Status at 10.0s:
+Heights: min=1, max=1
+Chain luck values: min=0.9968, max=0.9995, avg=0.9985
+Node 16 round status: in progress
+
+Status at 20.0s:
+Heights: min=3, max=3
+Chain luck values: min=2.7895, max=2.9369, avg=2.8677
+Node 39 round status: in progress
+
+Status at 30.0s:
+Heights: min=5, max=5
+Chain luck values: min=3.7438, max=4.8246, avg=4.6596
+Node 8 round status: in progress
+
+Status at 40.0s:
+Heights: min=7, max=7
+Chain luck values: min=5.0181, max=6.7866, avg=6.3967
+Node 35 round status: in progress
+
+Status at 50.0s:
+Heights: min=9, max=9
+Chain luck values: min=6.2376, max=8.6315, avg=7.9898
+Node 41 round status: in progress
+
+Status at 60.0s:
+Heights: min=11, max=11
+Chain luck values: min=6.9097, max=10.5004, avg=9.5417
+Node 33 round status: in progress
+
+Status at 70.0s:
+Heights: min=13, max=13
+Chain luck values: min=7.9828, max=12.3876, avg=10.9265
+Node 13 round status: in progress
+
+Status at 80.0s:
+Heights: min=15, max=15
+Chain luck values: min=9.0665, max=13.8450, avg=12.2511
+Node 3 round status: in progress
+
+Status at 90.0s:
+Heights: min=17, max=17
+Chain luck values: min=10.3571, max=15.6330, avg=13.5057
+Node 26 round status: in progress
+
+Status at 100.1s:
+Heights: min=19, max=19
+Chain luck values: min=11.1006, max=16.9050, avg=14.7078
+Node 32 round status: in progress
+
+Status at 110.1s:
+Heights: min=21, max=21
+Chain luck values: min=12.2836, max=18.4022, avg=15.8479
+Node 24 round status: in progress
+
+Status at 120.1s:
+Heights: min=23, max=23
+Chain luck values: min=13.1074, max=19.9610, avg=17.0727
+Node 28 round status: in progress
+
+Status at 130.1s:
+Heights: min=25, max=26
+Chain luck values: min=13.7859, max=22.4392, avg=18.2636
+Node 33 round status: in progress
+
+Status at 140.1s:
+Heights: min=27, max=28
+Chain luck values: min=15.1326, max=23.4151, avg=19.4113
+Node 33 round status: in progress
+
+Status at 150.1s:
+Heights: min=29, max=29
+Chain luck values: min=16.2031, max=25.2118, avg=20.4910
+Node 6 round status: in progress
+
+Status at 160.1s:
+Heights: min=31, max=31
+Chain luck values: min=17.5532, max=26.6486, avg=21.5162
+Node 6 round status: in progress
+
+Status at 170.1s:
+Heights: min=33, max=33
+Chain luck values: min=17.9143, max=28.0169, avg=22.4824
+Node 23 round status: in progress
+
+Status at 180.1s:
+Heights: min=35, max=35
+Chain luck values: min=19.1412, max=29.0615, avg=23.6162
+Node 18 round status: in progress
+
+Status at 190.1s:
+Heights: min=37, max=38
+Chain luck values: min=20.3378, max=29.9798, avg=24.6579
+Node 30 round status: in progress
+
+Status at 200.1s:
+Heights: min=39, max=40
+Chain luck values: min=21.0377, max=30.8083, avg=25.6933
+Node 48 round status: in progress
+
+Status at 210.1s:
+Heights: min=41, max=42
+Chain luck values: min=21.4930, max=32.3079, avg=26.6877
+Node 13 round status: in progress
+
+Status at 220.1s:
+Heights: min=43, max=43
+Chain luck values: min=22.5011, max=33.4160, avg=27.6073
+Node 42 round status: in progress
+
+Status at 230.1s:
+Heights: min=45, max=46
+Chain luck values: min=23.1245, max=34.6683, avg=28.6088
+Node 10 round status: in progress
+
+Status at 240.1s:
+Heights: min=47, max=47
+Chain luck values: min=23.3915, max=35.5318, avg=29.5403
+Node 47 round status: in progress
+
+Simulation ending: Minimum blockchain length reached (50 blocks)
+Final synchronization took 0.27 seconds
+
+===== SIMULATION RESULTS =====
+Ran for 247.32 seconds
+Maximum blockchain height: 50 for node 49
+Minimum blockchain height: 50 for node 0
+Maximum chain luck: 36.8178 for node 49
+All peers are in sync!
+All blockchains match till minimum heights!
+
+Block miner distribution:
+Node 23: 1300 blocks (2653.1%) - Expected: 2.0%
+Node 9: 350 blocks (714.3%) - Expected: 2.0%
+Node 46: 300 blocks (612.2%) - Expected: 2.0%
+Node 10: 100 blocks (204.1%) - Expected: 2.0%
+Node 5: 50 blocks (102.0%) - Expected: 2.0%
+Node 12: 50 blocks (102.0%) - Expected: 2.0%
+Node 39: 50 blocks (102.0%) - Expected: 2.0%
+Node 45: 50 blocks (102.0%) - Expected: 2.0%
+Node 22: 50 blocks (102.0%) - Expected: 2.0%
+Node 18: 50 blocks (102.0%) - Expected: 2.0%
+Node 48: 50 blocks (102.0%) - Expected: 2.0%
+Node 3: 50 blocks (102.0%) - Expected: 2.0%
+Simulation started at 2025-05-01 15:24:50 and ended at 2025-05-01 15:28:57
