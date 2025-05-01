@@ -595,7 +595,7 @@ class PoLSimulator:
 
         # Check if all nodes are in sync
         if all(h == lens[0] for h in lens):
-            print("All nodes are in sync!")
+            print("All peers are in sync!")
         else:
             print("Nodes are out of sync:")
             for i, node in enumerate(self.nodes):
