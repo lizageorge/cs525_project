@@ -491,10 +491,72 @@ class PoLSimulator:
                 print(
                     f"\nSimulation ending: Minimum blockchain length reached ({min_blockchain_length} blocks)"
                 )
+                self.final_synchronization()
                 break
 
             # Small sleep to prevent CPU hogging
             time.sleep(0.01)
+
+    def final_synchronization(self):
+        """
+        Perform a final synchronization to ensure all nodes have consistent blockchains.
+        This simulates allowing all network messages to be fully processed.
+        """
+        print("\nPerforming final blockchain synchronization...")
+
+        sync_time_start = time.time()
+        
+        # Continue processing messages until there are no more deliverable messages
+        synchronization_rounds = 0
+        max_rounds = 100  # Safety limit to prevent infinite loops
+        
+        while synchronization_rounds < max_rounds:
+            deliverable_count = 0
+            
+            # Process all pending messages for all nodes
+            for node in self.nodes:
+                messages = self.get_messages_for_node(node.id)
+                deliverable_count += len(messages)
+                
+                for msg in messages:
+                    try:
+                        if msg["type"] == "block":
+                            node.receive_block(msg["data"], msg["sender"])
+                        elif msg["type"] == "transaction":
+                            node.receive_transaction(msg["data"])
+                    except Exception as e:
+                        print(f"Error during synchronization: {e}")
+            
+            synchronization_rounds += 1
+            
+            # If no more messages were delivered, we're done
+            if deliverable_count == 0:
+                break
+                
+            # Small sleep to allow for any additional message processing
+            time.sleep(0.05)
+        
+        print(f"Synchronization completed in {synchronization_rounds} rounds")
+        
+        # Find the chain with the highest luck
+        best_chain = None
+        best_luck = -1
+        
+        for node in self.nodes:
+            if node.current_chain_luck > best_luck:
+                best_luck = node.current_chain_luck
+                best_chain = node.blockchain
+        
+        # Ensure all nodes have the best chain
+        for node in self.nodes:
+            if node.current_chain_luck < best_luck:
+                print(f"Updating Node {node.id} to the best chain (luck: {best_luck:.4f})")
+                node.blockchain = best_chain.copy()
+                node.current_hash = best_chain[-1].hash
+                node.current_height = best_chain[-1].height
+                node.current_chain_luck = best_luck
+        
+        print(f"Final synchronization took {time.time() - sync_time_start:.2f} seconds")
 
     def print_status(self):
         """Print current simulation status"""
