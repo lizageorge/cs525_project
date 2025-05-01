@@ -15,7 +15,7 @@ MAX_TRANSACTIONS_PER_BLOCK = 50
 SIMULATION_TIME = 120  # seconds to run the simulation
 DEBUG = True  # Enable detailed logging
 # Difficulty for mining (number of leading zeros in the hash)
-DIFFICULTY = 2  # Adjust this for more or less difficulty
+DIFFICULTY = 5  # Adjust this for more or less difficulty
 
 class Transaction:
     def __init__(self, sender: int, receiver: int, amount: float):
