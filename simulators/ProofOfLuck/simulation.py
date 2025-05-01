@@ -9,7 +9,7 @@ import argparse
 
 
 # Configuration
-ROUND_TIME = 15  # seconds between rounds (as suggested in Section 6.3)
+ROUND_TIME = 5  # seconds between rounds (as suggested in Section 6.3, adjusted to be comparable with our PoS sim)
 MIN_TRANSACTIONS_PER_BLOCK = 1
 MAX_TRANSACTIONS_PER_BLOCK = 50
 DEBUG = False  # Enable detailed logging
@@ -481,7 +481,7 @@ class PoLSimulator:
 
             # Print status every 10 seconds
             current_time = time.time()
-            if current_time - last_status_time >= 10:
+            if DEBUG and current_time - last_status_time >= 10:
                 self.print_status()
                 last_status_time = current_time
 
