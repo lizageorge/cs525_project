@@ -435,10 +435,10 @@ class PoWSimulator:
                 last_status_time = current_time
 
              # Check if the simulation should end
-            min_blockchain_length = min(len(peer.blockchain) for peer in self.peers)
-            if min_blockchain_length >= self.simulation_min_blocks:
+            max_blockchain_length = max(len(peer.blockchain) for peer in self.peers)
+            if max_blockchain_length >= self.simulation_min_blocks:
                 print(
-                    f"\nSimulation ending: Minimum blockchain length reached ({min_blockchain_length} blocks)"
+                    f"\nSimulation ending: Blockchain length reached ({max_blockchain_length} blocks)"
                 )
                 break
             
