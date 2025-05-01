@@ -4,12 +4,9 @@ import re
 import csv
 import datetime
 
-# NUM_PEERS = [10, 30, 50, 100]
-# NUM_BLOCKS = [5, 10, 50]
+NUM_PEERS = [10, 30, 50, 100]
+NUM_BLOCKS = [5, 10, 50]
 
-
-NUM_PEERS = [10, 30]
-NUM_BLOCKS = [5, 10]
 
 def extract_simulation_data(output_text):
     """Extract runtime and timestamp data from simulation output."""

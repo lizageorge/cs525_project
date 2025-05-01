@@ -1,0 +1,196 @@
+Initialized 50 peers with total stake: 2677.83
+Stake distribution:
+Peer 0: 68.52 (2.6%)
+Peer 1: 58.81 (2.2%)
+Peer 2: 54.96 (2.1%)
+Peer 3: 15.96 (0.6%)
+Peer 4: 12.06 (0.5%)
+Peer 5: 39.08 (1.5%)
+Peer 6: 87.16 (3.3%)
+Peer 7: 21.59 (0.8%)
+Peer 8: 19.24 (0.7%)
+Peer 9: 21.51 (0.8%)
+Peer 10: 83.30 (3.1%)
+Peer 11: 73.30 (2.7%)
+Peer 12: 27.07 (1.0%)
+Peer 13: 13.93 (0.5%)
+Peer 14: 58.02 (2.2%)
+Peer 15: 82.80 (3.1%)
+Peer 16: 87.16 (3.3%)
+Peer 17: 38.98 (1.5%)
+Peer 18: 19.70 (0.7%)
+Peer 19: 27.73 (1.0%)
+Peer 20: 92.61 (3.5%)
+Peer 21: 47.08 (1.8%)
+Peer 22: 34.61 (1.3%)
+Peer 23: 73.12 (2.7%)
+Peer 24: 25.84 (1.0%)
+Peer 25: 40.83 (1.5%)
+Peer 26: 74.48 (2.8%)
+Peer 27: 83.12 (3.1%)
+Peer 28: 55.97 (2.1%)
+Peer 29: 19.93 (0.7%)
+Peer 30: 90.51 (3.4%)
+Peer 31: 63.72 (2.4%)
+Peer 32: 72.49 (2.7%)
+Peer 33: 87.30 (3.3%)
+Peer 34: 75.29 (2.8%)
+Peer 35: 50.09 (1.9%)
+Peer 36: 91.97 (3.4%)
+Peer 37: 95.07 (3.6%)
+Peer 38: 20.18 (0.8%)
+Peer 39: 61.61 (2.3%)
+Peer 40: 83.15 (3.1%)
+Peer 41: 82.30 (3.1%)
+Peer 42: 36.45 (1.4%)
+Peer 43: 18.55 (0.7%)
+Peer 44: 53.65 (2.0%)
+Peer 45: 22.29 (0.8%)
+Peer 46: 40.89 (1.5%)
+Peer 47: 94.24 (3.5%)
+Peer 48: 31.62 (1.2%)
+Peer 49: 47.99 (1.8%)
+
+Round 1: Peer 37 selected as validator for height 0
+
+Round 2: Peer 16 selected as validator for height 1
+
+Round 3: Peer 35 selected as validator for height 2
+
+Round 4: Peer 39 selected as validator for height 3
+
+Round 5: Peer 36 selected as validator for height 4
+
+Round 6: Peer 16 selected as validator for height 5
+
+Round 7: Peer 11 selected as validator for height 6
+
+Round 8: Peer 41 selected as validator for height 7
+
+Round 9: Peer 27 selected as validator for height 8
+
+Round 10: Peer 21 selected as validator for height 9
+
+Round 11: Peer 40 selected as validator for height 10
+
+Round 12: Peer 41 selected as validator for height 11
+
+Round 13: Peer 4 selected as validator for height 12
+
+Round 14: Peer 36 selected as validator for height 13
+
+Round 15: Peer 36 selected as validator for height 14
+
+Round 16: Peer 15 selected as validator for height 15
+
+Round 17: Peer 2 selected as validator for height 16
+
+Round 18: Peer 37 selected as validator for height 17
+
+Round 19: Peer 34 selected as validator for height 18
+
+Round 20: Peer 47 selected as validator for height 19
+
+Round 21: Peer 30 selected as validator for height 20
+
+Round 22: Peer 27 selected as validator for height 21
+
+Round 23: Peer 43 selected as validator for height 22
+
+Round 24: Peer 37 selected as validator for height 23
+
+Round 25: Peer 23 selected as validator for height 24
+
+Round 26: Peer 40 selected as validator for height 25
+
+Round 27: Peer 7 selected as validator for height 26
+
+Round 28: Peer 28 selected as validator for height 27
+
+Round 29: Peer 15 selected as validator for height 28
+
+Round 30: Peer 40 selected as validator for height 29
+
+Round 31: Peer 41 selected as validator for height 30
+
+Round 32: Peer 33 selected as validator for height 31
+
+Round 33: Peer 43 selected as validator for height 32
+
+Round 34: Peer 16 selected as validator for height 33
+
+Round 35: Peer 32 selected as validator for height 34
+
+Round 36: Peer 26 selected as validator for height 35
+
+Round 37: Peer 8 selected as validator for height 36
+
+Round 38: Peer 25 selected as validator for height 37
+
+Round 39: Peer 20 selected as validator for height 38
+
+Round 40: Peer 46 selected as validator for height 39
+
+Round 41: Peer 19 selected as validator for height 40
+
+Round 42: Peer 30 selected as validator for height 41
+
+Round 43: Peer 14 selected as validator for height 42
+
+Round 44: Peer 25 selected as validator for height 43
+
+Round 45: Peer 31 selected as validator for height 44
+
+Round 46: Peer 46 selected as validator for height 45
+
+Round 47: Peer 32 selected as validator for height 46
+
+Round 48: Peer 12 selected as validator for height 47
+
+Round 49: Peer 18 selected as validator for height 48
+
+Round 50: Peer 26 selected as validator for height 49
+
+Simulation ending: Minimum blockchain length reached (50 blocks)
+
+===== SIMULATION RESULTS =====
+Ran for 250.61 seconds
+Maximum blockchain height: 50 for peer 49
+Minimum blockchain height: 50 for peer 0
+All peers are in sync!
+All blockchains match till minimum heights!
+
+Block validator distribution:
+Peer 37: 150 blocks (300.0%) - Stake: 3.6%
+Peer 16: 150 blocks (300.0%) - Stake: 3.3%
+Peer 36: 150 blocks (300.0%) - Stake: 3.4%
+Peer 41: 150 blocks (300.0%) - Stake: 3.1%
+Peer 40: 150 blocks (300.0%) - Stake: 3.1%
+Peer 27: 100 blocks (200.0%) - Stake: 3.1%
+Peer 15: 100 blocks (200.0%) - Stake: 3.1%
+Peer 30: 100 blocks (200.0%) - Stake: 3.4%
+Peer 43: 100 blocks (200.0%) - Stake: 0.7%
+Peer 32: 100 blocks (200.0%) - Stake: 2.7%
+Peer 26: 100 blocks (200.0%) - Stake: 2.8%
+Peer 25: 100 blocks (200.0%) - Stake: 1.5%
+Peer 46: 100 blocks (200.0%) - Stake: 1.5%
+Peer 35: 50 blocks (100.0%) - Stake: 1.9%
+Peer 39: 50 blocks (100.0%) - Stake: 2.3%
+Peer 11: 50 blocks (100.0%) - Stake: 2.7%
+Peer 21: 50 blocks (100.0%) - Stake: 1.8%
+Peer 4: 50 blocks (100.0%) - Stake: 0.5%
+Peer 2: 50 blocks (100.0%) - Stake: 2.1%
+Peer 34: 50 blocks (100.0%) - Stake: 2.8%
+Peer 47: 50 blocks (100.0%) - Stake: 3.5%
+Peer 23: 50 blocks (100.0%) - Stake: 2.7%
+Peer 7: 50 blocks (100.0%) - Stake: 0.8%
+Peer 28: 50 blocks (100.0%) - Stake: 2.1%
+Peer 33: 50 blocks (100.0%) - Stake: 3.3%
+Peer 8: 50 blocks (100.0%) - Stake: 0.7%
+Peer 20: 50 blocks (100.0%) - Stake: 3.5%
+Peer 19: 50 blocks (100.0%) - Stake: 1.0%
+Peer 14: 50 blocks (100.0%) - Stake: 2.2%
+Peer 31: 50 blocks (100.0%) - Stake: 2.4%
+Peer 12: 50 blocks (100.0%) - Stake: 1.0%
+Peer 18: 50 blocks (100.0%) - Stake: 0.7%
+Simulation started at 2025-04-30 16:51:31 and ended at 2025-04-30 16:55:41

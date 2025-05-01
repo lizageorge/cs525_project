@@ -1,0 +1,59 @@
+Initialized 30 peers with total stake: 1757.51
+Stake distribution:
+Peer 0: 89.91 (5.1%)
+Peer 1: 99.64 (5.7%)
+Peer 2: 41.14 (2.3%)
+Peer 3: 95.86 (5.5%)
+Peer 4: 98.83 (5.6%)
+Peer 5: 48.97 (2.8%)
+Peer 6: 56.72 (3.2%)
+Peer 7: 28.32 (1.6%)
+Peer 8: 63.31 (3.6%)
+Peer 9: 81.57 (4.6%)
+Peer 10: 40.74 (2.3%)
+Peer 11: 67.34 (3.8%)
+Peer 12: 53.39 (3.0%)
+Peer 13: 34.98 (2.0%)
+Peer 14: 68.23 (3.9%)
+Peer 15: 16.36 (0.9%)
+Peer 16: 87.63 (5.0%)
+Peer 17: 29.84 (1.7%)
+Peer 18: 84.01 (4.8%)
+Peer 19: 23.84 (1.4%)
+Peer 20: 57.16 (3.3%)
+Peer 21: 24.01 (1.4%)
+Peer 22: 79.32 (4.5%)
+Peer 23: 68.46 (3.9%)
+Peer 24: 34.53 (2.0%)
+Peer 25: 60.25 (3.4%)
+Peer 26: 59.33 (3.4%)
+Peer 27: 68.43 (3.9%)
+Peer 28: 63.97 (3.6%)
+Peer 29: 31.42 (1.8%)
+
+Round 1: Peer 22 selected as validator for height 0
+
+Round 2: Peer 6 selected as validator for height 1
+
+Round 3: Peer 20 selected as validator for height 2
+
+Round 4: Peer 23 selected as validator for height 3
+
+Round 5: Peer 21 selected as validator for height 4
+
+Simulation ending: Minimum blockchain length reached (5 blocks)
+
+===== SIMULATION RESULTS =====
+Ran for 25.34 seconds
+Maximum blockchain height: 5 for peer 29
+Minimum blockchain height: 5 for peer 0
+All peers are in sync!
+All blockchains match till minimum heights!
+
+Block validator distribution:
+Peer 22: 30 blocks (600.0%) - Stake: 4.5%
+Peer 6: 30 blocks (600.0%) - Stake: 3.2%
+Peer 20: 30 blocks (600.0%) - Stake: 3.3%
+Peer 23: 30 blocks (600.0%) - Stake: 3.9%
+Peer 21: 30 blocks (600.0%) - Stake: 1.4%
+Simulation started at 2025-04-30 16:31:49 and ended at 2025-04-30 16:32:15
