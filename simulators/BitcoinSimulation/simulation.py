@@ -15,7 +15,7 @@ MAX_TRANSACTIONS_PER_BLOCK = 50
 SIMULATION_TIME = 120  # seconds to run the simulation
 DEBUG = True  # Enable detailed logging
 # Difficulty for mining (number of leading zeros in the hash)
-DIFFICULTY = 4  # Adjust this for more or less difficulty
+DIFFICULTY = 3  # Adjust this for more or less difficulty
 
 class Transaction:
     def __init__(self, sender: int, receiver: int, amount: float):
@@ -218,8 +218,6 @@ class Peer:
                     print("someone else got it")
                 break
             block.nonce += 1
-        if(block_mined[0] and not self.block_mined):
-            print("someone else mined!")
 
     def receive_block_proposal(self, block_data: Dict, sender_id: int):
         """Process a block proposal received from another peer"""
@@ -515,7 +513,7 @@ if __name__ == "__main__":
     start_time = time.time()
 
     # Initialize the Bitcoin simulator with the specified number of peers and simulation time
-    simulator = PoWSimulator(args.num_peers, 50)
+    simulator = PoWSimulator(args.num_peers, args.min_final_chain_length)
     simulator.initialize()
     simulator.run()
 
