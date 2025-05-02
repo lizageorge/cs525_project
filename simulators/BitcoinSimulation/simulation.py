@@ -5,6 +5,7 @@ import json
 from typing import List, Dict, Set, Any
 from collections import deque
 import threading
+import argparse
 
 # Configuration
 NUM_PEERS = 20
@@ -16,7 +17,7 @@ DEBUG = True  # Enable detailed logging
 any_peer_mined = False
 MIN_FINAL_CHAIN_LENGTH = 5
 # Difficulty for mining (number of leading zeros in the hash)
-DIFFICULTY = 5  # Adjust this for more or less difficulty
+DIFFICULTY = 4  # Adjust this for more or less difficulty
 
 class Transaction:
     def __init__(self, sender: int, receiver: int, amount: float):
@@ -330,23 +331,25 @@ class Peer:
 
 class PoWSimulator:
     """Manages the entire PoW simulation"""
-    def __init__(self):
+    def __init__(self, num_peers: int, simulation_min_blocks: int):
         self.message_bus = MessageBus()
         self.peers = []
         self.current_round = 0
         self.running = False
         self.start_time = None
+        self.simulation_min_blocks = simulation_min_blocks  # Set the simulation time
+        self.num_peers = num_peers  # Set the number of peers
         self.block_mined = False  # Shared variable to indicate if a block has been mined
         self.lock = threading.Lock()  # Lock for thread safety
     
     def initialize(self):
         """Set up the simulation"""
-        for i in range(NUM_PEERS):
+        for i in range(self.num_peers):
             peer = Peer(i, self.message_bus)
             self.peers.append(peer)
             peer.start()
         
-        print(f"Initialized {NUM_PEERS} peers.")
+        print(f"Initialized {self.num_peers} peers.")
     
     def get_messages_for_peer(self, peer_id: int):
         """Get all messages that should be delivered to a specific peer"""
@@ -383,7 +386,7 @@ class PoWSimulator:
         """Main simulation loop"""
         last_block_time = time.time()
         last_status_time = time.time()
-        
+        print("Start time:")
         while self.running:
             current_time = time.time()
             
@@ -393,7 +396,7 @@ class PoWSimulator:
             
             # Generate random transactions
             if random.random() < 0.1:  # 10% chance each loop
-                peer_id = random.randint(0, NUM_PEERS - 1)
+                peer_id = random.randint(0, self.num_peers - 1)
                 tx = self.peers[peer_id].create_transaction()
                 # if DEBUG:
                 #     print(f"[Peer {peer_id}] Created {tx}")
@@ -429,7 +432,7 @@ class PoWSimulator:
 
              # Check if the simulation should end
             min_blockchain_length = min(len(peer.blockchain) for peer in self.peers)
-            if min_blockchain_length >= MIN_FINAL_CHAIN_LENGTH:
+            if min_blockchain_length >= self.simulation_min_blocks:
                 print(
                     f"\nSimulation ending: Minimum blockchain length reached ({min_blockchain_length} blocks)"
                 )
@@ -492,6 +495,31 @@ class PoWSimulator:
        
 # Run the simulation
 if __name__ == "__main__":
-    simulator = PoWSimulator()
+    parser = argparse.ArgumentParser(description="Run a Bitcoin blockchain simulation.")
+    parser.add_argument(
+        "--num_peers", type=int, required=True, help="Number of peers in the simulation"
+    )
+    parser.add_argument(
+        "--min_final_chain_length",
+        type=int,
+        required=True,
+        help="Number of minimum blocks in final chain",
+    )
+    args = parser.parse_args()
+
+    start_time = time.time()
+
+    # Initialize the Bitcoin simulator with the specified number of peers and simulation time
+    simulator = PoWSimulator(args.num_peers, args.min_final_chain_length)
     simulator.initialize()
     simulator.run()
+
+    end_time = time.time()
+
+    start_time = time.strftime(
+        "%Y-%m-%d %H:%M:%S", time.localtime(start_time)
+    )
+    end_time = time.strftime(
+        "%Y-%m-%d %H:%M:%S", time.localtime(end_time)
+    )
+    print(f"Simulation started at {start_time} and ended at {end_time}")

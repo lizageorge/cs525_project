@@ -1,0 +1,140 @@
+Initialized 10 nodes
+
+Status at 10.0s:
+Heights: min=1, max=1
+Chain luck values: min=0.9951, max=0.9951, avg=0.9951
+Node 2 round status: in progress
+
+Status at 20.0s:
+Heights: min=3, max=3
+Chain luck values: min=2.5640, max=2.6233, avg=2.5982
+Node 4 round status: in progress
+
+Status at 30.0s:
+Heights: min=5, max=5
+Chain luck values: min=3.5596, max=4.1462, avg=3.9382
+Node 6 round status: in progress
+
+Status at 40.0s:
+Heights: min=7, max=7
+Chain luck values: min=4.3533, max=5.8624, avg=5.2821
+Node 6 round status: in progress
+
+Status at 50.0s:
+Heights: min=9, max=9
+Chain luck values: min=4.7938, max=7.2624, avg=6.2674
+Node 5 round status: in progress
+
+Status at 60.0s:
+Heights: min=11, max=12
+Chain luck values: min=5.9639, max=9.0598, avg=7.7407
+Node 2 round status: in progress
+
+Status at 70.0s:
+Heights: min=13, max=13
+Chain luck values: min=6.1812, max=10.6747, avg=8.8609
+Node 2 round status: in progress
+
+Status at 80.0s:
+Heights: min=15, max=15
+Chain luck values: min=6.6846, max=11.8368, avg=9.9920
+Node 7 round status: in progress
+
+Status at 90.1s:
+Heights: min=17, max=18
+Chain luck values: min=7.3894, max=13.7653, avg=11.1599
+Node 4 round status: in progress
+
+Status at 100.1s:
+Heights: min=19, max=19
+Chain luck values: min=8.2366, max=15.3144, avg=12.2315
+Node 8 round status: in progress
+
+Status at 110.1s:
+Heights: min=21, max=21
+Chain luck values: min=9.7106, max=17.0792, avg=13.4063
+Node 5 round status: in progress
+
+Status at 120.1s:
+Heights: min=23, max=23
+Chain luck values: min=10.5344, max=18.4527, avg=14.3088
+Node 0 round status: in progress
+
+Status at 130.1s:
+Heights: min=25, max=25
+Chain luck values: min=11.9656, max=19.7259, avg=15.3531
+Node 1 round status: in progress
+
+Status at 140.1s:
+Heights: min=27, max=27
+Chain luck values: min=12.8448, max=20.8409, avg=16.3662
+Node 2 round status: in progress
+
+Status at 150.1s:
+Heights: min=29, max=29
+Chain luck values: min=13.9697, max=22.4427, avg=17.6610
+Node 9 round status: in progress
+
+Status at 160.1s:
+Heights: min=31, max=31
+Chain luck values: min=14.9446, max=23.8795, avg=18.7837
+Node 8 round status: in progress
+
+Status at 170.1s:
+Heights: min=33, max=33
+Chain luck values: min=15.8573, max=24.8777, avg=19.7151
+Node 4 round status: in progress
+
+Status at 180.1s:
+Heights: min=35, max=35
+Chain luck values: min=16.7144, max=25.7655, avg=20.7167
+Node 5 round status: in progress
+
+Status at 190.1s:
+Heights: min=37, max=37
+Chain luck values: min=17.7351, max=26.6628, avg=21.8586
+Node 5 round status: in progress
+
+Status at 200.1s:
+Heights: min=39, max=39
+Chain luck values: min=17.9095, max=28.4268, avg=22.8431
+Node 9 round status: in progress
+
+Status at 210.1s:
+Heights: min=41, max=41
+Chain luck values: min=18.5237, max=28.9570, avg=23.6690
+Node 8 round status: in progress
+
+Status at 220.1s:
+Heights: min=43, max=43
+Chain luck values: min=18.6657, max=30.3515, avg=24.7331
+Node 9 round status: in progress
+
+Status at 230.1s:
+Heights: min=45, max=45
+Chain luck values: min=19.9864, max=31.6202, avg=25.6230
+Node 3 round status: in progress
+
+Status at 240.1s:
+Heights: min=47, max=47
+Chain luck values: min=21.5212, max=33.3724, avg=26.6223
+Node 5 round status: in progress
+
+Simulation ending: Minimum blockchain length reached (50 blocks)
+Final synchronization took 0.00 seconds
+
+===== SIMULATION RESULTS =====
+Ran for 247.04 seconds
+Maximum blockchain height: 50 for node 9
+Minimum blockchain height: 50 for node 0
+Maximum chain luck: 34.3393 for node 9
+All peers are in sync!
+All blockchains match till minimum heights!
+
+Block miner distribution:
+Node 0: 380 blocks (775.5%) - Expected: 10.0%
+Node 2: 60 blocks (122.4%) - Expected: 10.0%
+Node 7: 30 blocks (61.2%) - Expected: 10.0%
+Node 4: 10 blocks (20.4%) - Expected: 10.0%
+Node 6: 10 blocks (20.4%) - Expected: 10.0%
+Simulation started at 2025-05-01 16:32:34 and ended at 2025-05-01 16:36:41
