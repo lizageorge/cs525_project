@@ -1,0 +1,4 @@
+Run,Num Peers,Chain Length,Runtime,Interval Start,Interval End,Peers In Sync,Blockchains Match
+1,30,5,25.34,2025-05-01 19:49:33,2025-05-01 19:49:58,True,True
+1,30,10,50.36,2025-05-01 19:49:58,2025-05-01 19:50:48,True,True
+1,30,50,250.54,2025-05-01 19:50:48,2025-05-01 19:54:59,True,True
