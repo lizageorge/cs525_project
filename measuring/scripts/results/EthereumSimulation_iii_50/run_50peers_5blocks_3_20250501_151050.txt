@@ -1,0 +1,92 @@
+Initialized 50 peers with total stake: 3138.88
+Stake distribution:
+Peer 0: 86.33 (2.8%)
+Peer 1: 64.07 (2.0%)
+Peer 2: 83.93 (2.7%)
+Peer 3: 84.32 (2.7%)
+Peer 4: 76.00 (2.4%)
+Peer 5: 95.09 (3.0%)
+Peer 6: 53.48 (1.7%)
+Peer 7: 88.37 (2.8%)
+Peer 8: 22.64 (0.7%)
+Peer 9: 70.38 (2.2%)
+Peer 10: 95.07 (3.0%)
+Peer 11: 40.11 (1.3%)
+Peer 12: 25.03 (0.8%)
+Peer 13: 87.82 (2.8%)
+Peer 14: 32.14 (1.0%)
+Peer 15: 80.01 (2.5%)
+Peer 16: 85.21 (2.7%)
+Peer 17: 98.86 (3.1%)
+Peer 18: 57.96 (1.8%)
+Peer 19: 26.56 (0.8%)
+Peer 20: 52.38 (1.7%)
+Peer 21: 81.68 (2.6%)
+Peer 22: 44.70 (1.4%)
+Peer 23: 81.38 (2.6%)
+Peer 24: 87.22 (2.8%)
+Peer 25: 35.57 (1.1%)
+Peer 26: 65.47 (2.1%)
+Peer 27: 77.11 (2.5%)
+Peer 28: 10.80 (0.3%)
+Peer 29: 77.81 (2.5%)
+Peer 30: 58.60 (1.9%)
+Peer 31: 22.41 (0.7%)
+Peer 32: 30.24 (1.0%)
+Peer 33: 52.32 (1.7%)
+Peer 34: 69.65 (2.2%)
+Peer 35: 98.32 (3.1%)
+Peer 36: 73.60 (2.3%)
+Peer 37: 97.56 (3.1%)
+Peer 38: 11.92 (0.4%)
+Peer 39: 97.32 (3.1%)
+Peer 40: 94.90 (3.0%)
+Peer 41: 90.57 (2.9%)
+Peer 42: 54.24 (1.7%)
+Peer 43: 74.10 (2.4%)
+Peer 44: 50.72 (1.6%)
+Peer 45: 14.79 (0.5%)
+Peer 46: 91.02 (2.9%)
+Peer 47: 42.22 (1.3%)
+Peer 48: 33.50 (1.1%)
+Peer 49: 13.38 (0.4%)
+
+Round 1: Peer 37 selected as validator for height 0
+
+Round 2: Peer 13 selected as validator for height 1
+
+Status at 10.0s:
+Average blockchain height: 0.0
+Heights: min=0, max=0
+Peer 48 has 0 pending blocks
+Votes for current height blocks:
+  Validator 13: votes seen by peers: [1]
+  Consensus threshold: 1600.83 of 3138.88 total stake
+
+Round 3: Peer 34 selected as validator for height 2
+
+Status at 20.0s:
+Average blockchain height: 2.0
+Heights: min=2, max=2
+Peer 43 has 0 pending blocks
+
+Round 4: Peer 39 selected as validator for height 3
+
+Round 5: Peer 36 selected as validator for height 4
+
+Simulation ending: Minimum blockchain length reached (5 blocks)
+
+===== SIMULATION RESULTS =====
+Ran for 25.33 seconds
+Maximum blockchain height: 5 for peer 49
+Minimum blockchain height: 5 for peer 0
+All peers are in sync!
+All blockchains match till minimum heights!
+
+Block validator distribution:
+Peer 37: 50 blocks (1000.0%) - Stake: 3.1%
+Peer 13: 50 blocks (1000.0%) - Stake: 2.8%
+Peer 34: 50 blocks (1000.0%) - Stake: 2.2%
+Peer 39: 50 blocks (1000.0%) - Stake: 3.1%
+Peer 36: 50 blocks (1000.0%) - Stake: 2.3%
+Simulation started at 2025-05-01 15:10:50 and ended at 2025-05-01 15:11:15

@@ -1,0 +1,89 @@
+Initialized 50 peers with total stake: 2858.05
+Stake distribution:
+Peer 0: 97.23 (3.4%)
+Peer 1: 23.20 (0.8%)
+Peer 2: 98.99 (3.5%)
+Peer 3: 70.05 (2.5%)
+Peer 4: 26.37 (0.9%)
+Peer 5: 12.27 (0.4%)
+Peer 6: 24.31 (0.9%)
+Peer 7: 15.22 (0.5%)
+Peer 8: 42.31 (1.5%)
+Peer 9: 49.61 (1.7%)
+Peer 10: 21.50 (0.8%)
+Peer 11: 51.36 (1.8%)
+Peer 12: 33.53 (1.2%)
+Peer 13: 11.56 (0.4%)
+Peer 14: 45.19 (1.6%)
+Peer 15: 62.92 (2.2%)
+Peer 16: 60.05 (2.1%)
+Peer 17: 79.75 (2.8%)
+Peer 18: 95.26 (3.3%)
+Peer 19: 41.44 (1.5%)
+Peer 20: 31.37 (1.1%)
+Peer 21: 70.69 (2.5%)
+Peer 22: 55.86 (2.0%)
+Peer 23: 61.59 (2.2%)
+Peer 24: 94.63 (3.3%)
+Peer 25: 47.63 (1.7%)
+Peer 26: 83.02 (2.9%)
+Peer 27: 25.51 (0.9%)
+Peer 28: 15.42 (0.5%)
+Peer 29: 53.86 (1.9%)
+Peer 30: 77.06 (2.7%)
+Peer 31: 81.08 (2.8%)
+Peer 32: 11.72 (0.4%)
+Peer 33: 41.98 (1.5%)
+Peer 34: 54.70 (1.9%)
+Peer 35: 46.54 (1.6%)
+Peer 36: 35.44 (1.2%)
+Peer 37: 83.80 (2.9%)
+Peer 38: 48.26 (1.7%)
+Peer 39: 61.14 (2.1%)
+Peer 40: 34.49 (1.2%)
+Peer 41: 99.65 (3.5%)
+Peer 42: 67.15 (2.3%)
+Peer 43: 87.93 (3.1%)
+Peer 44: 94.33 (3.3%)
+Peer 45: 89.31 (3.1%)
+Peer 46: 81.08 (2.8%)
+Peer 47: 79.22 (2.8%)
+Peer 48: 98.64 (3.5%)
+Peer 49: 82.83 (2.9%)
+
+Round 1: Peer 42 selected as validator for height 0
+
+Status at 10.0s:
+Average blockchain height: 0.0
+Heights: min=0, max=0
+Peer 21 has 0 pending blocks
+
+Round 2: Peer 18 selected as validator for height 1
+
+Round 3: Peer 39 selected as validator for height 2
+
+Status at 20.0s:
+Average blockchain height: 2.0
+Heights: min=2, max=2
+Peer 32 has 0 pending blocks
+
+Round 4: Peer 43 selected as validator for height 3
+
+Round 5: Peer 41 selected as validator for height 4
+
+Simulation ending: Minimum blockchain length reached (5 blocks)
+
+===== SIMULATION RESULTS =====
+Ran for 25.38 seconds
+Maximum blockchain height: 5 for peer 49
+Minimum blockchain height: 5 for peer 0
+All peers are in sync!
+All blockchains match till minimum heights!
+
+Block validator distribution:
+Peer 42: 50 blocks (1000.0%) - Stake: 2.3%
+Peer 18: 50 blocks (1000.0%) - Stake: 3.3%
+Peer 39: 50 blocks (1000.0%) - Stake: 2.1%
+Peer 43: 50 blocks (1000.0%) - Stake: 3.1%
+Peer 41: 50 blocks (1000.0%) - Stake: 3.5%
+Simulation started at 2025-05-01 15:09:59 and ended at 2025-05-01 15:10:24
