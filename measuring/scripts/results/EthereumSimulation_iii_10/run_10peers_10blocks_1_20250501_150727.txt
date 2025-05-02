@@ -1,0 +1,79 @@
+Initialized 10 peers with total stake: 555.74
+Stake distribution:
+Peer 0: 31.13 (5.6%)
+Peer 1: 80.66 (14.5%)
+Peer 2: 88.12 (15.9%)
+Peer 3: 15.92 (2.9%)
+Peer 4: 31.37 (5.6%)
+Peer 5: 52.44 (9.4%)
+Peer 6: 24.96 (4.5%)
+Peer 7: 66.81 (12.0%)
+Peer 8: 70.34 (12.7%)
+Peer 9: 93.99 (16.9%)
+
+Round 1: Peer 8 selected as validator for height 0
+
+Round 2: Peer 2 selected as validator for height 1
+
+Status at 10.0s:
+Average blockchain height: 0.0
+Heights: min=0, max=0
+Peer 9 has 0 pending blocks
+Votes for current height blocks:
+  Validator 2: votes seen by peers: [1]
+  Consensus threshold: 283.43 of 555.74 total stake
+
+Round 3: Peer 7 selected as validator for height 2
+
+Status at 20.0s:
+Average blockchain height: 2.0
+Heights: min=2, max=2
+Peer 2 has 0 pending blocks
+
+Round 4: Peer 8 selected as validator for height 3
+
+Round 5: Peer 8 selected as validator for height 4
+
+Status at 30.0s:
+Average blockchain height: 4.0
+Heights: min=4, max=4
+Peer 1 has 0 pending blocks
+
+Round 6: Peer 2 selected as validator for height 5
+
+Round 7: Peer 1 selected as validator for height 6
+
+Status at 40.0s:
+Average blockchain height: 6.0
+Heights: min=6, max=6
+Peer 7 has 0 pending blocks
+
+Round 8: Peer 9 selected as validator for height 7
+
+Round 9: Peer 5 selected as validator for height 8
+
+Status at 50.0s:
+Average blockchain height: 8.0
+Heights: min=8, max=8
+Peer 1 has 0 pending blocks
+
+Round 10: Peer 3 selected as validator for height 9
+
+Simulation ending: Minimum blockchain length reached (10 blocks)
+
+===== SIMULATION RESULTS =====
+Ran for 50.33 seconds
+Maximum blockchain height: 10 for peer 9
+Minimum blockchain height: 10 for peer 0
+All peers are in sync!
+All blockchains match till minimum heights!
+
+Block validator distribution:
+Peer 8: 30 blocks (300.0%) - Stake: 12.7%
+Peer 2: 20 blocks (200.0%) - Stake: 15.9%
+Peer 7: 10 blocks (100.0%) - Stake: 12.0%
+Peer 1: 10 blocks (100.0%) - Stake: 14.5%
+Peer 9: 10 blocks (100.0%) - Stake: 16.9%
+Peer 5: 10 blocks (100.0%) - Stake: 9.4%
+Peer 3: 10 blocks (100.0%) - Stake: 2.9%
+Simulation started at 2025-05-01 15:07:27 and ended at 2025-05-01 15:08:18

@@ -1,0 +1,143 @@
+Initialized 100 nodes
+
+Status at 10.0s:
+Heights: min=1, max=1
+Chain luck values: min=0.8923, max=0.9539, avg=0.9463
+Node 4 round status: in progress
+
+Status at 20.0s:
+Heights: min=3, max=3
+Chain luck values: min=1.9214, max=2.8920, avg=2.7582
+Node 71 round status: in progress
+
+Status at 30.0s:
+Heights: min=5, max=5
+Chain luck values: min=2.9186, max=4.7646, avg=4.4225
+Node 90 round status: in progress
+
+Status at 40.0s:
+Heights: min=7, max=8
+Chain luck values: min=3.9375, max=7.6257, avg=6.0412
+Node 43 round status: in progress
+
+Status at 50.0s:
+Heights: min=9, max=9
+Chain luck values: min=4.6675, max=8.5940, avg=7.5757
+Node 75 round status: in progress
+
+Status at 60.0s:
+Heights: min=11, max=12
+Chain luck values: min=5.3640, max=11.3154, avg=9.0723
+Node 80 round status: in progress
+
+Status at 70.1s:
+Heights: min=13, max=14
+Chain luck values: min=6.1886, max=12.6411, avg=10.4605
+Node 75 round status: in progress
+
+Status at 80.1s:
+Heights: min=15, max=16
+Chain luck values: min=7.4390, max=14.2594, avg=11.7747
+Node 8 round status: in progress
+
+Status at 90.1s:
+Heights: min=17, max=18
+Chain luck values: min=8.5132, max=16.0499, avg=13.0098
+Node 28 round status: in progress
+
+Status at 100.1s:
+Heights: min=19, max=20
+Chain luck values: min=9.6053, max=17.5120, avg=14.2652
+Node 97 round status: in progress
+
+Status at 110.1s:
+Heights: min=21, max=22
+Chain luck values: min=10.1374, max=19.3805, avg=15.3821
+Node 45 round status: in progress
+
+Status at 120.1s:
+Heights: min=23, max=24
+Chain luck values: min=10.8933, max=21.1085, avg=16.4515
+Node 53 round status: in progress
+
+Status at 130.1s:
+Heights: min=25, max=27
+Chain luck values: min=11.8399, max=22.0216, avg=17.4889
+Node 45 round status: in progress
+
+Status at 140.1s:
+Heights: min=27, max=28
+Chain luck values: min=12.9911, max=23.4379, avg=18.5540
+Node 18 round status: in progress
+
+Status at 150.2s:
+Heights: min=29, max=30
+Chain luck values: min=14.0961, max=25.2923, avg=19.5544
+Node 32 round status: in progress
+
+Status at 160.2s:
+Heights: min=31, max=33
+Chain luck values: min=14.5283, max=26.6974, avg=20.6123
+Node 99 round status: in progress
+
+Status at 170.2s:
+Heights: min=33, max=34
+Chain luck values: min=15.1727, max=28.9555, avg=21.5959
+Node 56 round status: waiting
+
+Status at 180.2s:
+Heights: min=35, max=36
+Chain luck values: min=16.7477, max=30.2704, avg=22.7205
+Node 74 round status: waiting
+
+Status at 190.2s:
+Heights: min=37, max=38
+Chain luck values: min=17.9346, max=31.7889, avg=23.7253
+Node 83 round status: in progress
+
+Status at 200.2s:
+Heights: min=39, max=40
+Chain luck values: min=18.6095, max=32.0395, avg=24.7124
+Node 3 round status: in progress
+
+Status at 210.2s:
+Heights: min=41, max=42
+Chain luck values: min=19.9346, max=32.6282, avg=25.6422
+Node 74 round status: in progress
+
+Status at 220.2s:
+Heights: min=43, max=44
+Chain luck values: min=20.5020, max=33.8792, avg=26.6592
+Node 99 round status: in progress
+
+Status at 230.3s:
+Heights: min=45, max=46
+Chain luck values: min=20.8881, max=34.6893, avg=27.6083
+Node 33 round status: in progress
+
+Status at 240.3s:
+Heights: min=47, max=48
+Chain luck values: min=21.5673, max=36.2583, avg=28.5816
+Node 93 round status: in progress
+
+Simulation ending: Minimum blockchain length reached (50 blocks)
+Final synchronization took 0.27 seconds
+
+===== SIMULATION RESULTS =====
+Ran for 247.58 seconds
+Maximum blockchain height: 50 for node 99
+Minimum blockchain height: 50 for node 0
+Maximum chain luck: 37.1497 for node 99
+All peers are in sync!
+All blockchains match till minimum heights!
+
+Block miner distribution:
+Node 19: 2600 blocks (5306.1%) - Expected: 1.0%
+Node 23: 900 blocks (1836.7%) - Expected: 1.0%
+Node 20: 500 blocks (1020.4%) - Expected: 1.0%
+Node 82: 400 blocks (816.3%) - Expected: 1.0%
+Node 91: 200 blocks (408.2%) - Expected: 1.0%
+Node 62: 100 blocks (204.1%) - Expected: 1.0%
+Node 27: 100 blocks (204.1%) - Expected: 1.0%
+Node 14: 100 blocks (204.1%) - Expected: 1.0%
+Simulation started at 2025-05-01 18:01:08 and ended at 2025-05-01 18:05:15
