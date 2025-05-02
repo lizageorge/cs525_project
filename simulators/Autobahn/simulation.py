@@ -1,840 +1,889 @@
-import asyncio
-import random
-import logging
 import time
+import random
+import hashlib
 import json
+from typing import List, Dict, Set, Any
+import threading
+from collections import deque
 import argparse
-import matplotlib.pyplot as plt
-from dataclasses import dataclass, field, asdict
-from typing import Dict, List, Set, Tuple, Optional, Any
-import uuid
-import sys
-import os
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler("autobahn_simulation.log"),
-        logging.StreamHandler()
-    ]
-)
-
-# Simulation configuration
-class SimulationConfig:
-    def __init__(self, 
-                 num_peers=20,
-                 run_time_sec=60,
-                 block_time_sec=2.0,
-                 view_change_timeout_sec=10.0,
-                 latency_min_ms=10,
-                 latency_max_ms=100,
-                 packet_loss_pct=1,
-                 byzantine_nodes=0,
-                 partition_network=False,
-                 partition_time_sec=None,
-                 log_level="INFO"):
-        self.num_peers = num_peers
-        self.run_time_sec = run_time_sec
-        self.block_time_sec = block_time_sec
-        self.view_change_timeout_sec = view_change_timeout_sec
-        self.latency_min_ms = latency_min_ms
-        self.latency_max_ms = latency_max_ms
-        self.packet_loss_pct = packet_loss_pct
-        self.byzantine_nodes = byzantine_nodes
-        self.partition_network = partition_network
-        self.partition_time_sec = partition_time_sec or (run_time_sec // 3)
-        self.log_level = log_level
-
-    def to_dict(self):
-        return {k: v for k, v in self.__dict__.items()}
 
 
-# Autobahn consensus protocol simulation components
-@dataclass
+# Configuration
+BLOCK_TIME = 5  # seconds between blocks
+MIN_TRANSACTIONS_PER_BLOCK = 1
+MAX_TRANSACTIONS_PER_BLOCK = 50
+DEBUG = False  # Enable detailed logging
+
+# Autobahn specific configuration
+LANE_COUNT = 4  # Number of parallel lanes
+CONFIRMATION_THRESHOLD = 3  # Number of confirmations needed for finality
+HIGHWAY_SYNC_INTERVAL = 10  # Seconds between highway synchronizations
+
+
+class Transaction:
+    def __init__(self, sender: int, receiver: int, amount: float):
+        self.sender = sender
+        self.receiver = receiver
+        self.amount = amount
+        self.timestamp = time.time()
+        self.tx_hash = self._calculate_hash()
+        # Assign transaction to a lane based on hash
+        self.lane = int(self.tx_hash[0:8], 16) % LANE_COUNT
+
+    def _calculate_hash(self) -> str:
+        tx_string = f"{self.sender}{self.receiver}{self.amount}{self.timestamp}"
+        return hashlib.sha256(tx_string.encode()).hexdigest()
+
+    def __str__(self) -> str:
+        return (
+            f"TX: {self.sender} -> {self.receiver}: {self.amount} (Lane {self.lane}, {self.tx_hash[:8]})"
+        )
+
+
 class Block:
-    """Represents a block in the blockchain."""
-    hash: str
-    prev_hash: str
-    proposer_id: str
-    height: int
-    data: str
-    timestamp: float
-    
-    def to_dict(self):
-        return asdict(self)
+    def __init__(
+        self,
+        height: int,
+        lane: int,
+        prev_hash: str,
+        validator: int,
+        timestamp: float,
+        transactions: List[Transaction] = [],
+    ):
+        self.height = height
+        self.lane = lane  # Which lane this block belongs to
+        self.prev_hash = prev_hash
+        self.validator = validator
+        self.timestamp = timestamp
+        self.transactions: List[Transaction] = transactions
+        self.confirmations: Set[int] = set()  # Peers that confirmed this block
+        self.hash = None
+        self.is_finalized = False
 
-
-@dataclass
-class Vote:
-    """Represents a vote on a block."""
-    block_hash: str
-    voter_id: str
-    vote_type: str  # "prepare" or "commit"
-    signature: str
-    
-    def to_dict(self):
-        return asdict(self)
-
-
-@dataclass
-class Message:
-    """Network message exchanged between peers."""
-    sender_id: str
-    msg_type: str  # "block_proposal", "prepare_vote", "commit_vote", "sync_request", etc.
-    content: Any
-    msg_id: str = field(default_factory=lambda: str(uuid.uuid4())[:8])
-    
-    def to_dict(self):
-        if hasattr(self.content, 'to_dict'):
-            content = self.content.to_dict()
-        elif isinstance(self.content, (str, int, float, bool, type(None))):
-            content = self.content
-        else:
-            content = str(self.content)
-            
-        return {
-            "sender_id": self.sender_id,
-            "msg_type": self.msg_type,
-            "content": content,
-            "msg_id": self.msg_id
-        }
-
-
-class NetworkSimulator:
-    """Simulates network conditions between peers."""
-    
-    def __init__(self, config: SimulationConfig):
-        self.latency_min_ms = config.latency_min_ms
-        self.latency_max_ms = config.latency_max_ms
-        self.packet_loss_pct = config.packet_loss_pct
-        self.disconnect_peers = set()
-        self.message_queues = {}  # peer_id -> asyncio.Queue
-        self.partitioned_groups = []  # List of sets of peer_ids
-        self.is_partitioned = False
-        self.logger = logging.getLogger("Network")
-        
-        # Statistics
-        self.messages_sent = 0
-        self.messages_delivered = 0
-        self.messages_dropped = 0
-        self.message_types = {}  # msg_type -> count
-        
-    def register_peer(self, peer_id):
-        """Register a new peer with the network."""
-        if peer_id not in self.message_queues:
-            self.message_queues[peer_id] = asyncio.Queue()
-            
-    def disconnect_peer(self, peer_id):
-        """Simulate peer disconnection."""
-        self.disconnect_peers.add(peer_id)
-        self.logger.info(f"Peer {peer_id} disconnected from network")
-        
-    def reconnect_peer(self, peer_id):
-        """Simulate peer reconnection."""
-        if peer_id in self.disconnect_peers:
-            self.disconnect_peers.remove(peer_id)
-            self.logger.info(f"Peer {peer_id} reconnected to network")
-    
-    def create_network_partition(self):
-        """Create a network partition by splitting peers into two groups."""
-        if self.is_partitioned:
-            return
-            
-        all_peers = list(self.message_queues.keys())
-        if len(all_peers) <= 2:
-            return
-            
-        # Randomly split peers into two groups
-        random.shuffle(all_peers)
-        split_point = len(all_peers) // 2
-        group1 = set(all_peers[:split_point])
-        group2 = set(all_peers[split_point:])
-        
-        self.partitioned_groups = [group1, group2]
-        self.is_partitioned = True
-        self.logger.warning(f"Network partitioned into groups: {len(group1)} and {len(group2)} peers")
-        
-    def heal_network_partition(self):
-        """Heal the network partition."""
-        if not self.is_partitioned:
-            return
-            
-        self.partitioned_groups = []
-        self.is_partitioned = False
-        self.logger.warning("Network partition healed")
-    
-    def can_communicate(self, from_peer: str, to_peer: str) -> bool:
-        """Check if two peers can communicate with each other."""
-        if from_peer in self.disconnect_peers or to_peer in self.disconnect_peers:
+    def __eq__(self, other):
+        if not isinstance(other, Block):
             return False
-            
-        if not self.is_partitioned:
-            return True
-            
-        # Check if they're in the same partition group
-        for group in self.partitioned_groups:
-            if from_peer in group and to_peer in group:
-                return True
-                
-        return False
-    
-    async def send_message(self, msg: Message, to_peer_id: str):
-        """Send a message from one peer to another with simulated network conditions."""
-        self.messages_sent += 1
-        
-        # Track message types
-        if msg.msg_type not in self.message_types:
-            self.message_types[msg.msg_type] = 0
-        self.message_types[msg.msg_type] += 1
-        
-        # Check if sender or receiver is disconnected or partitioned
-        if not self.can_communicate(msg.sender_id, to_peer_id):
-            self.messages_dropped += 1
-            return
-            
-        # Simulate packet loss
-        if random.random() < self.packet_loss_pct / 100:
-            self.logger.debug(f"Packet loss: {msg.msg_type} from {msg.sender_id} to {to_peer_id}")
-            self.messages_dropped += 1
-            return
-            
+        return (
+            self.height == other.height
+            and self.lane == other.lane
+            and self.prev_hash == other.prev_hash
+            and self.validator == other.validator
+            and self.timestamp == other.timestamp
+            and self.transactions == other.transactions
+            and self.hash == other.hash
+        )
+
+    def __str__(self) -> str:
+        status = "finalized" if self.is_finalized else f"{len(self.confirmations)} confirms"
+        return f"Block #{self.height} Lane {self.lane} by Validator {self.validator} with {len(self.transactions)} txs ({self.hash[:8] if self.hash else 'pending'}) [{status}]"
+
+    def add_transaction(self, tx: Transaction) -> None:
+        self.transactions.append(tx)
+
+    def finalize(self) -> None:
+        # Calculate the block hash only when finalized with all transactions
+        block_data = {
+            "height": self.height,
+            "lane": self.lane,
+            "prev_hash": self.prev_hash,
+            "validator": self.validator,
+            "timestamp": self.timestamp,
+            "transactions": [tx.tx_hash for tx in self.transactions],
+        }
+        block_string = json.dumps(block_data, sort_keys=True)
+        self.hash = hashlib.sha256(block_string.encode()).hexdigest()
+
+    def get_block_identifier(self) -> str:
+        """Create a unique identifier for this block based on its creator, lane and height"""
+        return f"{self.height}:{self.lane}:{self.validator}"
+
+
+class MessageBus:
+    """Simulates network communication between peers"""
+
+    def __init__(self, num_peers, latency_range=(0.05, 0.2)):
+        self.messages = deque()
+        self.min_latency, self.max_latency = latency_range
+        self.num_peers = num_peers
+
+    def broadcast(self, sender_id: int, msg_type: str, data: Any, exclude_ids=None):
+        """Schedule a message to be delivered to all peers except those in exclude_ids"""
+        if exclude_ids is None:
+            exclude_ids = []
+
+        # Add sender to excluded IDs to prevent self-messaging
+        if sender_id not in exclude_ids:
+            exclude_ids.append(sender_id)
+
+        for peer_id in range(self.num_peers):
+            if peer_id not in exclude_ids:
+                self.send(sender_id, peer_id, msg_type, data)
+
+    def send(self, sender_id: int, receiver_id: int, msg_type: str, data: Any):
+        """Schedule a message to be delivered to a specific peer"""
         # Simulate network latency
-        latency = random.uniform(self.latency_min_ms, self.latency_max_ms) / 1000
-        await asyncio.sleep(latency)
-        
-        # Deliver message
-        if to_peer_id in self.message_queues:
-            await self.message_queues[to_peer_id].put(msg)
-            self.messages_delivered += 1
-            
-    async def broadcast_message(self, msg: Message, exclude_peers=None):
-        """Broadcast a message to all connected peers except those in exclude_peers."""
-        exclude_peers = exclude_peers or []
-        tasks = []
-        
-        for peer_id in self.message_queues:
-            if peer_id != msg.sender_id and peer_id not in exclude_peers:
-                tasks.append(self.send_message(msg, peer_id))
-                
-        await asyncio.gather(*tasks)
-        
-    async def receive_message(self, peer_id: str, timeout=None) -> Optional[Message]:
-        """Receive a message for a specific peer, with optional timeout."""
-        if peer_id in self.disconnect_peers:
-            return None
-            
-        try:
-            if timeout:
-                return await asyncio.wait_for(self.message_queues[peer_id].get(), timeout)
+        latency = random.uniform(self.min_latency, self.max_latency)
+        delivery_time = time.time() + latency
+
+        self.messages.append(
+            {
+                "sender": sender_id,
+                "receiver": receiver_id,
+                "type": msg_type,
+                "data": data,
+                "delivery_time": delivery_time,
+            }
+        )
+
+    def get_deliverable_messages(self):
+        """Retrieve messages that are ready to be delivered"""
+        current_time = time.time()
+        deliverable = []
+        remaining = deque()
+
+        while self.messages:
+            msg = self.messages.popleft()
+            if msg["delivery_time"] <= current_time:
+                deliverable.append(msg)
             else:
-                return await self.message_queues[peer_id].get()
-        except asyncio.TimeoutError:
-            return None
+                remaining.append(msg)
+
+        self.messages = remaining
+        return deliverable
+
+
+class Peer:
+    """Represents a single node in the Autobahn network"""
+
+    def __init__(self, peer_id: int, throughput: float, message_bus: MessageBus):
+        self.id = peer_id
+        self.throughput = throughput  # Transaction processing capacity
+        self.message_bus = message_bus
+
+        # Blockchain state - now tracking multiple lanes
+        self.blockchains: Dict[int, List[Block]] = {lane: [] for lane in range(LANE_COUNT)}
+        self.pending_blocks: Dict[str, Block] = {}  # block_identifier -> Block
+        self.finalized_heights: Dict[int, int] = {lane: -1 for lane in range(LANE_COUNT)}
+        self.current_hashes: Dict[int, str] = {lane: f"genesis_hash_{lane}" for lane in range(LANE_COUNT)}
+
+        # Transaction pool separated by lanes
+        self.tx_pools: Dict[int, List[Transaction]] = {lane: [] for lane in range(LANE_COUNT)}
+
+        # Validator state - track which lanes we're validating
+        self.validating_lanes: Set[int] = set()
+        
+        # Track which blocks we've confirmed
+        self.confirmed_blocks: Dict[int, Set[str]] = {}  # height -> Set of block IDs we've confirmed
+        
+        # Last time we synchronized across lanes
+        self.last_highway_sync = time.time()
+        
+        # Highway data - cross-lane references
+        self.highway_references: Dict[int, Dict[int, str]] = {}  # height -> (lane -> block_hash)
+
+    def start(self):
+        """Initialize the peer"""
+        # Assign lanes to validate based on throughput
+        lane_assignments = simulator.assign_lanes(self.id)
+        self.validating_lanes = set(lane_assignments)
+        
+        if DEBUG:
+            print(f"[Peer {self.id}] Assigned to validate lanes: {self.validating_lanes}")
+
+    def select_validator_for_lane(self, lane: int, round_num: int) -> int:
+        """
+        Determine which peer should validate a specific lane in this round
+        All peers should arrive at the same conclusion
+        """
+        # Get all peers assigned to this lane
+        lane_validators = []
+        for peer_id in range(len(simulator.peers)):
+            if lane in simulator.peers[peer_id].validating_lanes:
+                lane_validators.append(peer_id)
+        
+        if not lane_validators:
+            # Fallback - assign to a random peer
+            return random.randint(0, len(simulator.peers) - 1)
             
-    def get_statistics(self):
-        """Get network statistics."""
-        return {
-            "messages_sent": self.messages_sent,
-            "messages_delivered": self.messages_delivered,
-            "messages_dropped": self.messages_dropped,
-            "delivery_rate": self.messages_delivered / max(1, self.messages_sent) * 100,
-            "message_types": self.message_types,
+        # Generate a deterministic rotation based on round
+        seed = hashlib.sha256(f"lane_{lane}_round_{round_num}".encode()).hexdigest()
+        random_value = int(seed, 16) % len(lane_validators)
+        
+        return lane_validators[random_value]
+
+    def process_messages(self):
+        """Process any messages delivered to this peer"""
+        messages = simulator.get_messages_for_peer(self.id)
+
+        for msg in messages:
+            try:
+                if msg["type"] == "propose_block":
+                    self.receive_block_proposal(msg["data"], msg["sender"])
+                elif msg["type"] == "confirm_block":
+                    self.receive_confirmation(msg["data"], msg["sender"])
+                elif msg["type"] == "transaction":
+                    self.receive_transaction(msg["data"])
+                elif msg["type"] == "highway_sync":
+                    self.receive_highway_sync(msg["data"], msg["sender"])
+            except Exception as e:
+                print(
+                    f"Error processing message {msg['type']} from {msg['sender']}: {e}"
+                )
+
+    def propose_blocks(self, round_num: int):
+        """Create and propose new blocks for each lane we're responsible for"""
+        for lane in self.validating_lanes:
+            validator_for_lane = self.select_validator_for_lane(lane, round_num)
+            
+            if validator_for_lane == self.id:
+                # We're the validator for this lane in this round
+                next_height = self.finalized_heights[lane] + 1
+                
+                # Create a new block
+                new_block = Block(
+                    height=next_height,
+                    lane=lane,
+                    prev_hash=self.current_hashes[lane],
+                    validator=self.id,
+                    timestamp=time.time(),
+                )
+
+                # Add transactions from the lane's pool
+                num_tx = min(
+                    len(self.tx_pools[lane]),
+                    random.randint(MIN_TRANSACTIONS_PER_BLOCK, MAX_TRANSACTIONS_PER_BLOCK),
+                )
+
+                for _ in range(num_tx):
+                    if self.tx_pools[lane]:
+                        tx = self.tx_pools[lane].pop(0)
+                        new_block.add_transaction(tx)
+
+                # Confirm our own block
+                new_block.confirmations.add(self.id)
+
+                # Track that we've confirmed this block
+                block_id = new_block.get_block_identifier()
+                if next_height not in self.confirmed_blocks:
+                    self.confirmed_blocks[next_height] = set()
+                self.confirmed_blocks[next_height].add(block_id)
+
+                # Store the pending block
+                self.pending_blocks[block_id] = new_block
+
+                # Add highway references if needed
+                if self.should_create_highway_reference(next_height):
+                    self.add_highway_references(new_block)
+
+                # Finalize the block for network transmission
+                new_block.finalize()
+
+                # Create a simplified version for network transmission
+                block_data = {
+                    "height": new_block.height,
+                    "lane": new_block.lane,
+                    "prev_hash": new_block.prev_hash,
+                    "validator": new_block.validator,
+                    "timestamp": new_block.timestamp,
+                    "transactions": new_block.transactions,
+                    "initial_confirmations": [self.id],  # Pass our confirmation
+                    "hash": new_block.hash,
+                    "highway_refs": self.get_highway_refs_for_block(new_block),
+                }
+
+                # Broadcast the block proposal
+                self.message_bus.broadcast(
+                    sender_id=self.id, msg_type="propose_block", data=block_data
+                )
+
+                if DEBUG:
+                    print(f"[Peer {self.id}] Proposed block at height {next_height} for lane {lane}")
+
+                # Check if the block can be finalized
+                self.check_finalization(block_id)
+
+    def should_create_highway_reference(self, height: int) -> bool:
+        """Determine if a highway reference should be created at this height"""
+        # Create a highway reference every 5 blocks
+        return height % 5 == 0
+
+    def add_highway_references(self, block: Block):
+        """Add cross-lane references to a block"""
+        refs = {}
+        
+        # Add references to the latest blocks in other lanes
+        for other_lane in range(LANE_COUNT):
+            if other_lane != block.lane and self.blockchains[other_lane]:
+                latest_block = self.blockchains[other_lane][-1]
+                refs[other_lane] = latest_block.hash
+        
+        # Store these references
+        if block.height not in self.highway_references:
+            self.highway_references[block.height] = {}
+        
+        self.highway_references[block.height].update(refs)
+
+    def get_highway_refs_for_block(self, block: Block) -> Dict[int, str]:
+        """Get the highway references for a block"""
+        if block.height in self.highway_references:
+            return self.highway_references[block.height]
+        return {}
+
+    def receive_block_proposal(self, block_data: Dict, sender_id: int):
+        """Process a block proposal received from another peer"""
+        # Extract block information
+        height = block_data["height"]
+        lane = block_data["lane"]
+        prev_hash = block_data["prev_hash"]
+        validator = block_data["validator"]
+        timestamp = block_data["timestamp"]
+        transactions = block_data["transactions"]
+        initial_confirmations = block_data.get("initial_confirmations", [])
+        block_hash = block_data.get("hash")
+        highway_refs = block_data.get("highway_refs", {})
+
+        # Verify the block is for the next height in its lane
+        if height != self.finalized_heights[lane] + 1:
+            if DEBUG:
+                print(
+                    f"[Peer {self.id}] Rejected block at height {height} for lane {lane} (expected {self.finalized_heights[lane] + 1})"
+                )
+            return
+
+        # Verify the previous hash for this lane
+        if prev_hash != self.current_hashes[lane]:
+            if DEBUG:
+                print(
+                    f"[Peer {self.id}] Rejected block with prev_hash {prev_hash} for lane {lane} (expected {self.current_hashes[lane]})"
+                )
+            return
+
+        # Create a block from the received data
+        block = Block(height, lane, prev_hash, validator, timestamp, transactions)
+        block.hash = block_hash  # Set the hash directly
+
+        # Add any initial confirmations that came with the block
+        for confirmer in initial_confirmations:
+            block.confirmations.add(confirmer)
+
+        # Store the block using its identifier
+        block_id = block.get_block_identifier()
+        self.pending_blocks[block_id] = block
+
+        # Store highway references if present
+        if highway_refs and height not in self.highway_references:
+            self.highway_references[height] = highway_refs
+
+        # Confirm the block if it's valid
+        self.confirm_block(block)
+
+    def confirm_block(self, block: Block):
+        """Confirm a valid block"""
+        # Add our confirmation to the block
+        block.confirmations.add(self.id)
+
+        # Track that we've confirmed this block
+        block_id = block.get_block_identifier()
+        if block.height not in self.confirmed_blocks:
+            self.confirmed_blocks[block.height] = set()
+        self.confirmed_blocks[block.height].add(block_id)
+
+        # Prepare confirmation data for broadcast
+        confirm_data = {
+            "block_height": block.height,
+            "block_lane": block.lane,
+            "block_validator": block.validator,
+            "block_id": block_id,
+            "confirmer": self.id,
         }
 
-
-class AutobahnPeer:
-    """Simulates a peer running the Autobahn consensus protocol."""
-    
-    def __init__(self, peer_id: str, network: NetworkSimulator, config: SimulationConfig, 
-                 is_validator=True, is_byzantine=False):
-        self.peer_id = peer_id
-        self.network = network
-        self.is_validator = is_validator
-        self.is_byzantine = is_byzantine
-        self.block_time_sec = config.block_time_sec
-        self.view_change_timeout_sec = config.view_change_timeout_sec
-        
-        # Blockchain state
-        self.blockchain = []  # List of confirmed blocks
-        self.pending_blocks = {}  # hash -> Block
-        self.current_height = 0
-        self.current_round = 0
-        
-        # Consensus state
-        self.current_leader = ""
-        self.prepare_votes = {}  # block_hash -> set of peer_ids
-        self.commit_votes = {}  # block_hash -> set of peer_ids
-        self.view_change_votes = set()  # set of peer_ids
-        self.last_view_change_time = time.time()
-        
-        # Statistics
-        self.blocks_proposed = 0
-        self.prepare_votes_sent = 0
-        self.commit_votes_sent = 0
-        self.view_change_votes_sent = 0
-        self.messages_received = 0
-        self.messages_processed = 0
-        
-        # Logger
-        self.logger = logging.getLogger(f"Peer-{peer_id}")
-        if config.log_level:
-            self.logger.setLevel(getattr(logging, config.log_level))
-        
-    def is_leader(self):
-        """Check if this peer is the current leader."""
-        return self.current_leader == self.peer_id
-        
-    def calculate_next_leader(self):
-        """Calculate the next leader based on round-robin selection."""
-        # In a real implementation, this might use a more sophisticated algorithm
-        validator_count = 20  # Assuming all peers are validators for simplicity
-        return f"peer_{self.current_round % validator_count}"
-        
-    def create_block(self) -> Block:
-        """Create a new block proposal."""
-        prev_hash = "genesis" if not self.blockchain else self.blockchain[-1].hash
-        # In a real implementation, this would collect transactions
-        data = f"Block data from {self.peer_id} at height {self.current_height + 1}"
-        block_hash = f"block_{self.current_height + 1}_{self.peer_id}_{random.randint(1000, 9999)}"
-        
-        block = Block(
-            hash=block_hash,
-            prev_hash=prev_hash,
-            proposer_id=self.peer_id,
-            height=self.current_height + 1,
-            data=data,
-            timestamp=time.time()
-        )
-        
-        self.blocks_proposed += 1
-        return block
-        
-    def validate_block(self, block: Block) -> bool:
-        """Validate a proposed block."""
-        # If we're byzantine and configured to reject blocks, return False randomly
-        if self.is_byzantine and random.random() < 0.5:
-            self.logger.warning(f"Byzantine behavior: Rejecting valid block {block.hash}")
-            return False
-            
-        # In a real implementation, this would verify the block's content
-        if block.height != self.current_height + 1:
-            return False
-            
-        if len(self.blockchain) > 0 and block.prev_hash != self.blockchain[-1].hash:
-            return False
-            
-        return True
-        
-    def create_vote(self, block_hash: str, vote_type: str) -> Vote:
-        """Create a vote for a block."""
-        # In a real implementation, this would create a cryptographic signature
-        signature = f"sig_{self.peer_id}_{random.randint(1000, 9999)}"
-        
-        # Update statistics
-        if vote_type == "prepare":
-            self.prepare_votes_sent += 1
-        elif vote_type == "commit":
-            self.commit_votes_sent += 1
-        
-        return Vote(
-            block_hash=block_hash,
-            voter_id=self.peer_id,
-            vote_type=vote_type,
-            signature=signature
-        )
-        
-    def has_quorum_prepare(self, block_hash: str) -> bool:
-        """Check if a block has enough prepare votes to proceed to commit phase."""
-        # Typically this would be 2/3 of validators
-        quorum_threshold = 14  # 2/3 of 20 validators rounded up
-        return block_hash in self.prepare_votes and len(self.prepare_votes[block_hash]) >= quorum_threshold
-        
-    def has_quorum_commit(self, block_hash: str) -> bool:
-        """Check if a block has enough commit votes to be finalized."""
-        # Typically this would be 2/3 of validators
-        quorum_threshold = 14  # 2/3 of 20 validators rounded up
-        return block_hash in self.commit_votes and len(self.commit_votes[block_hash]) >= quorum_threshold
-        
-    def add_prepare_vote(self, vote: Vote):
-        """Add a prepare vote for a block."""
-        if vote.block_hash not in self.prepare_votes:
-            self.prepare_votes[vote.block_hash] = set()
-        self.prepare_votes[vote.block_hash].add(vote.voter_id)
-        
-    def add_commit_vote(self, vote: Vote):
-        """Add a commit vote for a block."""
-        if vote.block_hash not in self.commit_votes:
-            self.commit_votes[vote.block_hash] = set()
-        self.commit_votes[vote.block_hash].add(vote.voter_id)
-        
-    def finalize_block(self, block_hash: str):
-        """Finalize a block and add it to the blockchain."""
-        if block_hash in self.pending_blocks and self.has_quorum_commit(block_hash):
-            block = self.pending_blocks[block_hash]
-            self.blockchain.append(block)
-            self.current_height = block.height
-            
-            # Clear consensus data for this height
-            self.pending_blocks = {h: b for h, b in self.pending_blocks.items() if b.height > block.height}
-            self.prepare_votes = {h: v for h, v in self.prepare_votes.items() if h != block_hash}
-            self.commit_votes = {h: v for h, v in self.commit_votes.items() if h != block_hash}
-            
-            self.logger.info(f"Finalized block at height {block.height}: {block_hash}")
-            
-            # Prepare for next round
-            self.current_round += 1
-            self.current_leader = self.calculate_next_leader()
-            
-    async def start_consensus(self):
-        """Main consensus loop."""
-        self.network.register_peer(self.peer_id)
-        self.current_leader = self.calculate_next_leader()
-        
-        # Initialize with a genesis block if needed
-        if not self.blockchain:
-            genesis = Block(
-                hash="genesis",
-                prev_hash="",
-                proposer_id="system",
-                height=0,
-                data="Genesis block",
-                timestamp=time.time()
+        if DEBUG:
+            print(
+                f"[Peer {self.id}] Confirming block at height {block.height} lane {block.lane} by validator {block.validator}"
             )
-            self.blockchain.append(genesis)
-            
-        self.logger.info(f"Starting consensus process, current leader: {self.current_leader}")
-        
-        # Start main processing tasks
-        await asyncio.gather(
-            self.proposal_task(),
-            self.message_processing_task(),
-            self.view_change_task()
-        )
-        
-    async def proposal_task(self):
-        """Task for handling block proposals as the leader."""
-        while True:
-            try:
-                # Wait until it's our turn to be leader
-                if self.is_leader() and not self.is_byzantine:
-                    self.logger.info(f"I am the leader for round {self.current_round}")
-                    # Create and propose a new block
-                    block = self.create_block()
-                    self.pending_blocks[block.hash] = block
-                    
-                    # Create our own prepare vote
-                    vote = self.create_vote(block.hash, "prepare")
-                    self.add_prepare_vote(vote)
-                    
-                    # Broadcast the block proposal
-                    proposal_msg = Message(
-                        sender_id=self.peer_id,
-                        msg_type="block_proposal",
-                        content=block
+
+        # Broadcast the confirmation
+        self.message_bus.broadcast(sender_id=self.id, msg_type="confirm_block", data=confirm_data)
+
+        # Check if the block can be finalized
+        self.check_finalization(block_id)
+
+    def receive_confirmation(self, confirm_data: Dict, sender_id: int):
+        """Process a confirmation from another peer"""
+        height = confirm_data["block_height"]
+        lane = confirm_data["block_lane"]
+        validator = confirm_data["block_validator"]
+        block_id = confirm_data["block_id"]
+        confirmer = confirm_data["confirmer"]
+
+        # Skip if we've already finalized this height for this lane
+        if height <= self.finalized_heights[lane]:
+            return
+
+        # Check if we have this pending block
+        if block_id in self.pending_blocks:
+            block = self.pending_blocks[block_id]
+
+            # Add the confirmation if we haven't counted it yet
+            if confirmer not in block.confirmations:
+                block.confirmations.add(confirmer)
+                if DEBUG:
+                    print(
+                        f"[Peer {self.id}] Received confirmation from peer {confirmer} for block at height {height} lane {lane}"
                     )
-                    await self.network.broadcast_message(proposal_msg)
-                    self.logger.info(f"Proposed block: {block.hash} at height {block.height}")
-                    
-                    # Wait for the next leader election
-                    await asyncio.sleep(self.block_time_sec)
-                elif self.is_leader() and self.is_byzantine:
-                    # Byzantine behavior: don't propose a block or propose invalid blocks
-                    self.logger.warning(f"Byzantine leader behavior: Not proposing a block for round {self.current_round}")
-                    await asyncio.sleep(self.block_time_sec)
-                else:
-                    # Just check periodically if we've become the leader
-                    await asyncio.sleep(0.5)
-            except Exception as e:
-                self.logger.error(f"Error in proposal task: {e}")
-                
-    async def message_processing_task(self):
-        """Task for processing incoming messages."""
-        while True:
-            try:
-                msg = await self.network.receive_message(self.peer_id)
-                if not msg:
-                    continue
-                    
-                self.messages_received += 1
-                
-                # Byzantine behavior: ignore messages randomly
-                if self.is_byzantine and random.random() < 0.3:
-                    self.logger.warning(f"Byzantine behavior: Ignoring message {msg.msg_type} from {msg.sender_id}")
-                    continue
-                
-                if msg.msg_type == "block_proposal":
-                    await self.handle_block_proposal(msg)
-                elif msg.msg_type == "prepare_vote":
-                    await self.handle_prepare_vote(msg)
-                elif msg.msg_type == "commit_vote":
-                    await self.handle_commit_vote(msg)
-                elif msg.msg_type == "view_change":
-                    await self.handle_view_change(msg)
-                    
-                self.messages_processed += 1
-                    
-            except Exception as e:
-                self.logger.error(f"Error processing message: {e}")
-                
-    async def view_change_task(self):
-        """Task for monitoring leader activity and initiating view changes."""
-        while True:
-            try:
-                # If we've been waiting too long for a block, initiate view change
-                time_since_last_view_change = time.time() - self.last_view_change_time
-                
-                if (time_since_last_view_change > self.view_change_timeout_sec and 
-                    not self.is_leader() and not self.is_byzantine):
-                    
-                    self.logger.warning(f"No progress detected, initiating view change")
-                    self.last_view_change_time = time.time()
-                    
-                    # Send view change vote
-                    self.view_change_votes_sent += 1
-                    view_change_msg = Message(
-                        sender_id=self.peer_id,
-                        msg_type="view_change",
-                        content=self.peer_id
-                    )
-                    await self.network.broadcast_message(view_change_msg)
-                
-                await asyncio.sleep(1)
-            except Exception as e:
-                self.logger.error(f"Error in view change task: {e}")
-                
-    async def handle_block_proposal(self, msg: Message):
-        """Handle an incoming block proposal."""
-        block = msg.content
-        self.logger.debug(f"Received block proposal from {msg.sender_id}: {block.hash}")
-        
-        if block.hash in self.pending_blocks:
-            return  # Already seen this block
-            
-        if self.validate_block(block):
-            # Store the pending block
-            self.pending_blocks[block.hash] = block
-            
-            # Byzantine behavior: double vote or vote for multiple blocks
-            if self.is_byzantine and random.random() < 0.5:
-                self.logger.warning(f"Byzantine behavior: Voting for multiple blocks at height {block.height}")
-                # Create additional fake blocks
-                fake_block = Block(
-                    hash=f"fake_block_{self.current_height + 1}_{self.peer_id}_{random.randint(1000, 9999)}",
-                    prev_hash=block.prev_hash,
-                    proposer_id=self.peer_id,
-                    height=block.height,
-                    data="Fake block data",
-                    timestamp=time.time()
-                )
-                self.pending_blocks[fake_block.hash] = fake_block
-                
-                # Vote for both blocks
-                for b in [block, fake_block]:
-                    vote = self.create_vote(b.hash, "prepare")
-                    self.add_prepare_vote(vote)
-                    vote_msg = Message(
-                        sender_id=self.peer_id,
-                        msg_type="prepare_vote",
-                        content=vote
-                    )
-                    await self.network.broadcast_message(vote_msg)
-            else:
-                # Normal behavior - vote for the valid block
-                vote = self.create_vote(block.hash, "prepare")
-                self.add_prepare_vote(vote)
-                
-                vote_msg = Message(
-                    sender_id=self.peer_id,
-                    msg_type="prepare_vote",
-                    content=vote
-                )
-                await self.network.broadcast_message(vote_msg)
-                self.logger.debug(f"Sent prepare vote for block: {block.hash}")
+
+                # Check if the block can be finalized
+                self.check_finalization(block_id)
         else:
-            self.logger.warning(f"Received invalid block from {msg.sender_id}: {block.hash}")
-            
-    async def handle_prepare_vote(self, msg: Message):
-        """Handle an incoming prepare vote."""
-        vote = msg.content
-        self.logger.debug(f"Received prepare vote from {vote.voter_id} for block: {vote.block_hash}")
-        
-        # In a real implementation, we would verify the vote signature
-        
-        # Add the prepare vote
-        self.add_prepare_vote(vote)
-        
-        # Check if we have a quorum of prepare votes
-        if (self.has_quorum_prepare(vote.block_hash) and 
-            vote.block_hash in self.pending_blocks and 
-            not self.is_byzantine):
-            # Create and broadcast commit vote
-            commit_vote = self.create_vote(vote.block_hash, "commit")
-            self.add_commit_vote(commit_vote)
-            
-            vote_msg = Message(
-                sender_id=self.peer_id,
-                msg_type="commit_vote",
-                content=commit_vote
+            # We don't have this block yet, we need to request it
+            # In a real system, we'd request the block from the network
+            # For simplicity, we'll just ignore it in this simulation
+            if DEBUG:
+                print(f"[Peer {self.id}] Received confirmation for unknown block {block_id}")
+
+    def check_finalization(self, block_id: str):
+        """Check if a block has enough confirmations to be finalized"""
+        if block_id not in self.pending_blocks:
+            return
+
+        block = self.pending_blocks[block_id]
+
+        # Skip if we've already finalized this height for this lane
+        if block.height <= self.finalized_heights[block.lane]:
+            return
+
+        # Check if we have enough confirmations
+        if len(block.confirmations) >= CONFIRMATION_THRESHOLD:
+            if DEBUG:
+                print(
+                    f"[Peer {self.id}] Block at height {block.height} lane {block.lane} has {len(block.confirmations)} confirmations (threshold: {CONFIRMATION_THRESHOLD})"
+                )
+            self.finalize_block(block)
+        elif DEBUG and random.random() < 0.05:  # Occasionally print confirmation status
+            print(
+                f"[Peer {self.id}] Block at height {block.height} lane {block.lane} has {len(block.confirmations)} confirmations (need {CONFIRMATION_THRESHOLD})"
             )
-            await self.network.broadcast_message(vote_msg)
-            self.logger.debug(f"Sent commit vote for block: {vote.block_hash}")
+
+    def finalize_block(self, block: Block):
+        """Finalize a block and add it to the lane's blockchain"""
+        lane = block.lane
+        
+        # Ensure it's the next block for this lane
+        if block.height != self.finalized_heights[lane] + 1:
+            return
+
+        # Mark as finalized
+        block.is_finalized = True
+
+        # Update blockchain state for this lane
+        self.blockchains[lane].append(block)
+        self.finalized_heights[lane] = block.height
+        self.current_hashes[lane] = block.hash
+
+        # Clean up pending blocks for this height and lane
+        blocks_to_remove = []
+        for bid, b in self.pending_blocks.items():
+            if b.height == block.height and b.lane == lane:
+                blocks_to_remove.append(bid)
+
+        # Then remove them
+        for bid in blocks_to_remove:
+            del self.pending_blocks[bid]
+
+        # Clean up confirmations for this height
+        if block.height in self.confirmed_blocks:
+            # Only remove confirmations for this lane's blocks
+            self.confirmed_blocks[block.height] = {
+                bid for bid in self.confirmed_blocks[block.height]
+                if self.get_lane_from_block_id(bid) != lane
+            }
             
-    async def handle_commit_vote(self, msg: Message):
-        """Handle an incoming commit vote."""
-        vote = msg.content
-        self.logger.debug(f"Received commit vote from {vote.voter_id} for block: {vote.block_hash}")
+            # If empty, remove the height entry
+            if not self.confirmed_blocks[block.height]:
+                del self.confirmed_blocks[block.height]
+
+        if DEBUG:
+            print(f"[Peer {self.id}] Finalized {block}")
+
+    def get_lane_from_block_id(self, block_id: str) -> int:
+        """Extract the lane from a block identifier"""
+        parts = block_id.split(":")
+        if len(parts) >= 2:
+            return int(parts[1])
+        return 0  # Default lane
+
+    def check_highway_sync(self):
+        """Periodically synchronize across lanes via the highway"""
+        current_time = time.time()
         
-        # In a real implementation, we would verify the vote signature
-        
-        # Add the commit vote
-        self.add_commit_vote(vote)
-        
-        # Check if we have a quorum of commit votes
-        if self.has_quorum_commit(vote.block_hash) and not self.is_byzantine:
-            self.finalize_block(vote.block_hash)
-            self.last_view_change_time = time.time()  # Reset view change timer
+        # Sync every HIGHWAY_SYNC_INTERVAL seconds
+        if current_time - self.last_highway_sync >= HIGHWAY_SYNC_INTERVAL:
+            self.last_highway_sync = current_time
             
-    async def handle_view_change(self, msg: Message):
-        """Handle view change messages (leader failures)."""
-        peer_id = msg.content
-        self.view_change_votes.add(peer_id)
-        
-        # If we have enough votes, change the leader
-        quorum_threshold = 14  # 2/3 of 20 validators rounded up
-        if len(self.view_change_votes) >= quorum_threshold:
-            self.current_round += 1
-            self.current_leader = self.calculate_next_leader()
-            self.view_change_votes.clear()
-            self.last_view_change_time = time.time()
-            self.logger.info(f"View change: new leader is {self.current_leader}")
+            # Prepare highway sync data - latest known block for each lane
+            sync_data = {}
+            for lane in range(LANE_COUNT):
+                if self.blockchains[lane]:
+                    latest_block = self.blockchains[lane][-1]
+                    sync_data[lane] = {
+                        "height": latest_block.height,
+                        "hash": latest_block.hash
+                    }
             
-    def get_statistics(self):
-        """Get peer statistics."""
-        return {
-            "peer_id": self.peer_id,
-            "is_byzantine": self.is_byzantine,
-            "chain_height": self.current_height,
-            "blocks_proposed": self.blocks_proposed,
-            "prepare_votes_sent": self.prepare_votes_sent,
-            "commit_votes_sent": self.commit_votes_sent,
-            "view_change_votes_sent": self.view_change_votes_sent,
-            "messages_received": self.messages_received,
-            "messages_processed": self.messages_processed,
-        }
+            # Broadcast to network
+            if sync_data:
+                self.message_bus.broadcast(
+                    sender_id=self.id, msg_type="highway_sync", data=sync_data
+                )
+                
+                if DEBUG and random.random() < 0.2:
+                    print(f"[Peer {self.id}] Broadcasting highway sync: {sync_data}")
+
+    def receive_highway_sync(self, sync_data: Dict, sender_id: int):
+        """Process highway synchronization from another peer"""
+        # Process lane data
+        for lane, data in sync_data.items():
+            lane = int(lane)
+            remote_height = data["height"]
+            remote_hash = data["hash"]
+            
+            # If remote peer is ahead of us for this lane, we could request blocks
+            # In a real implementation - for simplicity, just log
+            if remote_height > self.finalized_heights[lane]:
+                if DEBUG and random.random() < 0.1:
+                    print(f"[Peer {self.id}] Peer {sender_id} has lane {lane} at height {remote_height}, we're at {self.finalized_heights[lane]}")
+                    
+                # In a real implementation, we would request missing blocks
+                # self.request_blocks(lane, self.finalized_heights[lane] + 1, remote_height)
+
+    def receive_transaction(self, tx: Transaction):
+        """Add a transaction to the appropriate lane pool"""
+        # Check if we already have this transaction
+        lane = tx.lane
+        if not any(existing_tx.tx_hash == tx.tx_hash for existing_tx in self.tx_pools[lane]):
+            self.tx_pools[lane].append(tx)
+
+    def create_transaction(self, num_peers):
+        """Create a random transaction"""
+        receiver = random.randint(0, num_peers - 1)
+        while receiver == self.id:
+            receiver = random.randint(0, num_peers - 1)
+
+        tx = Transaction(
+            sender=self.id, receiver=receiver, amount=random.uniform(1, 100)
+        )
+
+        # Add to own pool based on the lane
+        lane = tx.lane
+        self.tx_pools[lane].append(tx)
+
+        # Broadcast to network
+        self.message_bus.broadcast(sender_id=self.id, msg_type="transaction", data=tx)
+
+        return tx
 
 
-class SimulationController:
-    """Controls the simulation and collects metrics."""
-    
-    def __init__(self, config: SimulationConfig):
-        self.config = config
-        self.network = NetworkSimulator(config)
+class AutobahnSimulator:
+    """Manages the entire Autobahn simulation"""
+
+    def __init__(self, num_peers: int, min_final_chain_length: int):
+        self.message_bus = MessageBus(num_peers=num_peers)
         self.peers = []
+        self.current_round = 0
+        self.running = False
         self.start_time = None
-        self.end_time = None
-        self.logger = logging.getLogger("SimController")
+        self.num_peers = num_peers
+        self.min_final_chain_length = min_final_chain_length
+
+    def initialize(self):
+        """Set up the simulation"""
+        # Create peers with random throughput capacity
+        for i in range(self.num_peers):
+            # Random throughput between 10 and 100 transactions per second
+            throughput = random.uniform(10, 100)
+            peer = Peer(i, throughput, self.message_bus)
+            self.peers.append(peer)
         
-    def create_peers(self):
-        """Create the peer nodes."""
-        for i in range(self.config.num_peers):
-            peer_id = f"peer_{i}"
-            is_byzantine = i < self.config.byzantine_nodes
-            
-            peer = AutobahnPeer(
-                peer_id=peer_id,
-                network=self.network,
-                config=self.config,
-                is_validator=True,  # All peers are validators in this simulation
-                is_byzantine=is_byzantine
+        # Assign lanes to peers based on throughput
+        self.assign_all_lanes()
+        
+        # Start all peers
+        for peer in self.peers:
+            peer.start()
+
+        total_throughput = sum(peer.throughput for peer in self.peers)
+        print(f"Initialized {self.num_peers} peers with total throughput: {total_throughput:.2f} tx/s")
+
+        # Display throughput distribution
+        print("Throughput distribution:")
+        for i, peer in enumerate(self.peers):
+            print(f"Peer {i}: {peer.throughput:.2f} tx/s ({(peer.throughput/total_throughput)*100:.1f}%)")
+            print(f"  Validating lanes: {peer.validating_lanes}")
+
+    def assign_all_lanes(self):
+        """Assign lanes to peers based on their throughput capacity"""
+        # Each lane should have multiple validators for redundancy
+        target_validators_per_lane = max(3, self.num_peers // 2)
+        
+        for lane in range(LANE_COUNT):
+            # Sort peers by throughput (highest first) and assign to lanes
+            sorted_peers = sorted(
+                [(i, peer.throughput) for i, peer in enumerate(self.peers)],
+                key=lambda x: x[1],
+                reverse=True
             )
             
-            if is_byzantine:
-                self.logger.warning(f"Peer {peer_id} is byzantine")
-                
-            self.peers.append(peer)
-            
-    async def run_partition_scenario(self):
-        """Create and heal a network partition during the simulation."""
-        if not self.config.partition_network:
-            return
-            
-        # Wait for 1/3 of the simulation time
-        await asyncio.sleep(self.config.partition_time_sec)
-        
-        # Create a network partition
-        self.network.create_network_partition()
-        
-        # Wait for 1/3 of the simulation time
-        await asyncio.sleep(self.config.partition_time_sec)
-        
-        # Heal the network partition
-        self.network.heal_network_partition()
-        
-    async def run_simulation(self):
-        """Run the full simulation."""
+            # Assign this lane to the top validators
+            for i in range(min(target_validators_per_lane, self.num_peers)):
+                peer_id = sorted_peers[i][0]
+                self.peers[peer_id].validating_lanes.add(lane)
+    
+    def assign_lanes(self, peer_id: int) -> List[int]:
+        """Get the lanes assigned to a specific peer"""
+        return list(self.peers[peer_id].validating_lanes)
+
+    def get_messages_for_peer(self, peer_id: int):
+        """Get all messages that should be delivered to a specific peer"""
+        deliverable = self.message_bus.get_deliverable_messages()
+        messages_for_peer = []
+        remaining_messages = []
+
+        for msg in deliverable:
+            if msg["receiver"] == peer_id:
+                messages_for_peer.append(msg)
+            else:
+                remaining_messages.append(msg)
+
+        # Re-add the undelivered messages back to the message bus
+        for msg in remaining_messages:
+            self.message_bus.messages.append(msg)
+
+        return messages_for_peer
+
+    def run(self):
+        """Run the simulation"""
+        self.running = True
         self.start_time = time.time()
-        self.logger.info(f"Starting simulation with configuration: {json.dumps(self.config.to_dict(), indent=2)}")
-        
-        # Create the peers
-        self.create_peers()
-        
-        # Start all peer consensus tasks
-        peer_tasks = [peer.start_consensus() for peer in self.peers]
-        
-        # Start network partition scenario if enabled
-        partition_task = asyncio.create_task(self.run_partition_scenario())
-        
-        # Run the simulation for the specified time
+
         try:
-            await asyncio.wait_for(asyncio.gather(*peer_tasks), timeout=self.config.run_time_sec)
-        except asyncio.TimeoutError:
-            self.logger.info("Simulation time completed")
-            
-        # Wait for partition task to complete
-        await partition_task
-        
-        self.end_time = time.time()
-        
-        # Collect and report results
-        self.collect_results()
-        
-    def collect_results(self):
-        """Collect and report simulation results."""
-        if not self.start_time or not self.end_time:
-            return
-            
-        elapsed_time = self.end_time - self.start_time
-        
-        # Print simulation results
-        print("\n" + "=" * 50)
-        print(f"SIMULATION RESULTS (duration: {elapsed_time:.2f} seconds)")
-        print("=" * 50)
-        
-        # Consensus results
-        heights = [peer.current_height for peer in self.peers]
-        
-        print(f"\nCONSENSUS STATUS:")
-        print(f"Min Height: {min(heights)}")
-        print(f"Max Height: {max(heights)}")
-        
-        if all(h == heights[0] for h in heights):
-            print(f"Consensus ACHIEVED! All peers at height {heights[0]}")
-        else:
-            print(f"Consensus FAILED! Heights vary")
-            
-        # Network statistics
-        net_stats = self.network.get_statistics()
-        print(f"\nNETWORK STATISTICS:")
-        print(f"Messages Sent: {net_stats['messages_sent']}")
-        print(f"Messages Delivered: {net_stats['messages_delivered']}")
-        print(f"Messages Dropped: {net_stats['messages_dropped']}")
-        print(f"Delivery Rate: {net_stats['delivery_rate']:.2f}%")
-        
-        print("\nMessage Types:")
-        for msg_type, count in net_stats['message_types'].items():
-            print(f"  {msg_type}: {count}")
-            
-        # Peer statistics
-        print(f"\nPEER STATISTICS:")
-        for peer in self.peers:
-            stats = peer.get_statistics()
-            byz_flag = "[BYZANTINE]" if stats["is_byzantine"] else ""
-            print(f"Peer {stats['peer_id']} {byz_flag}:")
-            print(f"  Chain Height: {stats['chain_height']}")
-            print(f"  Blocks Proposed: {stats['blocks_proposed']}")
-            print(f"  Prepare Votes: {stats['prepare_votes_sent']}")
-            print(f"  Commit Votes: {stats['commit_votes_sent']}")
-            print(f"  View Change Votes: {stats['view_change_votes_sent']}")
-            print(f"  Messages Received/Processed: {stats['messages_received']}/{stats['messages_processed']}")
-            
-        # Generate visualization
-        self.generate_visualization()
-        
-    def generate_visualization(self):
-        """Generate visualizations of the simulation results."""
-        try:
-            # Create figures directory if it doesn't exist
-            if not os.path.exists("figures"):
-                os.makedirs("figures")
+            self.simulation_loop()
+        except KeyboardInterrupt:
+            print("\nSimulation stopped by user")
+        finally:
+            self.running = False
+            self.print_results()
+
+    def simulation_loop(self):
+        """Main simulation loop"""
+        last_block_time = time.time()
+        last_status_time = time.time()
+
+        while self.running:
+            current_time = time.time()
+
+            # Process messages for all peers
+            for peer in self.peers:
+                peer.process_messages()
+
+            # Generate random transactions
+            if random.random() < 0.1:  # 10% chance each loop
+                peer_id = random.randint(0, self.num_peers - 1)
+                tx = self.peers[peer_id].create_transaction(self.num_peers)
+                if DEBUG:
+                    print(f"[Peer {peer_id}] Created {tx}")
+
+            # Check for highway synchronization
+            for peer in self.peers:
+                peer.check_highway_sync()
+
+            # Time to propose new blocks?
+            if current_time - last_block_time >= BLOCK_TIME:
+                # Increment round number
+                self.current_round += 1
                 
-            # Plot block heights
-            fig, ax = plt.subplots(figsize=(10, 6))
-            peer_ids = [peer.peer_id for peer in self.peers]
-            heights = [peer.current_height for peer in self.peers]
-            colors = ['red' if peer.is_byzantine else 'blue' for peer in self.peers]
+                # Each peer proposes blocks for their assigned lanes
+                for peer in self.peers:
+                    peer.propose_blocks(self.current_round)
+
+                last_block_time = current_time
+
+            # Print status every 10 seconds (on debug mode)
+            if current_time - last_status_time >= 10:
+                self.print_status()
+                last_status_time = current_time
+
+            # Check if the simulation should end
+            min_blockchain_length = min(
+                len(peer.blockchains[0]) for peer in self.peers
+            )  # Check first lane as benchmark
+            if min_blockchain_length >= self.min_final_chain_length:
+                print(
+                    f"\nSimulation ending: Minimum blockchain length reached ({min_blockchain_length} blocks in lane 0)"
+                )
+                break
+
+            # Small sleep to prevent CPU hogging
+            time.sleep(0.01)
+
+    def print_status(self):
+        """Print current simulation status"""
+        print(f"\nStatus at {time.time() - self.start_time:.1f}s:")
+        
+        # Show status for each lane
+        for lane in range(LANE_COUNT):
+            heights = [peer.finalized_heights[lane] for peer in self.peers]
+            avg_height = sum(heights) / len(heights)
             
-            ax.bar(peer_ids, heights, color=colors)
-            ax.set_ylabel("Block Height")
-            ax.set_xlabel("Peer ID")
-            ax.set_title("Final Block Heights by Peer")
-            plt.xticks(rotation=45)
-            plt.tight_layout()
-            plt.savefig("figures/block_heights.png")
+            print(f"Lane {lane}: Avg height={avg_height:.1f}, min={min(heights)}, max={max(heights)}")
+        
+        # Show transaction counts in pools
+        total_pending = {}
+        for lane in range(LANE_COUNT):
+            total_pending[lane] = sum(len(peer.tx_pools[lane]) for peer in self.peers)
+        
+        print(f"Pending transactions by lane: {total_pending}")
+        
+        # Show a sample peer's state
+        sample_peer = random.choice(self.peers)
+        print(f"Peer {sample_peer.id} has {len(sample_peer.pending_blocks)} pending blocks")
+        
+        # Show confirmations for a sample lane and height
+        sample_lane = 0
+        next_height = max(sample_peer.finalized_heights[sample_lane] + 1, 0)
+        
+        confirmation_counts = {}
+        for peer in self.peers:
+            for block_id, block in peer.pending_blocks.items():
+                if block.height == next_height and block.lane == sample_lane:
+                    validator = block.validator
+                    if validator not in confirmation_counts:
+                        confirmation_counts[validator] = []
+                    confirmation_counts[validator].append(len(block.confirmations))
+        
+        if confirmation_counts:
+            print(f"Lane {sample_lane} Height {next_height} confirmations:")
+            for validator, counts in confirmation_counts.items():
+                print(f"  Validator {validator}: confirmations seen by peers: {counts}")
+
+    def print_results(self):
+        """Print simulation results"""
+        print("\n===== SIMULATION RESULTS =====")
+        print(f"Ran for {time.time() - self.start_time:.2f} seconds")
+
+        # Print results for each lane
+        for lane in range(LANE_COUNT):
+            print(f"\n=== LANE {lane} RESULTS ===")
+            lens = [len(peer.blockchains[lane]) for peer in self.peers]
+
+            # Find the peer with the most blocks for this lane
+            max_height, max_peer = max((length, i) for i, length in enumerate(lens))
+            min_height, min_peer = min((length, i) for i, length in enumerate(lens))
+            print(f"Maximum blockchain height: {max_height} for peer {max_peer}")
+            print(f"Minimum blockchain height: {min_height} for peer {min_peer}")
+
+            # Check if all peers are in sync for this lane
+            if all(h == lens[0] for h in lens):
+                print(f"All peers are in sync for lane {lane}!")
+            else:
+                print(f"Peers are out of sync for lane {lane}:")
+                for i, peer in enumerate(self.peers):
+                    print(f"Peer {i}: length {len(peer.blockchains[lane])}")
+
+            # Check that all peers have the same minimum blockchain
+            if max_height > 0:
+                sample_blockchain = self.peers[max_peer].blockchains[lane]
+                all_match = True
+                for i, peer in enumerate(self.peers):
+                    peer_chain = peer.blockchains[lane]
+                    if len(peer_chain) > 0 and peer_chain != sample_blockchain[: len(peer_chain)]:
+                        all_match = False
+                        print(f"Peer {i}'s lane {lane} blockchain does not match the sample!")
+                        break
+                
+                if all_match:
+                    print(f"All lane {lane} blockchains match till minimum heights!")
+                
+                # Show block distribution (who created the blocks)
+                validator_counts = {}
+                for peer in self.peers:
+                    if peer.blockchains[lane]:
+                        for block in peer.blockchains[lane]:
+                            validator_counts[block.validator] = (
+                                validator_counts.get(block.validator, 0) + 1
+                            )
+
+                print(f"\nLane {lane} block validator distribution:")
+                for validator_id, count in sorted(
+                    validator_counts.items(), key=lambda x: x[1], reverse=True
+                ):
+                    validator_throughput = self.peers[validator_id].throughput
+                    total_throughput = sum(peer.throughput for peer in self.peers)
+                    throughput_percent = (validator_throughput / total_throughput) * 100
+                    blocks_percent = (count / max_height) * 100 if max_height > 0 else 0
+                    print(
+                        f"Peer {validator_id}: {count} blocks ({blocks_percent:.1f}%) - Throughput: {throughput_percent:.1f}%"
+                    )
+        
+        # Compare throughput across lanes
+        print("\n=== CROSS-LANE COMPARISON ===")
+        total_blocks_by_lane = {}
+        for lane in range(LANE_COUNT):
+            total_blocks = sum(len(peer.blockchains[lane]) for peer in self.peers) / len(self.peers)
+            total_blocks_by_lane[lane] = total_blocks
+            print(f"Lane {lane}: Average of {total_blocks:.1f} blocks")
+        
+        # Calculate total transactions processed
+        total_tx = 0
+        for lane in range(LANE_COUNT):
+            for peer in self.peers:
+                for block in peer.blockchains[lane]:
+                    total_tx += len(block.transactions)
             
-            # Plot message statistics
-            fig, ax = plt.subplots(figsize=(10, 6))
-            net_stats = self.network.get_statistics()
-            msg_types = list(net_stats['message_types'].keys())
-            msg_counts = list(net_stats['message_types'].values())
-            
-            ax.bar(msg_types, msg_counts)
-            ax.set_ylabel("Count")
-            ax.set_xlabel("Message Type")
-            ax.set_title("Message Counts by Type")
-            plt.xticks(rotation=45)
-            plt.tight_layout()
-            plt.savefig("figures/message_stats.png")
-            
-            self.logger.info("Generated visualization figures in the 'figures' directory")
-        except Exception as e:
-            self.logger.error(f"Error generating visualization: {e}")
+        # Divide by number of peers to get average
+        avg_tx = total_tx / len(self.peers)
+        print(f"\nTotal transactions processed (average): {avg_tx:.0f}")
+        
+        simulation_time = time.time() - self.start_time
+        throughput = avg_tx / simulation_time
+        print(f"Average throughput: {throughput:.2f} tx/sec")
 
 
-async def run_simulation_with_config(config: SimulationConfig):
-    """Run a simulation with the specified configuration."""
-    controller = SimulationController(config)
-    await controller.run_simulation()
-
-
-def parse_args():
-    """Parse command line arguments."""
-    parser = argparse.ArgumentParser(description="Autobahn Consensus Protocol Simulator")
-    
-    parser.add_argument("--peers", type=int, default=20, help="Number of peers")
-    parser.add_argument("--time", type=int, default=60, help="Simulation time in seconds")
-    parser.add_argument("--block-time", type=float, default=2.0, help="Block time in seconds")
-    parser.add_argument("--view-change-timeout", type=float, default=10.0, help="View change timeout in seconds")
-    parser.add_argument("--latency-min", type=int, default=10, help="Minimum network latency in ms")
-    parser.add_argument("--latency-max", type=int, default=100, help="Maximum network latency in ms")
-    parser.add_argument("--packet-loss", type=float, default=1.0, help="Packet loss percentage")
-    parser.add_argument("--byzantine", type=int, default=0, help="Number of byzantine nodes")
-    parser.add_argument("--partition", action="store_true", help="Enable network partition scenario")
-    parser.add_argument("--log-level", choices=["DEBUG", "INFO", "WARNING", "ERROR"], default="INFO", help="Logging level")
-    
-    return parser.parse_args()
-
-
-def main():
-    """Main entry point."""
-    args = parse_args()
-    
-    config = SimulationConfig(
-        num_peers=args.peers,
-        run_time_sec=args.time,
-        block_time_sec=args.block_time,
-        view_change_timeout_sec=args.view_change_timeout,
-        latency_min_ms=args.latency_min,
-        latency_max_ms=args.latency_max,
-        packet_loss_pct=args.packet_loss,
-        byzantine_nodes=args.byzantine,
-        partition_network=args.partition,
-        log_level=args.log_level
-    )
-    
-    asyncio.run(run_simulation_with_config(config))
-
-
+# Run the simulation
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Run an Autobahn blockchain simulation.")
+    parser.add_argument(
+        "--num_peers", type=int, required=True, help="Number of peers in the simulation"
+    )
+    parser.add_argument(
+        "--min_final_chain_length",
+        type=int,
+        required=True,
+        help="Minimum blockchain length to finalize the simulation",
+    )
+    parser.add_argument(
+        "--lane_count",
+        type=int,
+        default=LANE_COUNT,
+        help=f"Number of lanes to use (default: {LANE_COUNT})",
+    )
+    args = parser.parse_args()
+
+    # Update global configuration if provided
+    if args.lane_count:
+        LANE_COUNT = args.lane_count
+
+    start_time = time.time()
+
+    simulator = AutobahnSimulator(args.num_peers, args.min_final_chain_length)
+    simulator.initialize()
+    simulator.run()
+
+    end_time = time.time()
+
+    start_time = time.strftime(
+        "%Y-%m-%d %H:%M:%S", time.localtime(start_time)
+    )
+    end_time = time.strftime(
+        "%Y-%m-%d %H:%M:%S", time.localtime(end_time)
+    )
+    print(f"Simulation started at {start_time} and ended at {end_time}")
