@@ -1,0 +1,142 @@
+Initialized 30 nodes
+
+Status at 10.0s:
+Heights: min=1, max=1
+Chain luck values: min=0.9131, max=0.9636, avg=0.9619
+Node 23 round status: in progress
+
+Status at 20.0s:
+Heights: min=3, max=3
+Chain luck values: min=1.2440, max=2.8648, avg=2.7529
+Node 3 round status: in progress
+
+Status at 30.0s:
+Heights: min=5, max=5
+Chain luck values: min=2.6478, max=4.7123, avg=4.1996
+Node 15 round status: in progress
+
+Status at 40.0s:
+Heights: min=7, max=7
+Chain luck values: min=3.4180, max=6.6601, avg=5.7899
+Node 16 round status: in progress
+
+Status at 50.0s:
+Heights: min=9, max=9
+Chain luck values: min=4.2258, max=8.3016, avg=6.9509
+Node 26 round status: in progress
+
+Status at 60.0s:
+Heights: min=11, max=12
+Chain luck values: min=4.7916, max=10.9772, avg=8.3234
+Node 10 round status: in progress
+
+Status at 70.0s:
+Heights: min=13, max=13
+Chain luck values: min=5.7548, max=11.7247, avg=9.6851
+Node 17 round status: in progress
+
+Status at 80.0s:
+Heights: min=15, max=16
+Chain luck values: min=6.8327, max=13.7273, avg=10.9237
+Node 12 round status: in progress
+
+Status at 90.0s:
+Heights: min=17, max=17
+Chain luck values: min=7.0794, max=14.6540, avg=11.8781
+Node 15 round status: in progress
+
+Status at 100.1s:
+Heights: min=19, max=20
+Chain luck values: min=8.6838, max=15.2970, avg=12.9442
+Node 26 round status: in progress
+
+Status at 110.1s:
+Heights: min=21, max=21
+Chain luck values: min=9.3499, max=17.0445, avg=13.9094
+Node 19 round status: in progress
+
+Status at 120.1s:
+Heights: min=23, max=24
+Chain luck values: min=10.5675, max=17.9012, avg=14.9597
+Node 6 round status: in progress
+
+Status at 130.1s:
+Heights: min=25, max=26
+Chain luck values: min=11.7065, max=18.9387, avg=15.8796
+Node 18 round status: in progress
+
+Status at 140.1s:
+Heights: min=27, max=27
+Chain luck values: min=12.8738, max=20.0535, avg=16.8235
+Node 11 round status: in progress
+
+Status at 150.1s:
+Heights: min=29, max=30
+Chain luck values: min=13.3957, max=21.3775, avg=17.8551
+Node 14 round status: in progress
+
+Status at 160.1s:
+Heights: min=31, max=32
+Chain luck values: min=14.4680, max=22.5187, avg=18.9098
+Node 11 round status: in progress
+
+Status at 170.1s:
+Heights: min=33, max=34
+Chain luck values: min=15.6986, max=23.1264, avg=19.9525
+Node 10 round status: in progress
+
+Status at 180.1s:
+Heights: min=35, max=36
+Chain luck values: min=16.3123, max=24.3257, avg=20.8087
+Node 6 round status: in progress
+
+Status at 190.1s:
+Heights: min=37, max=37
+Chain luck values: min=17.2531, max=25.6147, avg=21.8700
+Node 7 round status: in progress
+
+Status at 200.1s:
+Heights: min=39, max=40
+Chain luck values: min=18.1218, max=27.2276, avg=23.0439
+Node 24 round status: in progress
+
+Status at 210.1s:
+Heights: min=41, max=41
+Chain luck values: min=18.6001, max=28.0035, avg=24.1016
+Node 9 round status: in progress
+
+Status at 220.1s:
+Heights: min=43, max=43
+Chain luck values: min=19.9448, max=28.9589, avg=25.0365
+Node 22 round status: in progress
+
+Status at 230.1s:
+Heights: min=45, max=46
+Chain luck values: min=20.5845, max=30.5678, avg=26.1520
+Node 22 round status: in progress
+
+Status at 240.1s:
+Heights: min=47, max=48
+Chain luck values: min=21.4637, max=31.7620, avg=27.2445
+Node 29 round status: in progress
+
+Simulation ending: Minimum blockchain length reached (50 blocks)
+Final synchronization took 0.26 seconds
+
+===== SIMULATION RESULTS =====
+Ran for 247.26 seconds
+Maximum blockchain height: 50 for node 29
+Minimum blockchain height: 50 for node 0
+Maximum chain luck: 33.1525 for node 29
+All peers are in sync!
+All blockchains match till minimum heights!
+
+Block miner distribution:
+Node 26: 840 blocks (1714.3%) - Expected: 3.3%
+Node 10: 450 blocks (918.4%) - Expected: 3.3%
+Node 7: 60 blocks (122.4%) - Expected: 3.3%
+Node 1: 30 blocks (61.2%) - Expected: 3.3%
+Node 12: 30 blocks (61.2%) - Expected: 3.3%
+Node 25: 30 blocks (61.2%) - Expected: 3.3%
+Node 17: 30 blocks (61.2%) - Expected: 3.3%
+Simulation started at 2025-05-01 16:52:29 and ended at 2025-05-01 16:56:36

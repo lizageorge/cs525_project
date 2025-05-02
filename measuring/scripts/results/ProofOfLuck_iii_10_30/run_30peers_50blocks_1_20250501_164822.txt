@@ -1,0 +1,143 @@
+Initialized 30 nodes
+
+Status at 10.0s:
+Heights: min=1, max=1
+Chain luck values: min=0.9945, max=0.9945, avg=0.9945
+Node 3 round status: in progress
+
+Status at 20.0s:
+Heights: min=3, max=3
+Chain luck values: min=2.2144, max=2.9544, avg=2.8337
+Node 26 round status: in progress
+
+Status at 30.0s:
+Heights: min=5, max=5
+Chain luck values: min=3.7194, max=4.7244, avg=4.4843
+Node 25 round status: in progress
+
+Status at 40.0s:
+Heights: min=7, max=8
+Chain luck values: min=4.4099, max=6.5569, avg=6.0793
+Node 1 round status: in progress
+
+Status at 50.0s:
+Heights: min=9, max=9
+Chain luck values: min=5.1371, max=8.1971, avg=7.3238
+Node 28 round status: in progress
+
+Status at 60.0s:
+Heights: min=11, max=11
+Chain luck values: min=5.3842, max=9.5292, avg=8.4934
+Node 17 round status: in progress
+
+Status at 70.0s:
+Heights: min=13, max=13
+Chain luck values: min=7.0711, max=11.1531, avg=9.6853
+Node 9 round status: in progress
+
+Status at 80.0s:
+Heights: min=15, max=16
+Chain luck values: min=7.8980, max=12.7697, avg=10.7065
+Node 1 round status: in progress
+
+Status at 90.0s:
+Heights: min=17, max=17
+Chain luck values: min=8.7320, max=13.6519, avg=11.6710
+Node 25 round status: in progress
+
+Status at 100.1s:
+Heights: min=19, max=19
+Chain luck values: min=8.9482, max=15.0639, avg=12.7361
+Node 17 round status: in progress
+
+Status at 110.1s:
+Heights: min=21, max=21
+Chain luck values: min=10.6876, max=16.6531, avg=13.8395
+Node 0 round status: in progress
+
+Status at 120.1s:
+Heights: min=23, max=23
+Chain luck values: min=11.5039, max=17.7045, avg=14.7197
+Node 14 round status: in progress
+
+Status at 130.1s:
+Heights: min=25, max=25
+Chain luck values: min=12.7968, max=19.0548, avg=15.7783
+Node 20 round status: in progress
+
+Status at 140.1s:
+Heights: min=27, max=28
+Chain luck values: min=14.0779, max=20.5020, avg=16.9047
+Node 9 round status: in progress
+
+Status at 150.1s:
+Heights: min=29, max=30
+Chain luck values: min=15.3798, max=21.1164, avg=17.9420
+Node 19 round status: in progress
+
+Status at 160.1s:
+Heights: min=31, max=31
+Chain luck values: min=16.3813, max=22.4688, avg=18.8829
+Node 3 round status: in progress
+
+Status at 170.1s:
+Heights: min=33, max=33
+Chain luck values: min=17.5112, max=23.5066, avg=19.9519
+Node 1 round status: in progress
+
+Status at 180.1s:
+Heights: min=35, max=35
+Chain luck values: min=17.7595, max=24.6123, avg=20.9598
+Node 3 round status: in progress
+
+Status at 190.1s:
+Heights: min=37, max=38
+Chain luck values: min=18.7825, max=25.0129, avg=21.8863
+Node 28 round status: in progress
+
+Status at 200.1s:
+Heights: min=39, max=39
+Chain luck values: min=19.5533, max=25.5396, avg=22.9128
+Node 14 round status: in progress
+
+Status at 210.1s:
+Heights: min=41, max=41
+Chain luck values: min=21.1584, max=27.3031, avg=23.9133
+Node 7 round status: in progress
+
+Status at 220.1s:
+Heights: min=43, max=43
+Chain luck values: min=21.9232, max=27.4688, avg=24.8450
+Node 1 round status: in progress
+
+Status at 230.1s:
+Heights: min=45, max=45
+Chain luck values: min=22.8956, max=28.9693, avg=25.7967
+Node 13 round status: in progress
+
+Status at 240.1s:
+Heights: min=47, max=47
+Chain luck values: min=23.4478, max=29.7794, avg=26.7180
+Node 17 round status: in progress
+
+Simulation ending: Minimum blockchain length reached (50 blocks)
+Final synchronization took 0.00 seconds
+
+===== SIMULATION RESULTS =====
+Ran for 246.99 seconds
+Maximum blockchain height: 50 for node 29
+Minimum blockchain height: 50 for node 0
+Maximum chain luck: 30.5807 for node 29
+All peers are in sync!
+All blockchains match till minimum heights!
+
+Block miner distribution:
+Node 24: 1020 blocks (2081.6%) - Expected: 3.3%
+Node 15: 180 blocks (367.3%) - Expected: 3.3%
+Node 8: 90 blocks (183.7%) - Expected: 3.3%
+Node 21: 60 blocks (122.4%) - Expected: 3.3%
+Node 17: 30 blocks (61.2%) - Expected: 3.3%
+Node 3: 30 blocks (61.2%) - Expected: 3.3%
+Node 20: 30 blocks (61.2%) - Expected: 3.3%
+Node 16: 30 blocks (61.2%) - Expected: 3.3%
+Simulation started at 2025-05-01 16:48:22 and ended at 2025-05-01 16:52:29
