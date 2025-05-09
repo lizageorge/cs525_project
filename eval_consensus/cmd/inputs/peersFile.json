@@ -1,0 +1,24 @@
+
+{ "vmName": "vm09", 
+"vmPeers": [ 
+{ "name": "vm00", "addr": "/ip4/172.22.154.253/tcp/9000/p2p/12D3KooWJuMbxZTURPvSZ3kxZzWmprubRgdFfRWbK94hxWnc4Waa" }, 
+
+{ "name": "vm01", "addr": "/ip4/172.22.154.250/tcp/9000/p2p/12D3KooWEZBZBGzHJqqsGHppAJrcUrxKDJ3aTUUe6CVBXV6Y8otw" }, 
+
+{ "name": "vm02", "addr": "/ip4/172.22.150.230/tcp/9000/p2p/12D3KooWBSEknVvVwRuFCbEd4GRA22MThgeNa6YbH1QSWxcX5B8W" }, 
+
+{ "name": "vm03", "addr": " /ip4/172.22.153.15/tcp/9000/p2p/12D3KooWGJ7XhszouauL1j9TrWYGfDxLddegRbJGZ8GX6xbGo8oQ" }, 
+
+{ "name": "vm04", "addr": "/ip4/172.22.154.251/tcp/9000/p2p/12D3KooWSHftU6zYvSWybf5GTxFVcR11kdre9JsvA9r7uRaogyeo" }, 
+
+{ "name": "vm05", "addr": "/ip4/172.22.150.231/tcp/9000/p2p/12D3KooWAABsZiTRuN66kquoxbnDnEsLJ8Rh7eYdAzfQGPTRfeGQ" }, 
+
+{ "name": "vm06", "addr": " /ip4/172.22.153.16/tcp/9000/p2p/12D3KooWAe4JLECmQS9EC9UJQS46cz2Qt7K2auqLab14tpVkHvqK" }, 
+
+{ "name": "vm07", "addr": "/ip4/172.22.154.252/tcp/9000/p2p/12D3KooWDbVQwBYETsAqZETJVAVhgxKBtAFin68oCe121U6PYAVi" },
+
+ { "name": "vm08", "addr": "/ip4/172.22.150.232/tcp/9000/p2p/12D3KooWHUDmXztHApUbNq4quW478Gbztt872ikB3JneF9EeMAiE" }, 
+
+{ "name": "vm09", "addr": "/ip4/172.22.153.17/tcp/9000/p2p/12D3KooWMwjJPNELfcPPKemP2KZ7FQMVJRQFC4ejrAHdN5iyWCaB" }
+
+ ] }
