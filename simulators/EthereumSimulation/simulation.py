@@ -720,3 +720,4 @@ if __name__ == "__main__":
         "%Y-%m-%d %H:%M:%S", time.localtime(end_time)
     )
     print(f"Simulation started at {start_time} and ended at {end_time}")
+

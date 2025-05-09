@@ -4,7 +4,7 @@ import re
 import csv
 import datetime
 
-NUM_PEERS = [10, 30, 50, 100]
+NUM_PEERS = [ 100]
 NUM_BLOCKS = [5, 10, 50]
 
 

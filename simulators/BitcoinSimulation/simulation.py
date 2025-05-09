@@ -7,6 +7,9 @@ from collections import deque
 import threading
 import argparse
 
+from codecarbon import OfflineEmissionsTracker
+
+
 # Configuration
 NUM_PEERS = 20
 BLOCK_TIME = 5  # seconds between blocks
@@ -507,6 +510,9 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
+
+    tracker = OfflineEmissionsTracker(country_iso_code="USA", measure_power_secs=5, log_level="error")
+    tracker.start()
     start_time = time.time()
 
     # Initialize the Bitcoin simulator with the specified number of peers and simulation time
@@ -523,3 +529,4 @@ if __name__ == "__main__":
         "%Y-%m-%d %H:%M:%S", time.localtime(end_time)
     )
     print(f"Simulation started at {start_time} and ended at {end_time}")
+    tracker.stop()

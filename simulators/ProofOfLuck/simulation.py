@@ -7,6 +7,9 @@ import threading
 from collections import deque
 import argparse
 
+from codecarbon import OfflineEmissionsTracker
+
+
 
 # Configuration
 ROUND_TIME = 5  # seconds between rounds (as suggested in Section 6.3)
@@ -658,6 +661,11 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
+
+
+    tracker = OfflineEmissionsTracker(country_iso_code="USA", measure_power_secs=5, log_level="error")
+    tracker.start()
+
     start_time = time.time()
 
     simulator = PoLSimulator(args.num_peers, args.min_final_chain_length)
@@ -673,3 +681,4 @@ if __name__ == "__main__":
         "%Y-%m-%d %H:%M:%S", time.localtime(end_time)
     )
     print(f"Simulation started at {start_time} and ended at {end_time}")
+    tracker.stop()
