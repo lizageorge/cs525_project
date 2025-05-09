@@ -1,0 +1,55 @@
+Initialized 10 peers.
+Start time:
+[Peer 3] Mined block 0 with hash 00008cff565b910b5fc4456cedf7037ed80dd1d500f326e3e6b571c6221ded41
+[Peer 1] Mined block 1 with hash 00000253418b341c5a5f1ce4a3a3a728001c66e06a2e63657278a0a13b4a9ba2
+
+Status at 11.4s:
+Average blockchain height: 0.0
+Heights: min=0, max=0
+[Peer 4] Mined block 2 with hash 0000b3f6802c6ea945a06f7c0d9de8ab31f35fb4cae5bfe37ca0f4dac9decfab
+
+Status at 20.0s:
+Average blockchain height: 2.0
+Heights: min=2, max=2
+[Peer 9] Mined block 3 with hash 00005d59c905e745b010735f9b0cd1978bfe77d0ef408ea7f6e3a5302e320964
+[Peer 5] Mined block 4 with hash 000041e8b10c1da72ab7c38b518c3caa2ec85cedcbfe5593cd3b71afe938ea8f
+
+Status at 30.0s:
+Average blockchain height: 4.0
+Heights: min=4, max=4
+[Peer 0] Mined block 5 with hash 00001d17840ec174da9dc58ff55b71d81bf2de810a3e9e03a892b4b489c157c6
+[Peer 2] Mined block 6 with hash 00001a3742c0267584cb064ae630f4f1ad5ff9af1997bd1cd41e8bd371658fa5
+
+Status at 40.1s:
+Average blockchain height: 6.0
+Heights: min=6, max=6
+[Peer 7] Mined block 7 with hash 00009819408677adefddb430c697f244fd99651be5b6240423abfbccb3effdcc
+[Peer 6] Mined block 8 with hash 00005c6f31fa685a6c114b4dd2e59df3c8f8fbbb5456c397f0797a2212c7d49b
+
+Status at 50.1s:
+Average blockchain height: 8.0
+Heights: min=8, max=8
+[Peer 8] Mined block 9 with hash 0000c51a8230a36f97893d91dfe1e6b667fe645f5db02170596915a40824f531
+
+Simulation ending: Minimum blockchain length reached (10 blocks)
+
+===== SIMULATION RESULTS =====
+Ran for 50.79 seconds
+Maximum blockchain height: 10 for peer 9
+Minimum blockchain height: 10 for peer 0
+All peers are in sync!
+Peer 0 does not match the sample blockchain!
+  Peer 0 blockchain: [<__main__.Block object at 0x7f68d8e4a700>, <__main__.Block object at 0x7f68d8e4ae80>, <__main__.Block object at 0x7f68d8e4ae20>, <__main__.Block object at 0x7f68d8fa54f0>, <__main__.Block object at 0x7f68d8e4a6d0>, <__main__.Block object at 0x7f68d8e4aac0>, <__main__.Block object at 0x7f68d85bffa0>, <__main__.Block object at 0x7f68d85dfa90>, <__main__.Block object at 0x7f68d8e533d0>, <__main__.Block object at 0x7f68d858e3d0>]
+  Sample blockchain: [<__main__.Block object at 0x7f68d8e4aa30>, <__main__.Block object at 0x7f68d8e4ab50>, <__main__.Block object at 0x7f68d8e53460>, <__main__.Block object at 0x7f68d8df4ac0>, <__main__.Block object at 0x7f68d8e4a790>, <__main__.Block object at 0x7f68d85bfe80>, <__main__.Block object at 0x7f68d85bffd0>, <__main__.Block object at 0x7f68d85bfdc0>, <__main__.Block object at 0x7f68d85df940>, <__main__.Block object at 0x7f68d8533160>]
+Blockchains do not match till minimum heights!
+Peer 0: 10 blocks
+Peer 1: 10 blocks
+Peer 2: 10 blocks
+Peer 3: 10 blocks
+Peer 4: 10 blocks
+Peer 5: 10 blocks
+Peer 6: 10 blocks
+Peer 7: 10 blocks
+Peer 8: 10 blocks
+Peer 9: 10 blocks
+Simulation started at 2025-05-01 12:47:55 and ended at 2025-05-01 12:48:46
