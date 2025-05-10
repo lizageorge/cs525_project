@@ -1,0 +1,244 @@
+Initialized 30 peers with total throughput: 1604.49 tx/s
+Throughput distribution:
+Peer 0: 45.52 tx/s (2.8%)
+  Validating lanes: set()
+Peer 1: 74.82 tx/s (4.7%)
+  Validating lanes: {0, 1, 2, 3}
+Peer 2: 52.30 tx/s (3.3%)
+  Validating lanes: {0, 1, 2, 3}
+Peer 3: 30.21 tx/s (1.9%)
+  Validating lanes: set()
+Peer 4: 25.12 tx/s (1.6%)
+  Validating lanes: set()
+Peer 5: 29.40 tx/s (1.8%)
+  Validating lanes: set()
+Peer 6: 62.23 tx/s (3.9%)
+  Validating lanes: {0, 1, 2, 3}
+Peer 7: 21.51 tx/s (1.3%)
+  Validating lanes: set()
+Peer 8: 83.42 tx/s (5.2%)
+  Validating lanes: {0, 1, 2, 3}
+Peer 9: 43.29 tx/s (2.7%)
+  Validating lanes: set()
+Peer 10: 74.68 tx/s (4.7%)
+  Validating lanes: {0, 1, 2, 3}
+Peer 11: 76.28 tx/s (4.8%)
+  Validating lanes: {0, 1, 2, 3}
+Peer 12: 37.15 tx/s (2.3%)
+  Validating lanes: set()
+Peer 13: 64.33 tx/s (4.0%)
+  Validating lanes: {0, 1, 2, 3}
+Peer 14: 88.90 tx/s (5.5%)
+  Validating lanes: {0, 1, 2, 3}
+Peer 15: 15.45 tx/s (1.0%)
+  Validating lanes: set()
+Peer 16: 95.55 tx/s (6.0%)
+  Validating lanes: {0, 1, 2, 3}
+Peer 17: 12.19 tx/s (0.8%)
+  Validating lanes: set()
+Peer 18: 87.05 tx/s (5.4%)
+  Validating lanes: {0, 1, 2, 3}
+Peer 19: 34.71 tx/s (2.2%)
+  Validating lanes: set()
+Peer 20: 51.61 tx/s (3.2%)
+  Validating lanes: {0, 1, 2, 3}
+Peer 21: 49.96 tx/s (3.1%)
+  Validating lanes: set()
+Peer 22: 43.26 tx/s (2.7%)
+  Validating lanes: set()
+Peer 23: 84.88 tx/s (5.3%)
+  Validating lanes: {0, 1, 2, 3}
+Peer 24: 18.86 tx/s (1.2%)
+  Validating lanes: set()
+Peer 25: 46.67 tx/s (2.9%)
+  Validating lanes: set()
+Peer 26: 66.86 tx/s (4.2%)
+  Validating lanes: {0, 1, 2, 3}
+Peer 27: 69.86 tx/s (4.4%)
+  Validating lanes: {0, 1, 2, 3}
+Peer 28: 23.95 tx/s (1.5%)
+  Validating lanes: set()
+Peer 29: 94.47 tx/s (5.9%)
+  Validating lanes: {0, 1, 2, 3}
+
+Status at 10.0s:
+Lane 0: Avg height=0.0, min=0, max=0
+Lane 1: Avg height=0.0, min=0, max=0
+Lane 2: Avg height=0.0, min=0, max=0
+Lane 3: Avg height=0.0, min=0, max=0
+Pending transactions by lane: {0: 724, 1: 706, 2: 757, 3: 506}
+Peer 9 has 0 pending blocks
+
+Status at 20.0s:
+Lane 0: Avg height=2.0, min=2, max=2
+Lane 1: Avg height=2.0, min=2, max=2
+Lane 2: Avg height=2.0, min=2, max=2
+Lane 3: Avg height=2.0, min=2, max=2
+Pending transactions by lane: {0: 1343, 1: 1338, 2: 1289, 3: 1067}
+Peer 17 has 0 pending blocks
+
+Status at 30.0s:
+Lane 0: Avg height=4.0, min=4, max=4
+Lane 1: Avg height=4.0, min=4, max=4
+Lane 2: Avg height=4.0, min=4, max=4
+Lane 3: Avg height=4.0, min=4, max=4
+Pending transactions by lane: {0: 1959, 1: 1910, 2: 1788, 3: 1790}
+Peer 9 has 0 pending blocks
+
+Status at 40.0s:
+Lane 0: Avg height=6.0, min=6, max=6
+Lane 1: Avg height=6.0, min=6, max=6
+Lane 2: Avg height=6.0, min=6, max=6
+Lane 3: Avg height=6.0, min=6, max=6
+Pending transactions by lane: {0: 2584, 1: 2604, 2: 2377, 3: 2456}
+Peer 16 has 0 pending blocks
+
+Status at 50.0s:
+Lane 0: Avg height=8.0, min=8, max=8
+Lane 1: Avg height=8.0, min=8, max=8
+Lane 2: Avg height=8.0, min=8, max=8
+Lane 3: Avg height=8.0, min=8, max=8
+Pending transactions by lane: {0: 3419, 1: 3235, 2: 3049, 3: 2905}
+Peer 17 has 0 pending blocks
+
+Simulation ending: Minimum blockchain length reached (10 blocks in lane 0)
+
+===== SIMULATION RESULTS =====
+Ran for 50.27 seconds
+
+=== LANE 0 RESULTS ===
+Maximum blockchain height: 10 for peer 29
+Minimum blockchain height: 10 for peer 0
+All peers are in sync for lane 0!
+All lane 0 blockchains match till minimum heights!
+
+Lane 0 block validator distribution:
+Peer 16: 90 blocks (900.0%) - Throughput: 6.0%
+Peer 10: 30 blocks (300.0%) - Throughput: 4.7%
+Peer 20: 30 blocks (300.0%) - Throughput: 3.2%
+Peer 11: 30 blocks (300.0%) - Throughput: 4.8%
+Peer 14: 30 blocks (300.0%) - Throughput: 5.5%
+Peer 29: 30 blocks (300.0%) - Throughput: 5.9%
+Peer 6: 30 blocks (300.0%) - Throughput: 3.9%
+Peer 26: 30 blocks (300.0%) - Throughput: 4.2%
+
+=== LANE 1 RESULTS ===
+Maximum blockchain height: 10 for peer 29
+Minimum blockchain height: 9 for peer 6
+Peers are out of sync for lane 1:
+Peer 0: length 10
+Peer 1: length 10
+Peer 2: length 10
+Peer 3: length 10
+Peer 4: length 10
+Peer 5: length 10
+Peer 6: length 9
+Peer 7: length 10
+Peer 8: length 10
+Peer 9: length 10
+Peer 10: length 10
+Peer 11: length 10
+Peer 12: length 10
+Peer 13: length 10
+Peer 14: length 10
+Peer 15: length 10
+Peer 16: length 10
+Peer 17: length 10
+Peer 18: length 10
+Peer 19: length 10
+Peer 20: length 10
+Peer 21: length 10
+Peer 22: length 9
+Peer 23: length 10
+Peer 24: length 10
+Peer 25: length 10
+Peer 26: length 10
+Peer 27: length 10
+Peer 28: length 10
+Peer 29: length 10
+All lane 1 blockchains match till minimum heights!
+
+Lane 1 block validator distribution:
+Peer 1: 90 blocks (900.0%) - Throughput: 4.7%
+Peer 8: 60 blocks (600.0%) - Throughput: 5.2%
+Peer 18: 58 blocks (580.0%) - Throughput: 5.4%
+Peer 6: 30 blocks (300.0%) - Throughput: 3.9%
+Peer 29: 30 blocks (300.0%) - Throughput: 5.9%
+Peer 13: 30 blocks (300.0%) - Throughput: 4.0%
+
+=== LANE 2 RESULTS ===
+Maximum blockchain height: 10 for peer 29
+Minimum blockchain height: 9 for peer 0
+Peers are out of sync for lane 2:
+Peer 0: length 9
+Peer 1: length 10
+Peer 2: length 10
+Peer 3: length 10
+Peer 4: length 10
+Peer 5: length 10
+Peer 6: length 10
+Peer 7: length 10
+Peer 8: length 10
+Peer 9: length 10
+Peer 10: length 10
+Peer 11: length 10
+Peer 12: length 10
+Peer 13: length 10
+Peer 14: length 10
+Peer 15: length 10
+Peer 16: length 10
+Peer 17: length 10
+Peer 18: length 10
+Peer 19: length 10
+Peer 20: length 10
+Peer 21: length 10
+Peer 22: length 10
+Peer 23: length 10
+Peer 24: length 10
+Peer 25: length 10
+Peer 26: length 10
+Peer 27: length 10
+Peer 28: length 10
+Peer 29: length 10
+All lane 2 blockchains match till minimum heights!
+
+Lane 2 block validator distribution:
+Peer 10: 90 blocks (900.0%) - Throughput: 4.7%
+Peer 16: 60 blocks (600.0%) - Throughput: 6.0%
+Peer 18: 30 blocks (300.0%) - Throughput: 5.4%
+Peer 23: 30 blocks (300.0%) - Throughput: 5.3%
+Peer 26: 30 blocks (300.0%) - Throughput: 4.2%
+Peer 13: 30 blocks (300.0%) - Throughput: 4.0%
+Peer 29: 29 blocks (290.0%) - Throughput: 5.9%
+
+=== LANE 3 RESULTS ===
+Maximum blockchain height: 10 for peer 29
+Minimum blockchain height: 10 for peer 0
+All peers are in sync for lane 3!
+All lane 3 blockchains match till minimum heights!
+
+Lane 3 block validator distribution:
+Peer 27: 60 blocks (600.0%) - Throughput: 4.4%
+Peer 18: 30 blocks (300.0%) - Throughput: 5.4%
+Peer 13: 30 blocks (300.0%) - Throughput: 4.0%
+Peer 10: 30 blocks (300.0%) - Throughput: 4.7%
+Peer 26: 30 blocks (300.0%) - Throughput: 4.2%
+Peer 23: 30 blocks (300.0%) - Throughput: 5.3%
+Peer 20: 30 blocks (300.0%) - Throughput: 3.2%
+Peer 29: 30 blocks (300.0%) - Throughput: 5.9%
+Peer 2: 30 blocks (300.0%) - Throughput: 3.3%
+
+=== CROSS-LANE COMPARISON ===
+Lane 0: Average of 10.0 blocks
+Lane 1: Average of 9.9 blocks
+Lane 2: Average of 10.0 blocks
+Lane 3: Average of 10.0 blocks
+
+Total transactions processed (average): 37227
+Average throughput: 740.42 tx/sec
+Simulation started at 2025-05-09 21:05:33 and ended at 2025-05-09 21:06:24
+Total energy consumed: 0.00041471223266044074
+Total CPU energy: 0.000273684843638219
+Total RAM energy: 0.00014102738902222175
+Total emissions: 0.000153224972737751
+CPU power: 14.899999999999999
