@@ -44,6 +44,10 @@ def extract_simulation_data(output_text):
     if emissions_match:
         data['emissions'] = float(emissions_match.group(1))
     
+    power_match = re.search(r"CPU power: ([\d\.e\-]+)", output_text)
+    if power_match:
+        data['cpu_power'] = float(power_match.group(1))
+    
     
     return data
 
@@ -72,10 +76,18 @@ if __name__ == "__main__":
     csv_path = os.path.join(OUTPUT_DIR, f"{sim_name}_results.csv")
     with open(csv_path, 'w', newline='') as csvfile:
         csv_writer = csv.writer(csvfile)
-        csv_writer.writerow(['Run', 'Num Peers', 'Chain Length', 'Runtime', 'Interval Start', 'Interval End', 'Peers In Sync', 'Blockchains Match'])
+        csv_writer.writerow(['Run', 'Num Peers', 'Chain Length', 'Runtime', 'Interval Start', 'Interval End', 'Total Energy (kWh)', 'CPU Energy (kWh)', 'RAM Energy (kWh)', 'Total Emissions (CO2 Kg)', 'Avg CPU Power (W)', 'Peers In Sync', 'Blockchains Match'])
     
     for num_peers in NUM_PEERS:
         for num_blocks in NUM_BLOCKS:
+            avg_of_runs = {
+                'runtime': [],
+                'total_energy': [],
+                'cpu_energy': [],
+                'ram_energy': [],
+                'emissions': [],
+                'cpu_power': []
+            }
             for run in range(args.num_runs):
                 run_num = run + 1
                 print(f"Running {args.sim} simulation with {num_peers} peers for {num_blocks} blocks, run {run_num}")
@@ -104,12 +116,50 @@ if __name__ == "__main__":
                             data['runtime'],
                             data['start_time'],
                             data['end_time'],
+                            data.get('total_energy', 'N/A'),
+                            data.get('cpu_energy', 'N/A'),
+                            data.get('ram_energy', 'N/A'),
+                            data.get('emissions', 'N/A'),
+                            data.get('cpu_power', 'N/A'),
                             data['peers_in_sync'],
                             data['blockchains_match']
                         ])
                     
+                    avg_of_runs['runtime'].append(data['runtime'])
+                    if 'total_energy' in data:
+                        avg_of_runs['total_energy'].append(data['total_energy'])
+                    if 'cpu_energy' in data:
+                        avg_of_runs['cpu_energy'].append(data['cpu_energy'])
+                    if 'ram_energy' in data:
+                        avg_of_runs['ram_energy'].append(data['ram_energy'])
+                    if 'emissions' in data:
+                        avg_of_runs['emissions'].append(data['emissions'])
+                    if 'cpu_power' in data:
+                        avg_of_runs['cpu_power'].append(data['cpu_power'])
+
                     print(f"Run {run_num} completed: Runtime {data['runtime']} seconds, results saved to {output_filename}")
                 else:
                     print(f"Warning: Couldn't extract all required data from run {run_num}")
+            
+            # add a row that is the avg of all the runs
+            with open(csv_path, 'a', newline='') as csvfile:
+                csv_writer = csv.writer(csvfile)
+                csv_writer.writerow([
+                    "Average",
+                    num_peers,
+                    num_blocks,
+                    sum(avg_of_runs['runtime']) / len(avg_of_runs['runtime']),
+                    "N/A",
+                    "N/A",
+                    sum(avg_of_runs['total_energy']) / len(avg_of_runs['total_energy']) if avg_of_runs['total_energy'] else 'N/A',
+                    sum(avg_of_runs['cpu_energy']) / len(avg_of_runs['cpu_energy']) if avg_of_runs['cpu_energy'] else 'N/A',
+                    sum(avg_of_runs['ram_energy']) / len(avg_of_runs['ram_energy']) if avg_of_runs['ram_energy'] else 'N/A',
+                    sum(avg_of_runs['emissions']) / len(avg_of_runs['emissions']) if avg_of_runs['emissions'] else 'N/A',
+                    sum(avg_of_runs['cpu_power']) / len(avg_of_runs['cpu_power']) if avg_of_runs['cpu_power'] else 'N/A',
+                    "N/A",
+                    "N/A"
+                ])
+            
+
     
     print(f"All simulations completed. Results saved to {csv_path}")

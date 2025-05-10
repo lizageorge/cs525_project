@@ -1,0 +1,48 @@
+Initialized 30 nodes
+
+Status at 10.0s:
+Heights: min=1, max=1
+Chain luck values: min=0.8581, max=0.8777, avg=0.8705
+Node 4 round status: in progress
+
+Status at 20.0s:
+Heights: min=3, max=3
+Chain luck values: min=2.7073, max=2.8050, avg=2.7496
+Node 7 round status: in progress
+
+Status at 30.0s:
+Heights: min=5, max=5
+Chain luck values: min=3.3025, max=4.6350, avg=4.4242
+Node 8 round status: in progress
+
+Status at 40.0s:
+Heights: min=7, max=7
+Chain luck values: min=3.8247, max=6.2986, avg=5.8894
+Node 24 round status: in progress
+
+Simulation ending: Minimum blockchain length reached (10 blocks)
+Final synchronization took 0.26 seconds
+
+===== SIMULATION RESULTS =====
+Ran for 47.28 seconds
+Maximum blockchain height: 10 for node 29
+Minimum blockchain height: 10 for node 0
+Maximum chain luck: 8.0283 for node 29
+All peers are in sync!
+All blockchains match till minimum heights!
+
+Block miner distribution:
+Node 15: 60 blocks (666.7%) - Expected: 3.3%
+Node 0: 30 blocks (333.3%) - Expected: 3.3%
+Node 2: 30 blocks (333.3%) - Expected: 3.3%
+Node 22: 30 blocks (333.3%) - Expected: 3.3%
+Node 21: 30 blocks (333.3%) - Expected: 3.3%
+Node 13: 30 blocks (333.3%) - Expected: 3.3%
+Node 4: 30 blocks (333.3%) - Expected: 3.3%
+Node 25: 30 blocks (333.3%) - Expected: 3.3%
+Simulation started at 2025-05-09 19:34:16 and ended at 2025-05-09 19:35:03
+Total energy consumed: 0.00024039458896388626
+Total CPU energy: 0.00012020109805833325
+Total RAM energy: 0.000120193490905553
+Total emissions: 8.881930996825395e-05
+CPU power: 10.0
