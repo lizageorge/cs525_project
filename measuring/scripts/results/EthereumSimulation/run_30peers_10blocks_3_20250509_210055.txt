@@ -1,0 +1,114 @@
+Initialized 30 peers with total stake: 1779.88
+Stake distribution:
+Peer 0: 16.25 (0.9%)
+Peer 1: 64.70 (3.6%)
+Peer 2: 46.12 (2.6%)
+Peer 3: 54.50 (3.1%)
+Peer 4: 72.82 (4.1%)
+Peer 5: 73.93 (4.2%)
+Peer 6: 21.44 (1.2%)
+Peer 7: 58.67 (3.3%)
+Peer 8: 80.12 (4.5%)
+Peer 9: 90.70 (5.1%)
+Peer 10: 30.03 (1.7%)
+Peer 11: 81.88 (4.6%)
+Peer 12: 36.19 (2.0%)
+Peer 13: 91.70 (5.2%)
+Peer 14: 81.47 (4.6%)
+Peer 15: 47.73 (2.7%)
+Peer 16: 83.87 (4.7%)
+Peer 17: 29.23 (1.6%)
+Peer 18: 19.31 (1.1%)
+Peer 19: 76.34 (4.3%)
+Peer 20: 51.23 (2.9%)
+Peer 21: 69.15 (3.9%)
+Peer 22: 81.72 (4.6%)
+Peer 23: 94.41 (5.3%)
+Peer 24: 65.53 (3.7%)
+Peer 25: 52.45 (2.9%)
+Peer 26: 38.19 (2.1%)
+Peer 27: 25.22 (1.4%)
+Peer 28: 93.07 (5.2%)
+Peer 29: 51.92 (2.9%)
+
+Round 1: Peer 23 selected as validator for height 0
+
+Round 2: Peer 9 selected as validator for height 1
+
+Status at 10.0s:
+Average blockchain height: 0.0
+Heights: min=0, max=0
+Peer 19 has 0 pending blocks
+Votes for current height blocks:
+  Validator 9: votes seen by peers: [1]
+  Consensus threshold: 907.74 of 1779.88 total stake
+
+Round 3: Peer 21 selected as validator for height 2
+
+Round 4: Peer 23 selected as validator for height 3
+
+Status at 20.0s:
+Average blockchain height: 2.0
+Heights: min=2, max=2
+Peer 8 has 0 pending blocks
+Votes for current height blocks:
+  Validator 23: votes seen by peers: [1]
+  Consensus threshold: 907.74 of 1779.88 total stake
+
+Round 5: Peer 22 selected as validator for height 4
+
+Round 6: Peer 9 selected as validator for height 5
+
+Status at 30.0s:
+Average blockchain height: 4.0
+Heights: min=4, max=4
+Peer 2 has 0 pending blocks
+Votes for current height blocks:
+  Validator 9: votes seen by peers: [1]
+  Consensus threshold: 907.74 of 1779.88 total stake
+
+Round 7: Peer 6 selected as validator for height 6
+
+Round 8: Peer 25 selected as validator for height 7
+
+Status at 40.0s:
+Average blockchain height: 6.0
+Heights: min=6, max=6
+Peer 12 has 0 pending blocks
+Votes for current height blocks:
+  Validator 25: votes seen by peers: [1]
+  Consensus threshold: 907.74 of 1779.88 total stake
+
+Round 9: Peer 14 selected as validator for height 8
+
+Status at 50.0s:
+Average blockchain height: 8.0
+Heights: min=8, max=8
+Peer 22 has 0 pending blocks
+
+Round 10: Peer 11 selected as validator for height 9
+
+Simulation ending: Minimum blockchain length reached (10 blocks)
+
+===== SIMULATION RESULTS =====
+Ran for 50.32 seconds
+Maximum blockchain height: 10 for peer 29
+Minimum blockchain height: 10 for peer 0
+All peers are in sync!
+All blockchains match till minimum heights!
+
+Block validator distribution:
+Peer 23: 60 blocks (600.0%) - Stake: 5.3%
+Peer 9: 60 blocks (600.0%) - Stake: 5.1%
+Peer 21: 30 blocks (300.0%) - Stake: 3.9%
+Peer 22: 30 blocks (300.0%) - Stake: 4.6%
+Peer 6: 30 blocks (300.0%) - Stake: 1.2%
+Peer 25: 30 blocks (300.0%) - Stake: 2.9%
+Peer 14: 30 blocks (300.0%) - Stake: 4.6%
+Peer 11: 30 blocks (300.0%) - Stake: 4.6%
+Simulation started at 2025-05-09 21:00:57 and ended at 2025-05-09 21:01:47
+Total energy consumed: 0.00029006913378902896
+Total CPU energy: 0.0001489236212306952
+Total RAM energy: 0.00014114551255833369
+Total emissions: 0.0001071727130684339
+CPU power: 10.0
