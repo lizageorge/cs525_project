@@ -1,3 +1,5 @@
+import os
+import sys
 import time
 import random
 import hashlib
@@ -7,6 +9,8 @@ import threading
 from collections import deque
 import argparse
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
+from simulators.common import run_simulation
 
 # Configuration
 ROUND_TIME = 5  # seconds between rounds (as suggested in Section 6.3)
@@ -645,6 +649,7 @@ class PoLSimulator:
 
 
 # Run the simulation
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run a Proof of Luck blockchain simulation.")
     parser.add_argument(
@@ -658,18 +663,6 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    start_time = time.time()
-
+    # Create and run the simulator
     simulator = PoLSimulator(args.num_peers, args.min_final_chain_length)
-    simulator.initialize()
-    simulator.run()
-
-    end_time = time.time()
-
-    start_time = time.strftime(
-        "%Y-%m-%d %H:%M:%S", time.localtime(start_time)
-    )
-    end_time = time.strftime(
-        "%Y-%m-%d %H:%M:%S", time.localtime(end_time)
-    )
-    print(f"Simulation started at {start_time} and ended at {end_time}")
+    run_simulation(simulator)

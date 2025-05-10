@@ -1,0 +1,342 @@
+____________________________________________________________________
+			P o w e r T O P
+
+____________________________________________________________________
+ *  *  *   System Information   *  *  *
+
+PowerTOP Version;2.15 ran at Thu May  8 22:32:59 2025
+
+Kernel Version;Linux version 5.14.0-503.40.1.el9_5.x86_64
+System Name;Intel Corporation440BX Desktop Reference PlatformNone
+CPU Information;2 Intel(R) Xeon(R) Silver 4216 CPU @ 2.10GHz
+OS Information;Red Hat Enterprise Linux release 9.5 (Plow)
+
+Target: 1 units/s;System:  53.7 wakeup/s;CPU:  0.2% usage;GPU: 0 ops/s;GFX: 0 wakeups/s;VFS: 0 ops/s;
+
+____________________________________________________________________
+ *  *  *   Top 10 Power Consumers   *  *  *
+
+Usage;Events/s;Category;Description
+  0.0%; 26.2;Timer;hrtimer_wakeup
+  0.0%; 20.4;Process;[PID 51653] powertop
+  0.0%;  4.3;Timer;tick_nohz_highres_handler
+  0.1%;  0.5;Process;[PID 41215] python3 simulation.py --num_peers 50 --min_final_chain_length 10 
+  0.0%;  0.5;Process;[PID 1651] falcon-sensor-bpf 
+  0.0%; 0.20;Process;[PID 42894] /home/lizag2/.vscode-server/cli/servers/Stable-17baf841131aa23349f217ca7c570c76ee87b957/server/node --dns-result-or
+  0.0%; 0.20;Process;[PID 1643] falcon-sensor-bpf 
+  0.0%; 0.18;Process;[PID 42872] /home/lizag2/.vscode-server/code-17baf841131aa23349f217ca7c570c76ee87b957 command-shell --cli-data-dir /home/lizag2
+  0.0%; 0.00;kWork;drm_fb_helper_damage_work
+  0.0%; 0.15;Process;[PID 17] [rcu_preempt]
+
+____________________________________________________________________
+ *  *  *   Processor Idle State Report   *  *  *
+
+Package;0
+C2 (pc2);  0.0%
+C3 (pc3);  0.0%
+C6 (pc6);  0.0%
+C7 (pc7);  0.0%
+;
+;
+;
+
+;Core 0
+C3 (cc3);  0.0%
+C6 (cc6);  0.0%
+C7 (cc7);  0.0%
+;Core 1
+C3 (cc3);  0.0%
+C6 (cc6);  0.0%
+C7 (cc7);  0.0%
+
+CPU;0
+C0 active;  0.0%;
+POLL;  0.0%;   0.0 ms
+C1; 90.6%;   1.6 ms
+;
+;
+;
+;
+CPU;1
+C0 active;  0.0%;
+POLL;  0.0%;   0.0 ms
+C1; 87.8%;   1.5 ms
+;
+;
+;
+;
+;;
+;;
+;;
+;;
+;;
+;;
+
+____________________________________________________________________
+ *  *  *   Processor Frequency Report   *  *  *
+
+Package;0
+Idle;   inf% 
+;
+;
+;
+
+;Core 0
+Idle;   inf% 
+;Core 1
+Idle;   inf% 
+
+CPU 0
+Average;9223372036854.8 GHz
+Idle;   inf% 
+CPU 1
+Average;9223372036854.8 GHz
+Idle;   inf% 
+;
+;
+
+____________________________________________________________________
+ *  *  *   Overview of Software Power Consumers   *  *  *
+
+Usage;Wakeups/s;GPU ops/s;Disk IO/s;GFX Wakeups/s;Category;Description
+103.0 us/s; 26.2;;;;Timer;hrtimer_wakeup
+ 70.4 us/s; 20.4;;;;Process;[PID 51653] powertop
+ 21.5 us/s;  4.3;;;;Timer;tick_nohz_highres_handler
+  1.0 ms/s;  0.5;;;;Process;[PID 41215] python3 simulation.py --num_peers 50 --min_final_chain_length 10 
+  2.8 us/s;  0.5;;;;Process;[PID 1651] falcon-sensor-bpf 
+119.3 us/s; 0.20;;;;Process;[PID 42894] /home/lizag2/.vscode-server/cli/servers/Stable-17baf841131aa23349f217ca7c570c76ee87b957/server/node --dns-result-or
+  2.7 us/s; 0.20;;;;Process;[PID 1643] falcon-sensor-bpf 
+ 12.7 us/s; 0.18;;;;Process;[PID 42872] /home/lizag2/.vscode-server/code-17baf841131aa23349f217ca7c570c76ee87b957 command-shell --cli-data-dir /home/lizag2
+391.9 us/s;;;;;kWork;drm_fb_helper_damage_work
+  1.0 us/s; 0.15;;;;Process;[PID 17] [rcu_preempt]
+ 10.9 us/s; 0.12;;;;Process;[PID 42828] sshd: lizag2@notty   
+ 44.0 us/s; 0.10;;;;Interrupt;[3] net_rx(softirq)
+  0.5 us/s; 0.10;;;;Process;[PID 615] [xfsaild/dm-0]
+ 15.1 us/s; 0.08;;;;Process;[PID 2266] /home/lizag2/.vscode-server/cli/servers/Stable-17baf841131aa23349f217ca7c570c76ee87b957/server/node /home/lizag2/.vs
+152.0 us/s; 0.02;;;;Interrupt;[7] sched(softirq)
+ 15.6 us/s; 0.07;;;;Process;[PID 2401] /home/lizag2/.vscode-server/cli/servers/Stable-17baf841131aa23349f217ca7c570c76ee87b957/server/node /home/lizag2/.vs
+ 17.8 us/s; 0.06;;;;kWork;toggle_allocation_gate
+ 33.1 us/s; 0.05;;;;kWork;fb_flashcursor
+  1.8 us/s; 0.06;;;;Process;[PID 923] /usr/bin/vmtoolsd 
+  1.6 us/s; 0.06;;;;Process;[PID 1949] falcon-sensor-bpf 
+ 12.0 us/s; 0.05;;;;kWork;delayed_vfree_work
+ 56.7 us/s; 0.03;;;;Process;[PID 1943] falcon-sensor-bpf 
+ 97.1 us/s;;;;;Timer;process_timeout
+ 17.8 us/s; 0.03;;;;Process;[PID 51638] powertop --csv=output_bitcoin.csv -t 200 
+  2.8 us/s; 0.04;;;;Process;[PID 42866] /home/lizag2/.vscode-server/code-17baf841131aa23349f217ca7c570c76ee87b957 command-shell --cli-data-dir /home/lizag2
+ 77.6 us/s; 0.01;;;;kWork;disk_events_workfn
+ 12.5 us/s; 0.03;;;;Process;[PID 51647] cpuUsage.sh
+ 14.9 us/s; 0.03;;;;Process;[PID 1677] /opt/saltstack/salt/bin/python3.10 /usr/bin/salt-minion MultiMinionProcessManager MinionProcessManager MinionProcess
+ 21.7 us/s; 0.02;;;;Process;[PID 1942] falcon-sensor-bpf 
+ 70.1 us/s;;;;;Interrupt;[9] RCU(softirq)
+ 65.4 us/s;;;;;Process;[PID 51664] ps
+ 59.5 us/s;;;;;Timer;delayed_work_timer_fn
+  1.1 us/s; 0.02;;;;Process;[PID 915] /usr/sbin/NetworkManager --no-daemon 
+  0.4 us/s; 0.02;;;;Process;[PID 16] [ksoftirqd/0]
+ 12.8 us/s; 0.01;;;;Process;[PID 1488] falcon-sensor-bpf 
+  0.1 us/s; 0.02;;;;Process;[PID 36] [kcompactd0]
+ 37.1 us/s;;;;;kWork;flush_to_ldisc
+ 22.9 us/s; 0.01;;;;Process;[PID 51671] node
+ 29.5 us/s;;;;;Interrupt;[1] timer(softirq)
+ 16.8 us/s; 0.01;;;;kWork;flush_memcg_stats_dwork
+  4.1 us/s; 0.01;;;;kWork;vmstat_shepherd
+  3.6 us/s; 0.01;;;;Process;[PID 42905] /home/lizag2/.vscode-server/cli/servers/Stable-17baf841131aa23349f217ca7c570c76ee87b957/server/node /home/lizag2/.v
+ 27.4 us/s;;;;;Interrupt;[25] ens33-rxtx-0
+  0.2 us/s; 0.01;;;;Process;[PID 50170] /usr/libexec/sssd/sssd_kcm --uid 0 --gid 0 --logger=files 
+ 22.2 us/s;;;;;kWork;xfs_log_worker
+  9.4 us/s; 0.01;;;;Process;[PID 1491] falcon-sensor-bpf 
+  7.8 us/s; 0.01;;;;Process;[PID 1489] falcon-sensor-bpf 
+  6.3 us/s; 0.01;;;;Process;[PID 51654] cpuUsage.sh
+ 18.4 us/s;;;;;Process;[PID 51673] git
+  5.5 us/s; 0.01;;;;Process;[PID 51659] cpuUsage.sh
+  5.2 us/s; 0.01;;;;kWork;vmballoon_work
+ 15.6 us/s;;;;;kWork;wb_workfn
+  2.0 us/s; 0.01;;;;Process;[PID 51669] cpuUsage.sh
+  1.9 us/s; 0.01;;;;Process;[PID 51668] cpuUsage.sh
+ 14.5 us/s;;;;;Process;[PID 51673] node
+ 14.4 us/s;;;;;Process;[PID 51674] git
+  1.4 us/s; 0.01;;;;Process;[PID 51652] sleep
+  0.8 us/s; 0.01;;;;kWork;lru_add_drain_per_cpu
+ 13.4 us/s;;;;;Process;[PID 1490] falcon-sensor-bpf 
+  0.5 us/s; 0.01;;;;Process;[PID 1945] falcon-sensor-bpf 
+  0.5 us/s; 0.01;;;;Process;[PID 1944] falcon-sensor-bpf 
+  0.4 us/s; 0.01;;;;Process;[PID 1017] /usr/bin/python3 -Es /usr/sbin/tuned -l -P 
+  0.1 us/s; 0.01;;;;Process;[PID 25] [ksoftirqd/1]
+  0.1 us/s; 0.01;;;;Process;[PID 1086] /usr/sbin/rsyslogd -n 
+  0.1 us/s; 0.01;;;;Process;[PID 1668] falcon-sensor-bpf 
+ 12.6 us/s;;;;;Process;[PID 51672] node
+  9.8 us/s;;;;;Process;[PID 51672] git
+  9.0 us/s;;;;;kWork;drain_vmap_area_work
+  8.9 us/s;;;;;Timer;tcp_orphan_update
+  8.8 us/s;;;;;Timer;tcp_delack_timer
+  7.1 us/s;;;;;Process;[PID 51654] sed
+  6.9 us/s;;;;;Process;[PID 51664] node
+  6.1 us/s;;;;;Interrupt;[28] ahci[0000:02:02.0]
+  5.9 us/s;;;;;Process;[PID 51657] cpuUsage.sh
+  5.4 us/s;;;;;Process;[PID 51655] cpuUsage.sh
+  5.1 us/s;;;;;Process;[PID 51664] sh
+  5.0 us/s;;;;;Process;[PID 51667] cat
+  5.0 us/s;;;;;Process;[PID 51669] cat
+  4.8 us/s;;;;;kWork;blk_mq_run_work_fn
+  4.6 us/s;;;;;kWork;vmstat_update
+  3.3 us/s;;;;;Interrupt;[4] block(softirq)
+  2.7 us/s;;;;;kWork;kfree_rcu_work
+  2.0 us/s;;;;;Timer;tcp_write_timer
+  1.8 us/s;;;;;Process;[PID 51656] cpuUsage.sh
+  1.8 us/s;;;;;Process;[PID 51660] cpuUsage.sh
+  1.7 us/s;;;;;Process;[PID 51655] cat
+  1.5 us/s;;;;;Process;[PID 51658] cpuUsage.sh
+  1.5 us/s;;;;;Timer;mix_interrupt_randomness
+  1.5 us/s;;;;;Process;[PID 51665] cpuUsage.sh
+  1.4 us/s;;;;;kWork;kfree_rcu_monitor
+  1.4 us/s;;;;;Process;[PID 51659] cat
+  1.0 us/s;;;;;kWork;wq_barrier_func
+  0.9 us/s;;;;;Timer;blk_stat_timer_fn
+  0.9 us/s;;;;;kWork;xfs_end_io
+  0.8 us/s;;;;;Process;[PID 51657] cat
+  0.8 us/s;;;;;kWork;neigh_managed_work
+  0.8 us/s;;;;;kWork;xlog_cil_push_work
+  0.8 us/s;;;;;kWork;xlog_ioend_work
+  0.7 us/s;;;;;Interrupt;[26] ens33-rxtx-1
+  0.7 us/s;;;;;kWork;sync_hw_clock
+
+____________________________________________________________________
+ *  *  *   Device Power Report   *  *  *
+
+Usage;Device Name
+  0.3%;CPU misc
+  0.3%;CPU core
+  0.3%;DRAM
+100.0%;PCI Device: VMware VMXNET3 Ethernet Controller
+100.0%;PCI Device: Intel Corporation 82371AB/EB/MB PIIX4 IDE
+100.0%;PCI Device: Intel Corporation 82371AB/EB/MB PIIX4 ACPI
+100.0%;PCI Device: VMware SATA AHCI controller
+100.0%;PCI Device: VMware Virtual Machine Communication Interface
+100.0%;PCI Device: VMware SVGA II Adapter
+100.0%;PCI Device: Intel Corporation 82371AB/EB/MB PIIX4 ISA
+100.0%;PCI Device: Intel Corporation 440BX/ZX/DX - 82443BX/ZX/DX AGP bridge
+100.0%;PCI Device: VMware PVSCSI SCSI Controller
+100.0%;PCI Device: Intel Corporation 440BX/ZX/DX - 82443BX/ZX/DX Host bridge
+ 24.5 pkts/s;Network interface: ens33 (vmxnet3)
+  0.0%;runtime-pcspkr
+  0.0%;runtime-i8042
+  0.0%;runtime-serial8250
+  0.0%;runtime-efivars.0
+  0.0%;runtime-PNP0800:00
+  0.0%;runtime-PNP0001:00
+  0.0%;runtime-rtc-efi.0
+  0.0%;runtime-Fixed MDIO bus.0
+  0.0%;runtime-intel_rapl_msr.0
+  0.0%;runtime-ACPI0003:00
+  0.0%;runtime-kgdboc
+  0.0%;runtime-alarmtimer.0.auto
+____________________________________________________________________
+ *  *  *   Process Device Activity   *  *  *
+
+Process;Device
+systemd;/dev/autofs
+;/dev/kmsg
+;/dev/rfkill
+systemd-journal;/dev/kmsg
+;/dev/kmsg
+mcelog;/dev/mcelog
+vmtoolsd;/dev/dri/renderD128
+tuned;/dev/cpu_dma_latency
+systemd-logind;/dev/input/event0
+;/dev/input/event1
+
+____________________________________________________________________
+ *  *  *   AHCI ALPM Residency Statistics - Not supported on this macine   *  *  *
+
+____________________________________________________________________
+ *  *  *   Software Settings in Need of Tuning   *  *  *
+
+Description;Script
+Enable SATA link power management for host14;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host14/link_power_management_policy';
+Enable SATA link power management for host15;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host15/link_power_management_policy';
+Enable SATA link power management for host16;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host16/link_power_management_policy';
+Enable SATA link power management for host17;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host17/link_power_management_policy';
+VM writeback timeout;echo '1500' > '/proc/sys/vm/dirty_writeback_centisecs';
+Enable SATA link power management for host3;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host3/link_power_management_policy';
+Enable SATA link power management for host5;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host5/link_power_management_policy';
+Enable SATA link power management for host11;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host11/link_power_management_policy';
+Enable SATA link power management for host7;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host7/link_power_management_policy';
+Enable SATA link power management for host31;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host31/link_power_management_policy';
+Enable SATA link power management for host13;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host13/link_power_management_policy';
+Enable SATA link power management for host9;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host9/link_power_management_policy';
+Enable SATA link power management for host22;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host22/link_power_management_policy';
+Enable SATA link power management for host32;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host32/link_power_management_policy';
+Enable SATA link power management for host8;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host8/link_power_management_policy';
+Enable SATA link power management for host12;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host12/link_power_management_policy';
+Enable SATA link power management for host18;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host18/link_power_management_policy';
+Enable SATA link power management for host19;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host19/link_power_management_policy';
+Enable SATA link power management for host10;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host10/link_power_management_policy';
+Enable SATA link power management for host24;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host24/link_power_management_policy';
+Enable SATA link power management for host26;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host26/link_power_management_policy';
+Enable SATA link power management for host28;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host28/link_power_management_policy';
+Enable SATA link power management for host21;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host21/link_power_management_policy';
+Enable SATA link power management for host27;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host27/link_power_management_policy';
+Enable SATA link power management for host4;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host4/link_power_management_policy';
+Enable SATA link power management for host29;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host29/link_power_management_policy';
+Enable SATA link power management for host20;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host20/link_power_management_policy';
+Enable SATA link power management for host23;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host23/link_power_management_policy';
+Enable SATA link power management for host6;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host6/link_power_management_policy';
+Enable SATA link power management for host25;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host25/link_power_management_policy';
+Enable SATA link power management for host30;echo 'med_power_with_dipm' > '/sys/class/scsi_host/host30/link_power_management_policy';
+Runtime PM for port ata3 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata3/power/control';
+Runtime PM for PCI Device VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/power/control';
+Runtime PM for PCI Device VMware Virtual Machine Communication Interface;echo 'auto' > '/sys/bus/pci/devices/0000:00:07.7/power/control';
+Runtime PM for PCI Device Intel Corporation 440BX/ZX/DX - 82443BX/ZX/DX Host bridge;echo 'auto' > '/sys/bus/pci/devices/0000:00:00.0/power/control';
+Runtime PM for PCI Device VMware SVGA II Adapter;echo 'auto' > '/sys/bus/pci/devices/0000:00:0f.0/power/control';
+Runtime PM for PCI Device Intel Corporation 82371AB/EB/MB PIIX4 ISA;echo 'auto' > '/sys/bus/pci/devices/0000:00:07.0/power/control';
+Runtime PM for PCI Device Intel Corporation 440BX/ZX/DX - 82443BX/ZX/DX AGP bridge;echo 'auto' > '/sys/bus/pci/devices/0000:00:01.0/power/control';
+Runtime PM for disk sda;echo 'auto' > '/sys/block/sda/device/power/control';
+Runtime PM for port ata13 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata13/power/control';
+Runtime PM for PCI Device VMware PVSCSI SCSI Controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:00.0/power/control';
+Runtime PM for port ata4 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata4/power/control';
+Runtime PM for port ata5 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata5/power/control';
+Runtime PM for port ata6 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata6/power/control';
+Runtime PM for port ata7 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata7/power/control';
+Runtime PM for PCI Device Intel Corporation 82371AB/EB/MB PIIX4 IDE;echo 'auto' > '/sys/bus/pci/devices/0000:00:07.1/power/control';
+Runtime PM for port ata8 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata8/power/control';
+Runtime PM for port ata9 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata9/power/control';
+Runtime PM for port ata10 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata10/power/control';
+Runtime PM for port ata11 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata11/power/control';
+Runtime PM for port ata12 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata12/power/control';
+Runtime PM for port ata15 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata15/power/control';
+Runtime PM for PCI Device VMware VMXNET3 Ethernet Controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:01.0/power/control';
+Runtime PM for port ata16 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata16/power/control';
+Runtime PM for port ata18 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata18/power/control';
+Runtime PM for port ata19 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata19/power/control';
+Runtime PM for port ata30 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata30/power/control';
+Runtime PM for port ata31 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata31/power/control';
+Runtime PM for PCI Device Intel Corporation 82371AB/EB/MB PIIX4 ACPI;echo 'auto' > '/sys/bus/pci/devices/0000:00:07.3/power/control';
+Runtime PM for port ata1 of PCI device: Intel Corporation 82371AB/EB/MB PIIX4 IDE;echo 'auto' > '/sys/bus/pci/devices/0000:00:07.1/ata1/power/control';
+Runtime PM for port ata17 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata17/power/control';
+Runtime PM for port ata14 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata14/power/control';
+Runtime PM for port ata28 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata28/power/control';
+Runtime PM for port ata29 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata29/power/control';
+Runtime PM for port ata26 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata26/power/control';
+Runtime PM for port ata27 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata27/power/control';
+Runtime PM for port ata24 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata24/power/control';
+Runtime PM for port ata25 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata25/power/control';
+Runtime PM for port ata22 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata22/power/control';
+Runtime PM for port ata23 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata23/power/control';
+Runtime PM for port ata20 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata20/power/control';
+Runtime PM for port ata21 of PCI device: VMware SATA AHCI controller;echo 'auto' > '/sys/bus/pci/devices/0000:02:02.0/ata21/power/control';
+Runtime PM for port ata2 of PCI device: Intel Corporation 82371AB/EB/MB PIIX4 IDE;echo 'auto' > '/sys/bus/pci/devices/0000:00:07.1/ata2/power/control';
+____________________________________________________________________
+ *  *  *   Untunable Software Issues   *  *  *
+
+Description
+____________________________________________________________________
+ *  *  *   Optimal Tuned Software Settings   *  *  *
+
+Description
+NMI watchdog should be turned off
+
+____________________________________________________________________
+ *  *  *   Wake status of the devices   *  *  *
+
+Description;Script
+Wake-on-lan status for device ens33;echo 'enabled' > '/sys/class/net/ens33/device/power/wakeup';
