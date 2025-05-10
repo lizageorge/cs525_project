@@ -142,23 +142,24 @@ if __name__ == "__main__":
                     print(f"Warning: Couldn't extract all required data from run {run_num}")
             
             # add a row that is the avg of all the runs
-            with open(csv_path, 'a', newline='') as csvfile:
-                csv_writer = csv.writer(csvfile)
-                csv_writer.writerow([
-                    "Average",
-                    num_peers,
-                    num_blocks,
-                    sum(avg_of_runs['runtime']) / len(avg_of_runs['runtime']),
-                    "N/A",
-                    "N/A",
-                    sum(avg_of_runs['total_energy']) / len(avg_of_runs['total_energy']) if avg_of_runs['total_energy'] else 'N/A',
-                    sum(avg_of_runs['cpu_energy']) / len(avg_of_runs['cpu_energy']) if avg_of_runs['cpu_energy'] else 'N/A',
-                    sum(avg_of_runs['ram_energy']) / len(avg_of_runs['ram_energy']) if avg_of_runs['ram_energy'] else 'N/A',
-                    sum(avg_of_runs['emissions']) / len(avg_of_runs['emissions']) if avg_of_runs['emissions'] else 'N/A',
-                    sum(avg_of_runs['cpu_power']) / len(avg_of_runs['cpu_power']) if avg_of_runs['cpu_power'] else 'N/A',
-                    "N/A",
-                    "N/A"
-                ])
+            if len(avg_of_runs['runtime']) > 0:
+                with open(csv_path, 'a', newline='') as csvfile:
+                    csv_writer = csv.writer(csvfile)
+                    csv_writer.writerow([
+                        "Average",
+                        num_peers,
+                        num_blocks,
+                        sum(avg_of_runs['runtime']) / len(avg_of_runs['runtime']),
+                        "N/A",
+                        "N/A",
+                        sum(avg_of_runs['total_energy']) / len(avg_of_runs['total_energy']) if avg_of_runs['total_energy'] else 'N/A',
+                        sum(avg_of_runs['cpu_energy']) / len(avg_of_runs['cpu_energy']) if avg_of_runs['cpu_energy'] else 'N/A',
+                        sum(avg_of_runs['ram_energy']) / len(avg_of_runs['ram_energy']) if avg_of_runs['ram_energy'] else 'N/A',
+                        sum(avg_of_runs['emissions']) / len(avg_of_runs['emissions']) if avg_of_runs['emissions'] else 'N/A',
+                        sum(avg_of_runs['cpu_power']) / len(avg_of_runs['cpu_power']) if avg_of_runs['cpu_power'] else 'N/A',
+                        "N/A",
+                        "N/A"
+                    ])
             
 
     

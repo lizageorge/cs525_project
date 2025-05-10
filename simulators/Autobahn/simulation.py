@@ -1,3 +1,5 @@
+import os
+import sys
 import time
 import random
 import hashlib
@@ -7,6 +9,9 @@ import threading
 from collections import deque
 import argparse
 
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
+from simulators.common import run_simulation
 
 # Configuration
 BLOCK_TIME = 5  # seconds between blocks
@@ -875,15 +880,4 @@ if __name__ == "__main__":
     start_time = time.time()
 
     simulator = AutobahnSimulator(args.num_peers, args.min_final_chain_length)
-    simulator.initialize()
-    simulator.run()
-
-    end_time = time.time()
-
-    start_time = time.strftime(
-        "%Y-%m-%d %H:%M:%S", time.localtime(start_time)
-    )
-    end_time = time.strftime(
-        "%Y-%m-%d %H:%M:%S", time.localtime(end_time)
-    )
-    print(f"Simulation started at {start_time} and ended at {end_time}")
+    run_simulation(simulator)

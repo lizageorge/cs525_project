@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 import random
 import hashlib
@@ -8,9 +9,8 @@ import threading
 from collections import deque
 import argparse
 
-from codecarbon import OfflineEmissionsTracker
-
-
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
+from simulators.common import run_simulation
 
 # Configuration
 ROUND_TIME = 5  # seconds between rounds (as suggested in Section 6.3)
@@ -649,6 +649,7 @@ class PoLSimulator:
 
 
 # Run the simulation
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run a Proof of Luck blockchain simulation.")
     parser.add_argument(
@@ -662,32 +663,6 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-
-    #get current directory of this script
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    output_dir = os.path.join(current_dir, "emissions_outputs")
-    tracker = OfflineEmissionsTracker(country_iso_code="USA", measure_power_secs=5, log_level="error",output_dir=current_dir, output_file=f"emissions_{args.num_peers}_p_{args.min_final_chain_length}_c.csv", allow_multiple_runs=False)
-    tracker.start()
-
-    start_time = time.time()
-
+    # Create and run the simulator
     simulator = PoLSimulator(args.num_peers, args.min_final_chain_length)
-    simulator.initialize()
-    simulator.run()
-
-    end_time = time.time()
-
-    start_time = time.strftime(
-        "%Y-%m-%d %H:%M:%S", time.localtime(start_time)
-    )
-    end_time = time.strftime(
-        "%Y-%m-%d %H:%M:%S", time.localtime(end_time)
-    )
-    print(f"Simulation started at {start_time} and ended at {end_time}")
-
-    tracker.stop()
-    print(f"Total energy consumed: {tracker.final_emissions_data.energy_consumed}")
-    print(f"Total CPU energy: {tracker.final_emissions_data.cpu_energy}")
-    print(f"Total RAM energy: {tracker.final_emissions_data.ram_energy}")
-    print(f"Total emissions: {tracker.final_emissions_data.emissions}")
-    print(f"CPU power: {tracker.final_emissions_data.cpu_power}")
+    run_simulation(simulator)

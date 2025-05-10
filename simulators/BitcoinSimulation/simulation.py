@@ -1,3 +1,5 @@
+import os
+import sys
 import time
 import random
 import hashlib
@@ -7,8 +9,8 @@ from collections import deque
 import threading
 import argparse
 
-from codecarbon import OfflineEmissionsTracker
-
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
+from simulators.common import run_simulation
 
 # Configuration
 NUM_PEERS = 20
@@ -490,13 +492,13 @@ class Peer:
 
 class PoWSimulator:
     """Manages the entire PoW simulation"""
-    def __init__(self, num_peers: int, simulation_min_blocks: int):
+    def __init__(self, num_peers: int, min_final_chain_length: int):
         self.message_bus = MessageBus(num_peers)
         self.peers = []
         self.current_round = 0
         self.running = False
         self.start_time = None
-        self.simulation_min_blocks = simulation_min_blocks  # Set the simulation time
+        self.min_final_chain_length = min_final_chain_length  # Set the simulation time
         self.num_peers = num_peers  # Set the number of peers
         self.lock = threading.Lock()  # Lock for thread safety
     
@@ -596,7 +598,7 @@ class PoWSimulator:
             
             # Check if the simulation should end
             min_blockchain_length = min(len(peer.blockchain) for peer in self.peers)
-            if min_blockchain_length >= self.simulation_min_blocks:
+            if min_blockchain_length >= self.min_final_chain_length:
                 print(
                     f"\nSimulation ending: Blockchain length reached ({min_blockchain_length} blocks)"
                 )
@@ -691,22 +693,8 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-
-    tracker = OfflineEmissionsTracker(country_iso_code="USA", measure_power_secs=5, log_level="error",output_dir="emissions_outputs", output_file=f"emissions_{args.num_peers}_p_{args.min_final_chain_length}_c.csv", allow_multiple_runs=False)
-    tracker.start()
     start_time = time.time()
 
-    # Initialize the Bitcoin simulator with the specified number of peers and simulation time
     simulator = PoWSimulator(args.num_peers, args.min_final_chain_length)
-    simulator.initialize()
-    simulator.run()
-
-    end_time = time.time()
-
-    start_time_str = time.strftime(
-        "%Y-%m-%d %H:%M:%S", time.localtime(start_time)
-    )
-    end_time_str = time.strftime(
-        "%Y-%m-%d %H:%M:%S", time.localtime(end_time)
-    )
-    print(f"Simulation started at {start_time_str} and ended at {end_time_str}")
+    run_simulation(simulator)
+    
