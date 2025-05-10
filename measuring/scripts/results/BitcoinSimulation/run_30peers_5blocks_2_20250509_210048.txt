@@ -1,0 +1,301 @@
+Initialized 30 peers.
+Starting simulation...
+[Peer 19] Mined block 0 with hash 00000182
+[Peer 19] Finalized block 0 with hash 00000182
+[Peer 17] Mined block 0 with hash 00000036
+[Peer 17] Finalized block 0 with hash 00000036
+
+Status at 30.1s:
+Average blockchain height: -0.9
+Heights: min=-1, max=0
+Peer agreement: 93.3%
+[Peer 0] Finalized block 0 with hash 00000182
+[Peer 1] Finalized block 0 with hash 00000182
+[Peer 2] Finalized block 0 with hash 00000182
+[Peer 3] Finalized block 0 with hash 00000182
+[Peer 4] Finalized block 0 with hash 00000182
+[Peer 5] Finalized block 0 with hash 00000182
+[Peer 6] Finalized block 0 with hash 00000182
+[Peer 7] Finalized block 0 with hash 00000182
+[Peer 8] Finalized block 0 with hash 00000182
+[Peer 9] Finalized block 0 with hash 00000182
+[Peer 10] Finalized block 0 with hash 00000182
+[Peer 11] Finalized block 0 with hash 00000182
+[Peer 12] Finalized block 0 with hash 00000182
+[Peer 13] Finalized block 0 with hash 00000182
+[Peer 14] Finalized block 0 with hash 00000182
+[Peer 15] Finalized block 0 with hash 00000182
+[Peer 16] Finalized block 0 with hash 00000182
+[Peer 18] Finalized block 0 with hash 00000182
+[Peer 20] Finalized block 0 with hash 00000182
+[Peer 21] Finalized block 0 with hash 00000182
+[Peer 22] Finalized block 0 with hash 00000182
+[Peer 23] Finalized block 0 with hash 00000182
+[Peer 24] Finalized block 0 with hash 00000182
+[Peer 25] Finalized block 0 with hash 00000182
+[Peer 26] Finalized block 0 with hash 00000182
+[Peer 27] Finalized block 0 with hash 00000182
+[Peer 28] Finalized block 0 with hash 00000182
+[Peer 29] Finalized block 0 with hash 00000182
+[Peer 13] Mined block 1 with hash 00000c15
+[Peer 13] Finalized block 1 with hash 00000c15
+
+Status at 31.1s:
+Average blockchain height: 0.0
+Heights: min=0, max=1
+Peer agreement: 96.7%
+[Peer 9] Finalized block 1 with hash 00000c15
+[Peer 22] Finalized block 1 with hash 00000c15
+[Peer 4] Finalized block 1 with hash 00000c15
+[Peer 6] Finalized block 1 with hash 00000c15
+[Peer 24] Finalized block 1 with hash 00000c15
+[Peer 25] Finalized block 1 with hash 00000c15
+[Peer 3] Finalized block 1 with hash 00000c15
+[Peer 28] Finalized block 1 with hash 00000c15
+[Peer 5] Finalized block 1 with hash 00000c15
+[Peer 7] Finalized block 1 with hash 00000c15
+[Peer 10] Finalized block 1 with hash 00000c15
+[Peer 18] Finalized block 1 with hash 00000c15
+[Peer 21] Finalized block 1 with hash 00000c15
+[Peer 27] Finalized block 1 with hash 00000c15
+[Peer 29] Finalized block 1 with hash 00000c15
+[Peer 12] Finalized block 1 with hash 00000c15
+[Peer 16] Finalized block 1 with hash 00000c15
+[Peer 23] Finalized block 1 with hash 00000c15
+[Peer 8] Finalized block 1 with hash 00000c15
+[Peer 15] Finalized block 1 with hash 00000c15
+[Peer 17] Reorganizing to a longer chain with height 1
+[Peer 17] Finalized block 0 with hash 00000182
+[Peer 17] Finalized block 1 with hash 00000c15
+[Peer 17] Finalized block 1 with hash 00000c15
+[Peer 26] Finalized block 1 with hash 00000c15
+[Peer 1] Finalized block 1 with hash 00000c15
+[Peer 11] Finalized block 1 with hash 00000c15
+[Peer 0] Finalized block 1 with hash 00000c15
+[Peer 2] Finalized block 1 with hash 00000c15
+[Peer 14] Finalized block 1 with hash 00000c15
+[Peer 19] Finalized block 1 with hash 00000c15
+[Peer 20] Finalized block 1 with hash 00000c15
+[Peer 17] Mined block 2 with hash 00000624
+[Peer 17] Finalized block 2 with hash 00000624
+[Peer 22] Mined block 2 with hash 000006ee
+[Peer 22] Finalized block 2 with hash 000006ee
+
+Status at 70.6s:
+Average blockchain height: 1.1
+Heights: min=1, max=2
+Peer agreement: 93.3%
+[Peer 0] Finalized block 2 with hash 00000624
+[Peer 1] Finalized block 2 with hash 00000624
+[Peer 2] Finalized block 2 with hash 00000624
+[Peer 3] Finalized block 2 with hash 00000624
+[Peer 4] Finalized block 2 with hash 00000624
+[Peer 5] Finalized block 2 with hash 00000624
+[Peer 6] Finalized block 2 with hash 00000624
+[Peer 7] Finalized block 2 with hash 00000624
+[Peer 8] Finalized block 2 with hash 00000624
+[Peer 9] Finalized block 2 with hash 00000624
+[Peer 10] Finalized block 2 with hash 00000624
+[Peer 11] Finalized block 2 with hash 00000624
+[Peer 12] Finalized block 2 with hash 00000624
+[Peer 13] Finalized block 2 with hash 00000624
+[Peer 14] Finalized block 2 with hash 00000624
+[Peer 15] Finalized block 2 with hash 00000624
+[Peer 16] Finalized block 2 with hash 00000624
+[Peer 18] Finalized block 2 with hash 00000624
+[Peer 19] Finalized block 2 with hash 00000624
+[Peer 20] Finalized block 2 with hash 00000624
+[Peer 21] Finalized block 2 with hash 00000624
+[Peer 23] Finalized block 2 with hash 00000624
+[Peer 24] Finalized block 2 with hash 00000624
+[Peer 25] Finalized block 2 with hash 00000624
+[Peer 26] Finalized block 2 with hash 00000624
+[Peer 27] Finalized block 2 with hash 00000624
+[Peer 28] Finalized block 2 with hash 00000624
+[Peer 29] Finalized block 2 with hash 00000624
+[Peer 9] Mined block 3 with hash 00000a1f
+[Peer 9] Finalized block 3 with hash 00000a1f
+
+Status at 71.8s:
+Average blockchain height: 2.0
+Heights: min=2, max=3
+Peer agreement: 96.7%
+[Peer 0] Finalized block 3 with hash 00000a1f
+[Peer 25] Finalized block 3 with hash 00000a1f
+[Peer 7] Finalized block 3 with hash 00000a1f
+[Peer 3] Finalized block 3 with hash 00000a1f
+[Peer 10] Finalized block 3 with hash 00000a1f
+[Peer 12] Finalized block 3 with hash 00000a1f
+[Peer 19] Finalized block 3 with hash 00000a1f
+[Peer 23] Finalized block 3 with hash 00000a1f
+[Peer 13] Finalized block 3 with hash 00000a1f
+[Peer 17] Finalized block 3 with hash 00000a1f
+[Peer 15] Finalized block 3 with hash 00000a1f
+[Peer 29] Finalized block 3 with hash 00000a1f
+[Peer 1] Finalized block 3 with hash 00000a1f
+[Peer 6] Finalized block 3 with hash 00000a1f
+[Peer 22] Reorganizing to a longer chain with height 3
+[Peer 22] Finalized block 0 with hash 00000182
+[Peer 22] Finalized block 1 with hash 00000c15
+[Peer 22] Finalized block 2 with hash 000006ee
+[Peer 22] Finalized block 1 with hash 00000c15
+[Peer 22] Finalized block 2 with hash 000006ee
+[Peer 22] Finalized block 2 with hash 00000624
+[Peer 22] Finalized block 3 with hash 00000a1f
+[Peer 22] Finalized block 3 with hash 00000a1f
+[Peer 27] Finalized block 3 with hash 00000a1f
+[Peer 2] Finalized block 3 with hash 00000a1f
+[Peer 18] Finalized block 3 with hash 00000a1f
+[Peer 24] Finalized block 3 with hash 00000a1f
+[Peer 16] Finalized block 3 with hash 00000a1f
+[Peer 4] Finalized block 3 with hash 00000a1f
+[Peer 8] Finalized block 3 with hash 00000a1f
+[Peer 20] Finalized block 3 with hash 00000a1f
+[Peer 28] Finalized block 3 with hash 00000a1f
+[Peer 14] Finalized block 3 with hash 00000a1f
+[Peer 5] Finalized block 3 with hash 00000a1f
+[Peer 11] Finalized block 3 with hash 00000a1f
+[Peer 21] Finalized block 3 with hash 00000a1f
+[Peer 26] Finalized block 3 with hash 00000a1f
+[Peer 22] Mined block 4 with hash 0000024f
+[Peer 22] Finalized block 4 with hash 0000024f
+[Peer 9] Mined block 4 with hash 000003a5
+[Peer 9] Finalized block 4 with hash 000003a5
+
+Status at 109.8s:
+Average blockchain height: 3.1
+Heights: min=3, max=4
+Peer agreement: 93.3%
+[Peer 0] Finalized block 4 with hash 0000024f
+[Peer 1] Finalized block 4 with hash 0000024f
+[Peer 2] Finalized block 4 with hash 0000024f
+[Peer 3] Finalized block 4 with hash 0000024f
+[Peer 4] Finalized block 4 with hash 0000024f
+[Peer 5] Finalized block 4 with hash 0000024f
+[Peer 6] Finalized block 4 with hash 0000024f
+[Peer 7] Finalized block 4 with hash 0000024f
+[Peer 8] Finalized block 4 with hash 0000024f
+[Peer 10] Finalized block 4 with hash 0000024f
+[Peer 11] Finalized block 4 with hash 0000024f
+[Peer 12] Finalized block 4 with hash 0000024f
+[Peer 13] Finalized block 4 with hash 0000024f
+[Peer 14] Finalized block 4 with hash 0000024f
+[Peer 15] Finalized block 4 with hash 0000024f
+[Peer 16] Finalized block 4 with hash 0000024f
+[Peer 17] Finalized block 4 with hash 0000024f
+[Peer 18] Finalized block 4 with hash 0000024f
+[Peer 19] Finalized block 4 with hash 0000024f
+[Peer 20] Finalized block 4 with hash 0000024f
+[Peer 21] Finalized block 4 with hash 0000024f
+[Peer 23] Finalized block 4 with hash 0000024f
+[Peer 24] Finalized block 4 with hash 0000024f
+[Peer 25] Finalized block 4 with hash 0000024f
+[Peer 26] Finalized block 4 with hash 0000024f
+[Peer 27] Finalized block 4 with hash 0000024f
+[Peer 28] Finalized block 4 with hash 0000024f
+[Peer 29] Finalized block 4 with hash 0000024f
+
+Simulation ending: Blockchain length reached (5 blocks)
+
+===== SIMULATION RESULTS =====
+Ran for 109.85 seconds
+Maximum blockchain height: 9 blocks (peer 22)
+Minimum blockchain height: 5 blocks (peer 0)
+Peers are at different heights:
+  9 blocks: 1 peers (3.3%)
+  6 blocks: 1 peers (3.3%)
+  5 blocks: 28 peers (93.3%)
+Peer 0: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 1: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 2: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 3: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 4: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 5: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 6: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 7: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 8: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 9: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 10: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 11: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 12: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 13: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 14: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 15: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 16: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 17: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000c15 (miner 13)
+Peer 18: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 19: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 20: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 21: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 23: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 24: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 25: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 26: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 27: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 28: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peer 29: Different block at height 2
+  Expected: 000006ee (miner 22)
+  Found: 00000624 (miner 17)
+Peers have different views of the blockchain
+Simulation started at 2025-05-09 21:00:51 and ended at 2025-05-09 21:02:40
+Total energy consumed: 0.001291954110495343
+Total CPU energy: 0.0010813339470481206
+Total RAM energy: 0.0002106201634472222
+Total emissions: 0.0004773421610670459
+CPU power: 30.525000000000002
