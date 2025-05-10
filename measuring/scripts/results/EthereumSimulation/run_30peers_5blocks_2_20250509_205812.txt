@@ -1,0 +1,76 @@
+Initialized 30 peers with total stake: 1729.56
+Stake distribution:
+Peer 0: 36.62 (2.1%)
+Peer 1: 52.31 (3.0%)
+Peer 2: 15.92 (0.9%)
+Peer 3: 11.94 (0.7%)
+Peer 4: 24.27 (1.4%)
+Peer 5: 87.99 (5.1%)
+Peer 6: 79.21 (4.6%)
+Peer 7: 96.60 (5.6%)
+Peer 8: 78.77 (4.6%)
+Peer 9: 65.99 (3.8%)
+Peer 10: 93.05 (5.4%)
+Peer 11: 65.66 (3.8%)
+Peer 12: 48.00 (2.8%)
+Peer 13: 15.35 (0.9%)
+Peer 14: 59.66 (3.4%)
+Peer 15: 43.04 (2.5%)
+Peer 16: 37.57 (2.2%)
+Peer 17: 51.03 (3.0%)
+Peer 18: 23.46 (1.4%)
+Peer 19: 84.47 (4.9%)
+Peer 20: 76.51 (4.4%)
+Peer 21: 25.10 (1.5%)
+Peer 22: 17.22 (1.0%)
+Peer 23: 96.74 (5.6%)
+Peer 24: 70.69 (4.1%)
+Peer 25: 75.46 (4.4%)
+Peer 26: 98.85 (5.7%)
+Peer 27: 35.78 (2.1%)
+Peer 28: 90.93 (5.3%)
+Peer 29: 71.39 (4.1%)
+
+Round 1: Peer 24 selected as validator for height 0
+
+Round 2: Peer 9 selected as validator for height 1
+
+Status at 10.0s:
+Average blockchain height: 0.0
+Heights: min=0, max=0
+Peer 15 has 0 pending blocks
+Votes for current height blocks:
+  Validator 9: votes seen by peers: [1]
+  Consensus threshold: 882.07 of 1729.56 total stake
+
+Round 3: Peer 23 selected as validator for height 2
+
+Status at 20.0s:
+Average blockchain height: 2.0
+Heights: min=2, max=2
+Peer 28 has 0 pending blocks
+
+Round 4: Peer 25 selected as validator for height 3
+
+Round 5: Peer 23 selected as validator for height 4
+
+Simulation ending: Minimum blockchain length reached (5 blocks)
+
+===== SIMULATION RESULTS =====
+Ran for 25.31 seconds
+Maximum blockchain height: 5 for peer 29
+Minimum blockchain height: 5 for peer 0
+All peers are in sync!
+All blockchains match till minimum heights!
+
+Block validator distribution:
+Peer 23: 60 blocks (1200.0%) - Stake: 5.6%
+Peer 24: 30 blocks (600.0%) - Stake: 4.1%
+Peer 9: 30 blocks (600.0%) - Stake: 3.8%
+Peer 25: 30 blocks (600.0%) - Stake: 4.4%
+Simulation started at 2025-05-09 20:58:14 and ended at 2025-05-09 20:58:39
+Total energy consumed: 0.00015726341778888865
+Total CPU energy: 7.863412148888863e-05
+Total RAM energy: 7.862929630000003e-05
+Total emissions: 5.810458676071406e-05
+CPU power: 10.0
