@@ -1,3 +1,4 @@
+import os
 import time
 import random
 import hashlib
@@ -662,8 +663,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
 
-
-    tracker = OfflineEmissionsTracker(country_iso_code="USA", measure_power_secs=5, log_level="error")
+    #get current directory of this script
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    output_dir = os.path.join(current_dir, "emissions_outputs")
+    tracker = OfflineEmissionsTracker(country_iso_code="USA", measure_power_secs=5, log_level="error",output_dir=current_dir, output_file=f"emissions_{args.num_peers}_p_{args.min_final_chain_length}_c.csv", allow_multiple_runs=False)
     tracker.start()
 
     start_time = time.time()
@@ -681,4 +684,10 @@ if __name__ == "__main__":
         "%Y-%m-%d %H:%M:%S", time.localtime(end_time)
     )
     print(f"Simulation started at {start_time} and ended at {end_time}")
+
     tracker.stop()
+    print(f"Total energy consumed: {tracker.final_emissions_data.energy_consumed}")
+    print(f"Total CPU energy: {tracker.final_emissions_data.cpu_energy}")
+    print(f"Total RAM energy: {tracker.final_emissions_data.ram_energy}")
+    print(f"Total emissions: {tracker.final_emissions_data.emissions}")
+    print(f"CPU power: {tracker.final_emissions_data.cpu_power}")

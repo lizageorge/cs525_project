@@ -692,7 +692,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
 
-    tracker = OfflineEmissionsTracker(country_iso_code="USA", measure_power_secs=5, log_level="error")
+    tracker = OfflineEmissionsTracker(country_iso_code="USA", measure_power_secs=5, log_level="error",output_dir="emissions_outputs", output_file=f"emissions_{args.num_peers}_p_{args.min_final_chain_length}_c.csv", allow_multiple_runs=False)
     tracker.start()
     start_time = time.time()
 

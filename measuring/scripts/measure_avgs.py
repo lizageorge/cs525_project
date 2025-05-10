@@ -4,8 +4,9 @@ import re
 import csv
 import datetime
 
-NUM_PEERS = [ 100]
-NUM_BLOCKS = [5, 10, 50]
+NUM_PEERS = [ 30 ]
+NUM_BLOCKS = [5, 10]
+# NUM_BLOCKS = [5, 10, 50]
 
 
 def extract_simulation_data(output_text):
@@ -25,6 +26,24 @@ def extract_simulation_data(output_text):
     
     data['peers_in_sync'] = "All peers are in sync!" in output_text
     data['blockchains_match'] = "All blockchains match till minimum heights!" in output_text
+
+     # Extract energy and emissions data
+    energy_match = re.search(r"Total energy consumed: ([\d\.e\-]+)", output_text)
+    if energy_match:
+        data['total_energy'] = float(energy_match.group(1))
+    
+    cpu_energy_match = re.search(r"Total CPU energy: ([\d\.e\-]+)", output_text)
+    if cpu_energy_match:
+        data['cpu_energy'] = float(cpu_energy_match.group(1))
+    
+    ram_energy_match = re.search(r"Total RAM energy: ([\d\.e\-]+)", output_text)
+    if ram_energy_match:
+        data['ram_energy'] = float(ram_energy_match.group(1))
+    
+    emissions_match = re.search(r"Total emissions: ([\d\.e\-]+)", output_text)
+    if emissions_match:
+        data['emissions'] = float(emissions_match.group(1))
+    
     
     return data
 
@@ -42,11 +61,15 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    OUTPUT_DIR = os.path.join("results", f"{args.sim.split('/')[-1]}")
+    sim_name = args.sim.split("/")[-1]
+    if sim_name == "":
+        sim_name = args.sim.split("/")[-2]
+    print(f"Running simulations for {sim_name}")
+    OUTPUT_DIR = os.path.join("results", f"{sim_name}")
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR)
     
-    csv_path = os.path.join(OUTPUT_DIR, f"{args.sim.split('/')[-1]}_results.csv")
+    csv_path = os.path.join(OUTPUT_DIR, f"{sim_name}_results.csv")
     with open(csv_path, 'w', newline='') as csvfile:
         csv_writer = csv.writer(csvfile)
         csv_writer.writerow(['Run', 'Num Peers', 'Chain Length', 'Runtime', 'Interval Start', 'Interval End', 'Peers In Sync', 'Blockchains Match'])
