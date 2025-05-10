@@ -5,7 +5,11 @@ import csv
 import datetime
 
 NUM_PEERS = [ 30 ]
-NUM_BLOCKS = [5, 10, 50]
+<<<<<<< HEAD
+NUM_BLOCKS = [50]
+=======
+NUM_BLOCKS = [ 50]
+>>>>>>> 74a5ba9086de99a4e39c05dc2cfa60d6af31bcc2
 
 
 def extract_simulation_data(output_text):

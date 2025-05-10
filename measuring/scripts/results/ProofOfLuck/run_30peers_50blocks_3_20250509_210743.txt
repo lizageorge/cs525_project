@@ -1,0 +1,144 @@
+Initialized 30 nodes
+
+Status at 10.0s:
+Heights: min=1, max=1
+Chain luck values: min=0.9510, max=0.9893, avg=0.9818
+Node 1 round status: in progress
+
+Status at 20.0s:
+Heights: min=3, max=3
+Chain luck values: min=1.4889, max=2.9553, avg=2.8082
+Node 8 round status: in progress
+
+Status at 30.0s:
+Heights: min=5, max=5
+Chain luck values: min=2.3407, max=4.7326, avg=4.4487
+Node 23 round status: in progress
+
+Status at 40.0s:
+Heights: min=7, max=8
+Chain luck values: min=3.5934, max=6.4334, avg=5.9378
+Node 16 round status: in progress
+
+Status at 50.0s:
+Heights: min=9, max=9
+Chain luck values: min=4.2326, max=8.2903, avg=7.3104
+Node 3 round status: in progress
+
+Status at 60.0s:
+Heights: min=11, max=11
+Chain luck values: min=5.1053, max=9.8111, avg=8.6684
+Node 7 round status: in progress
+
+Status at 70.0s:
+Heights: min=13, max=13
+Chain luck values: min=6.1464, max=11.1006, avg=9.9171
+Node 19 round status: in progress
+
+Status at 80.0s:
+Heights: min=15, max=15
+Chain luck values: min=7.7992, max=12.9579, avg=11.1779
+Node 27 round status: in progress
+
+Status at 90.1s:
+Heights: min=17, max=18
+Chain luck values: min=8.8333, max=14.3192, avg=12.2443
+Node 7 round status: in progress
+
+Status at 100.1s:
+Heights: min=19, max=19
+Chain luck values: min=9.5644, max=15.7813, avg=13.5024
+Node 4 round status: in progress
+
+Status at 110.1s:
+Heights: min=21, max=21
+Chain luck values: min=10.1493, max=16.9085, avg=14.5877
+Node 16 round status: in progress
+
+Status at 120.1s:
+Heights: min=23, max=23
+Chain luck values: min=11.4556, max=18.3231, avg=15.7684
+Node 11 round status: in progress
+
+Status at 130.1s:
+Heights: min=25, max=26
+Chain luck values: min=12.4704, max=20.0935, avg=16.8148
+Node 13 round status: in progress
+
+Status at 140.1s:
+Heights: min=27, max=28
+Chain luck values: min=12.9609, max=21.9812, avg=17.9311
+Node 2 round status: in progress
+
+Status at 150.1s:
+Heights: min=29, max=29
+Chain luck values: min=13.8060, max=23.1714, avg=18.9490
+Node 6 round status: in progress
+
+Status at 160.1s:
+Heights: min=31, max=31
+Chain luck values: min=14.7304, max=24.4226, avg=19.9581
+Node 24 round status: in progress
+
+Status at 170.1s:
+Heights: min=33, max=33
+Chain luck values: min=16.2439, max=25.9433, avg=20.9606
+Node 8 round status: in progress
+
+Status at 180.1s:
+Heights: min=35, max=36
+Chain luck values: min=17.1364, max=27.5793, avg=21.9971
+Node 23 round status: in progress
+
+Status at 190.1s:
+Heights: min=37, max=38
+Chain luck values: min=18.0193, max=28.1729, avg=23.1407
+Node 0 round status: in progress
+
+Status at 200.1s:
+Heights: min=39, max=39
+Chain luck values: min=18.4205, max=29.1318, avg=24.0574
+Node 25 round status: in progress
+
+Status at 210.1s:
+Heights: min=41, max=42
+Chain luck values: min=19.3668, max=30.0352, avg=25.1304
+Node 25 round status: in progress
+
+Status at 220.1s:
+Heights: min=43, max=44
+Chain luck values: min=21.0978, max=30.8821, avg=26.1331
+Node 18 round status: in progress
+
+Status at 230.1s:
+Heights: min=45, max=46
+Chain luck values: min=21.6241, max=32.0560, avg=27.2302
+Node 26 round status: in progress
+
+Status at 240.1s:
+Heights: min=47, max=48
+Chain luck values: min=22.3163, max=33.5037, avg=28.1837
+Node 9 round status: in progress
+
+Simulation ending: Minimum blockchain length reached (50 blocks)
+Final synchronization took 0.26 seconds
+
+===== SIMULATION RESULTS =====
+Ran for 247.31 seconds
+Maximum blockchain height: 50 for node 29
+Minimum blockchain height: 50 for node 0
+Maximum chain luck: 34.9176 for node 29
+All peers are in sync!
+All blockchains match till minimum heights!
+
+Block miner distribution:
+Node 3: 810 blocks (1653.1%) - Expected: 3.3%
+Node 6: 450 blocks (918.4%) - Expected: 3.3%
+Node 10: 150 blocks (306.1%) - Expected: 3.3%
+Node 5: 60 blocks (122.4%) - Expected: 3.3%
+Simulation started at 2025-05-09 21:07:45 and ended at 2025-05-09 21:11:53
+Total energy consumed: 0.0013523524773718114
+Total CPU energy: 0.0007321727131607002
+Total RAM energy: 0.0006201797642111114
+Total emissions: 0.0004996577268719952
+CPU power: 10.0
