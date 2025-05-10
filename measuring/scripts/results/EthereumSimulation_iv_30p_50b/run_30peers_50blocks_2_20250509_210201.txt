@@ -1,0 +1,297 @@
+Initialized 30 peers with total stake: 1716.80
+Stake distribution:
+Peer 0: 48.12 (2.8%)
+Peer 1: 42.69 (2.5%)
+Peer 2: 95.87 (5.6%)
+Peer 3: 63.00 (3.7%)
+Peer 4: 14.11 (0.8%)
+Peer 5: 62.47 (3.6%)
+Peer 6: 59.45 (3.5%)
+Peer 7: 56.01 (3.3%)
+Peer 8: 69.92 (4.1%)
+Peer 9: 58.65 (3.4%)
+Peer 10: 92.82 (5.4%)
+Peer 11: 95.09 (5.5%)
+Peer 12: 11.83 (0.7%)
+Peer 13: 59.18 (3.4%)
+Peer 14: 45.14 (2.6%)
+Peer 15: 53.05 (3.1%)
+Peer 16: 67.71 (3.9%)
+Peer 17: 47.06 (2.7%)
+Peer 18: 61.84 (3.6%)
+Peer 19: 14.80 (0.9%)
+Peer 20: 75.70 (4.4%)
+Peer 21: 69.26 (4.0%)
+Peer 22: 49.72 (2.9%)
+Peer 23: 73.15 (4.3%)
+Peer 24: 99.89 (5.8%)
+Peer 25: 10.02 (0.6%)
+Peer 26: 75.96 (4.4%)
+Peer 27: 17.32 (1.0%)
+Peer 28: 56.88 (3.3%)
+Peer 29: 70.12 (4.1%)
+
+Round 1: Peer 23 selected as validator for height 0
+
+Status at 10.0s:
+Average blockchain height: 0.0
+Heights: min=0, max=0
+Peer 11 has 0 pending blocks
+
+Round 2: Peer 8 selected as validator for height 1
+
+Round 3: Peer 21 selected as validator for height 2
+
+Status at 20.0s:
+Average blockchain height: 2.0
+Heights: min=2, max=2
+Peer 14 has 0 pending blocks
+
+Round 4: Peer 23 selected as validator for height 3
+
+Round 5: Peer 21 selected as validator for height 4
+
+Status at 30.0s:
+Average blockchain height: 4.0
+Heights: min=4, max=4
+Peer 17 has 0 pending blocks
+
+Round 6: Peer 8 selected as validator for height 5
+
+Round 7: Peer 5 selected as validator for height 6
+
+Status at 40.0s:
+Average blockchain height: 6.0
+Heights: min=6, max=6
+Peer 23 has 0 pending blocks
+
+Round 8: Peer 24 selected as validator for height 7
+
+Round 9: Peer 14 selected as validator for height 8
+
+Status at 50.0s:
+Average blockchain height: 8.0
+Heights: min=8, max=8
+Peer 14 has 0 pending blocks
+
+Round 10: Peer 10 selected as validator for height 9
+
+Round 11: Peer 24 selected as validator for height 10
+
+Status at 60.0s:
+Average blockchain height: 10.0
+Heights: min=10, max=10
+Peer 29 has 0 pending blocks
+
+Round 12: Peer 24 selected as validator for height 11
+
+Round 13: Peer 2 selected as validator for height 12
+
+Status at 70.0s:
+Average blockchain height: 12.0
+Heights: min=12, max=12
+Peer 13 has 0 pending blocks
+
+Round 14: Peer 21 selected as validator for height 13
+
+Round 15: Peer 21 selected as validator for height 14
+
+Status at 80.1s:
+Average blockchain height: 14.0
+Heights: min=14, max=14
+Peer 4 has 0 pending blocks
+
+Round 16: Peer 7 selected as validator for height 15
+
+Round 17: Peer 2 selected as validator for height 16
+
+Status at 90.1s:
+Average blockchain height: 16.0
+Heights: min=16, max=16
+Peer 12 has 0 pending blocks
+
+Round 18: Peer 23 selected as validator for height 17
+
+Round 19: Peer 20 selected as validator for height 18
+
+Status at 100.1s:
+Average blockchain height: 18.0
+Heights: min=18, max=18
+Peer 25 has 0 pending blocks
+
+Round 20: Peer 29 selected as validator for height 19
+
+Round 21: Peer 16 selected as validator for height 20
+
+Status at 110.1s:
+Average blockchain height: 20.0
+Heights: min=20, max=20
+Peer 23 has 0 pending blocks
+
+Round 22: Peer 15 selected as validator for height 21
+
+Round 23: Peer 26 selected as validator for height 22
+
+Status at 120.1s:
+Average blockchain height: 22.0
+Heights: min=22, max=22
+Peer 7 has 0 pending blocks
+
+Round 24: Peer 23 selected as validator for height 23
+
+Round 25: Peer 11 selected as validator for height 24
+
+Status at 130.1s:
+Average blockchain height: 24.0
+Heights: min=24, max=24
+Peer 13 has 0 pending blocks
+
+Round 26: Peer 24 selected as validator for height 25
+
+Round 27: Peer 3 selected as validator for height 26
+
+Status at 140.1s:
+Average blockchain height: 26.0
+Heights: min=26, max=26
+Peer 28 has 0 pending blocks
+
+Round 28: Peer 15 selected as validator for height 27
+
+Round 29: Peer 8 selected as validator for height 28
+
+Status at 150.1s:
+Average blockchain height: 28.0
+Heights: min=28, max=28
+Peer 10 has 0 pending blocks
+
+Round 30: Peer 24 selected as validator for height 29
+
+Round 31: Peer 24 selected as validator for height 30
+
+Status at 160.1s:
+Average blockchain height: 30.0
+Heights: min=30, max=30
+Peer 11 has 0 pending blocks
+
+Round 32: Peer 18 selected as validator for height 31
+
+Round 33: Peer 26 selected as validator for height 32
+
+Status at 170.1s:
+Average blockchain height: 32.0
+Heights: min=32, max=32
+Peer 9 has 0 pending blocks
+
+Round 34: Peer 8 selected as validator for height 33
+
+Round 35: Peer 18 selected as validator for height 34
+
+Status at 180.1s:
+Average blockchain height: 34.0
+Heights: min=34, max=34
+Peer 18 has 0 pending blocks
+
+Round 36: Peer 13 selected as validator for height 35
+
+Round 37: Peer 3 selected as validator for height 36
+
+Status at 190.1s:
+Average blockchain height: 36.0
+Heights: min=36, max=36
+Peer 28 has 0 pending blocks
+
+Round 38: Peer 12 selected as validator for height 37
+
+Round 39: Peer 10 selected as validator for height 38
+
+Status at 200.1s:
+Average blockchain height: 38.0
+Heights: min=38, max=38
+Peer 3 has 0 pending blocks
+
+Round 40: Peer 28 selected as validator for height 39
+
+Round 41: Peer 9 selected as validator for height 40
+
+Status at 210.1s:
+Average blockchain height: 40.0
+Heights: min=40, max=40
+Peer 28 has 0 pending blocks
+
+Round 42: Peer 16 selected as validator for height 41
+
+Round 43: Peer 7 selected as validator for height 42
+
+Status at 220.1s:
+Average blockchain height: 42.0
+Heights: min=42, max=42
+Peer 12 has 0 pending blocks
+
+Round 44: Peer 13 selected as validator for height 43
+
+Round 45: Peer 17 selected as validator for height 44
+
+Status at 230.1s:
+Average blockchain height: 44.0
+Heights: min=44, max=44
+Peer 28 has 0 pending blocks
+
+Round 46: Peer 28 selected as validator for height 45
+
+Round 47: Peer 18 selected as validator for height 46
+
+Status at 240.1s:
+Average blockchain height: 46.0
+Heights: min=46, max=46
+Peer 20 has 0 pending blocks
+
+Round 48: Peer 6 selected as validator for height 47
+
+Round 49: Peer 9 selected as validator for height 48
+
+Status at 250.1s:
+Average blockchain height: 48.0
+Heights: min=48, max=48
+Peer 26 has 0 pending blocks
+
+Round 50: Peer 14 selected as validator for height 49
+
+Simulation ending: Minimum blockchain length reached (50 blocks)
+
+===== SIMULATION RESULTS =====
+Ran for 250.60 seconds
+Maximum blockchain height: 50 for peer 29
+Minimum blockchain height: 50 for peer 0
+All peers are in sync!
+All blockchains match till minimum heights!
+
+Block validator distribution:
+Peer 24: 180 blocks (360.0%) - Stake: 5.8%
+Peer 23: 120 blocks (240.0%) - Stake: 4.3%
+Peer 8: 120 blocks (240.0%) - Stake: 4.1%
+Peer 21: 120 blocks (240.0%) - Stake: 4.0%
+Peer 18: 90 blocks (180.0%) - Stake: 3.6%
+Peer 14: 60 blocks (120.0%) - Stake: 2.6%
+Peer 10: 60 blocks (120.0%) - Stake: 5.4%
+Peer 2: 60 blocks (120.0%) - Stake: 5.6%
+Peer 7: 60 blocks (120.0%) - Stake: 3.3%
+Peer 16: 60 blocks (120.0%) - Stake: 3.9%
+Peer 15: 60 blocks (120.0%) - Stake: 3.1%
+Peer 26: 60 blocks (120.0%) - Stake: 4.4%
+Peer 3: 60 blocks (120.0%) - Stake: 3.7%
+Peer 13: 60 blocks (120.0%) - Stake: 3.4%
+Peer 28: 60 blocks (120.0%) - Stake: 3.3%
+Peer 9: 60 blocks (120.0%) - Stake: 3.4%
+Peer 5: 30 blocks (60.0%) - Stake: 3.6%
+Peer 20: 30 blocks (60.0%) - Stake: 4.4%
+Peer 29: 30 blocks (60.0%) - Stake: 4.1%
+Peer 11: 30 blocks (60.0%) - Stake: 5.5%
+Peer 12: 30 blocks (60.0%) - Stake: 0.7%
+Peer 17: 30 blocks (60.0%) - Stake: 2.7%
+Peer 6: 30 blocks (60.0%) - Stake: 3.5%
+Simulation started at 2025-05-09 21:02:03 and ended at 2025-05-09 21:06:14
+Total energy consumed: 0.0012617738967844099
+Total CPU energy: 0.0006338677267649639
+Total RAM energy: 0.0006279061700194454
+Total emissions: 0.00046619138696662625
+CPU power: 10.45
